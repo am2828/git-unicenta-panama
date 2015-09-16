@@ -28,6 +28,9 @@ import com.openbravo.data.loader.BatchSentence;
 import com.openbravo.data.loader.BatchSentenceResource;
 import com.openbravo.data.loader.Session;
 import com.openbravo.format.Formats;
+import com.openbravo.pos.erp.sync.SyncClosedCash;
+import com.openbravo.pos.erp.sync.SyncERPOrders;
+import com.openbravo.pos.erp.sync.SyncERPQueue;
 import com.openbravo.pos.printer.DeviceTicket;
 import com.openbravo.pos.printer.TicketParser;
 import com.openbravo.pos.printer.TicketPrinterException;
@@ -103,6 +106,10 @@ public class JRootApp extends JPanel implements AppView {
     static {        
         initOldClasses();
     }
+    //instance add for integration
+    private  SyncERPQueue syncQueue;
+    private SyncERPOrders syncOrders;
+    private SyncClosedCash syncClosedCash;
 
 /**JG Added 3.07.2011 - Add clock to the title bar - T Sirwani*/
     private class PrintTimeAction implements ActionListener {
@@ -309,7 +316,7 @@ public class JRootApp extends JPanel implements AppView {
         }
            
         showLogin();
-
+        readConfigActiveMQ(m_dlSystem);
         return true;
     }
    
@@ -750,7 +757,71 @@ public class JRootApp extends JPanel implements AppView {
             inputtext.append(c);
         }
     }
+    /**Process added for automatic integration with idempiere
+     * 
+     */
+private void readConfigActiveMQ(DataLogicSystem dlsystem){
+        Properties activeMQProp = dlsystem.getResourceAsProperties("openbravo.properties");
+        String lastUpdateCustomers = dlsystem.getResourceAsText("queue.lastUpdateCustomers");
+        String lastupdateProducts = dlsystem.getResourceAsText("queue.lastUpdateProducts");
+        String lastupdatePeople = dlsystem.getResourceAsText("queue.lastUpdatePeople");
+        String lastupdateCreditmemo = dlsystem.getResourceAsText("queue.lastUpdateCreditMemo");
+        String lastupdateResendOrders = dlsystem.getResourceAsText("queue.lastUpdateResendOrders");
+        String userName = activeMQProp.getProperty("user");
+        String password = activeMQProp.getProperty("password");
+        String host = activeMQProp.getProperty("queue-host");
+        int port = Integer.parseInt(activeMQProp.getProperty("queue-port"));
+        String topicProducts = activeMQProp.getProperty("products-queue");
+        String topicPeople = activeMQProp.getProperty("users-queue");
+        String topicCustomers = activeMQProp.getProperty("customers-queue");
+        String topicCreditmemo = activeMQProp.getProperty("creditmemo-queue");
+        String topicOrder = activeMQProp.getProperty("orders-queue");
+        String topicClosedCash = activeMQProp.getProperty("closedcash-queue");
+        String topicResendOrders = activeMQProp.getProperty("resendorders-queue");
+        Double minuteSyncOrders;
+        try {
+            minuteSyncOrders = Double.parseDouble(activeMQProp.getProperty("syncOrders.minutes"));
+        } catch (Exception e) {
+            minuteSyncOrders= 1.0;
+        }
+       
+        Sync(this,userName,password,host,port,lastUpdateCustomers, topicCustomers);
+        Sync(this,userName,password,host,port,lastupdateProducts, topicProducts);
+        Sync(this,userName,password,host,port,lastupdatePeople, topicPeople);
+        Sync(this,userName,password,host,port,lastupdateCreditmemo, topicCreditmemo);
+        Sync(this,userName,password,host,port,lastupdateResendOrders, topicResendOrders);
+        syncOrders(this,userName,password,host,port,minuteSyncOrders,topicOrder);
+        syncClosedCash(this,userName,password,host,port,minuteSyncOrders,topicClosedCash);
+    }
+    
+    private void Sync(JRootApp rootApp, String userName, String password, String host,int port, String lastUpdate, 
+        String topic){
+        //Primero revisa en la cola de Products y Customers para ver si hay datos sin sincronizar
+        String url = "tcp://"+host+":"+port+"?jms.optimizeAcknowledge=true&keepAlive=true&jms.prefetchPolicy.queuePrefetch=1";
+        syncQueue = new SyncERPQueue(userName, password, url, lastUpdate, topic, rootApp);
+        syncQueue.start();
 
+      // Escucha de los Topics
+      //  syncTopic = new SyncERPTopic(userName, password, url,lastUpdate,topic,rootApp);
+      //  syncTopic.start();
+    }
+    
+    private void syncOrders(JRootApp rootApp,String userName, String password, String host,int port, Double minuteSyncOrders,String p_topicOrder){
+        if(!minuteSyncOrders.equals(0.0)){
+            //syncOrders = new SyncERPOrders(p_topicOrder,rootApp, minuteSyncOrders);
+            String url = "tcp://"+host+":"+port+"?jms.optimizeAcknowledge=true&keepAlive=true&jms.prefetchPolicy.queuePrefetch=1";
+            syncOrders = new SyncERPOrders(p_topicOrder,rootApp, minuteSyncOrders,userName, password, url);
+            syncOrders.start();
+        }
+    }
+    
+    private void syncClosedCash(JRootApp rootApp,String userName, String password, String host,int port, Double minuteSyncClosedCash,String p_topicClosedCash){
+        if(!minuteSyncClosedCash.equals(0.0)){
+            String url = "tcp://"+host+":"+port+"?jms.optimizeAcknowledge=true&keepAlive=true&jms.prefetchPolicy.queuePrefetch=1";
+            syncClosedCash = new SyncClosedCash(p_topicClosedCash,rootApp, minuteSyncClosedCash,userName, password, url);
+            syncClosedCash.start();
+        }
+    }
         
     /** This method is called from within the constructor to
      * initialize the form.
