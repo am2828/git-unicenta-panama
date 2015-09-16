@@ -5,6 +5,7 @@
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>UnicentaPos</name>
             <source-roots>
+                <root id="src.src-erp.dir"/>
                 <root id="src.dir"/>
                 <root id="locales.dir"/>
                 <root id="reports.dir"/>
