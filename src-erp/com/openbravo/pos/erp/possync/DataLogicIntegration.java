@@ -386,6 +386,16 @@ public Object transact() throws BasicException {
     public List getTickets() throws BasicException {
         return new PreparedSentence(s
                 , "SELECT T.ID, T.TICKETTYPE, T.TICKETID, R.DATENEW, R.MONEY, R.ATTRIBUTES, P.ID, P.NAME, C.ID, "
+                        + "C.SEARCHKEY, C.NAME, C.TAXID "
+                        + "FROM RECEIPTS R JOIN TICKETS T ON R.ID = T.ID "
+                        + "LEFT OUTER JOIN PEOPLE P ON T.PERSON = P.ID "
+                        + "LEFT OUTER JOIN CUSTOMERS C ON T.CUSTOMER = C.ID WHERE (T.TICKETTYPE = 0 OR T.TICKETTYPE = 1) AND T.STATUS = 2"
+                , null
+                , new SerializerReadClass(TicketInfo.class)).list();
+    }
+    public List getTicketsFiscal() throws BasicException {
+        return new PreparedSentence(s
+                , "SELECT T.ID, T.TICKETTYPE, T.TICKETID, R.DATENEW, R.MONEY, R.ATTRIBUTES, P.ID, P.NAME, C.ID, "
                         + "C.SEARCHKEY, C.NAME, C.TAXID, T.FISCALPRINT_SERIAL, T.FISCAL_INVOICENUMBER, T. FISCAL_ZREPORT "
                         + "FROM RECEIPTS R JOIN TICKETS T ON R.ID = T.ID "
                         + "LEFT OUTER JOIN PEOPLE P ON T.PERSON = P.ID "
@@ -399,6 +409,16 @@ public Object transact() throws BasicException {
      * @throws BasicException 
      */
     public List getTicketsSync() throws BasicException {
+        return new PreparedSentence(s
+                , "SELECT T.ID, T.TICKETTYPE, T.TICKETID, R.DATENEW, R.MONEY, R.ATTRIBUTES, P.ID, P.NAME, C.ID, "
+                        + "C.SEARCHKEY, C.NAME, C.TAXID  "
+                        + "FROM RECEIPTS R JOIN TICKETS T ON R.ID = T.ID "
+                        + "LEFT OUTER JOIN PEOPLE P ON T.PERSON = P.ID "
+                        + "LEFT OUTER JOIN CUSTOMERS C ON T.CUSTOMER = C.ID WHERE (T.TICKETTYPE = 0 OR T.TICKETTYPE = 1) AND T.STATUS = 2"
+                , null
+                , new SerializerReadClass(TicketInfo.class)).list();
+    }
+    public List getTicketsSyncFiscal() throws BasicException {
         return new PreparedSentence(s
                 , "SELECT T.ID, T.TICKETTYPE, T.TICKETID, R.DATENEW, R.MONEY, R.ATTRIBUTES, P.ID, P.NAME, C.ID, "
                         + "C.SEARCHKEY, C.NAME, C.TAXID, T.FISCALPRINT_SERIAL, T.FISCAL_INVOICENUMBER, T. FISCAL_ZREPORT "
@@ -454,6 +474,9 @@ public Object transact() throws BasicException {
         new StaticSentence(s, "UPDATE CLOSEDCASH SET STATUS = 0 WHERE STATUS = 2 AND DATEEND IS NOT NULL").exec();
     }
     public void setTicketsInProcess() throws BasicException {
+        new StaticSentence(s, "UPDATE TICKETS SET STATUS = 2 WHERE STATUS = 0  ").exec();
+    }
+    public void setTicketsInProcessFiscal() throws BasicException {
         new StaticSentence(s, "UPDATE TICKETS SET STATUS = 2 WHERE STATUS = 0 AND FISCAL_INVOICENUMBER IS NOT NULL ").exec();
     }
     public void resendTickets() throws BasicException {
@@ -506,6 +529,7 @@ public Object transact() throws BasicException {
                 }                
             }).list();
     }
+    
         public List getCreditNote(String receiptId) throws BasicException {
         return new PreparedSentence(s
                 ,   "SELECT A.NUMBER, A.ID, A.RECEIPT, A.TOTAL, A.AVALIABLE, A.DATENEW, A.BRANCH " +
