@@ -128,7 +128,7 @@ public class ProductsQueueSync implements ProcessAction {
                             product.getTax().getId(),
                             product.getTax().getName(),
                             tc.getID(),
-                            new Date(Long.MIN_VALUE),
+                            //new Date(Long.MIN_VALUE),
                             null,
                             null,
                             product.getTax().getPercentage() / 100,
@@ -137,7 +137,7 @@ public class ProductsQueueSync implements ProcessAction {
                     dlintegration.syncTax(t);
                    
                     // Synchonization of categories
-                    CategoryInfo c = new CategoryInfo(product.getCategory().getId(), product.getCategory().getName(), null);
+                    CategoryInfo c = new CategoryInfo(product.getCategory().getId(), product.getCategory().getName(), null,null,null);
                     dlintegration.syncCategory(c);
 
                     // Synchonization of products

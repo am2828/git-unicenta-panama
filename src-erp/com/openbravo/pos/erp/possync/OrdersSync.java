@@ -310,7 +310,8 @@ public class OrdersSync implements ProcessAction {
                             writer.writeStartElement("paymentAmount");
                             writer.writeCharacters(String.valueOf(ticket.getTotal()));
                             writer.writeEndElement();
-                            //send fiscal information
+                            //send fiscal information commented for standard
+                            /*
                             writer.writeStartElement("fiscalprint_serial");
                             writer.writeCharacters(ticket.getFiscalprint_serial());
                             writer.writeEndElement();
@@ -320,6 +321,7 @@ public class OrdersSync implements ProcessAction {
                             writer.writeStartElement("fiscal_zreport");
                             writer.writeCharacters(ticket.getFiscal_zreport());
                             writer.writeEndElement();
+                                    */
                             writer.writeStartElement("numberoflines");
                             writer.writeCharacters(Integer.toString(ticket.getLines().size()));
                             writer.writeEndElement();

@@ -44,8 +44,8 @@ import com.openbravo.pos.forms.BeanFactoryDataSingle;
 import com.openbravo.pos.inventory.TaxCategoryInfo;
 import com.openbravo.pos.payment.PaymentInfoTicket;
 import com.openbravo.pos.ticket.CategoryInfo;
-import com.openbravo.pos.ticket.ClosedCashInfo;
-import com.openbravo.pos.ticket.CreditNoteInfo;
+import com.openbravo.pos.erp.externalsales.ClosedCashInfo;
+import com.openbravo.pos.erp.externalsales.CreditNoteInfo;
 import com.openbravo.pos.ticket.ProductInfoExt;
 import com.openbravo.pos.ticket.TaxInfo;
 import com.openbravo.pos.ticket.TicketInfo;
@@ -345,7 +345,7 @@ public Object transact() throws BasicException {
                     setString(6, prod.getCategoryID());
                     setString(7, prod.getTaxCategoryID());
                     setBytes(8, ImageUtils.writeImage(prod.getImage()));
-                    setDouble(9, prod.getstockvolume());
+                    setDouble(9, prod.getStockVolume());
                     // setDouble(x, 0.0);
                     // setDouble(x, 0.0);
                     setString(10, prod.getID());  
@@ -368,7 +368,7 @@ public Object transact() throws BasicException {
                     setString(10, prod.getTaxCategoryID());
                     setBytes(11, ImageUtils.writeImage(prod.getImage()));
                     setDouble(12, 0.0);
-                    setDouble(13, prod.getstockvolume());
+                    setDouble(13, prod.getStockVolume());
 //                    setDouble(13, getstockvolume());                               
                 }});
         // Insert in catalog
@@ -437,7 +437,8 @@ public Object transact() throws BasicException {
                   ", C.ADDRESS, C.ADDRESS2, C.POSTAL, C.CITY, C.REGION, C.COUNTRY" +
                 " FROM CUSTOMERS C INNER JOIN TICKETS T ON C.ID = T.CUSTOMER WHERE T.ID = ?"
                 , SerializerWriteString.INSTANCE
-                , CustomerInfoExt.getSerializerRead()).find(ticket);
+                //, CustomerInfoExt.getSerializerRead()
+                ).find(ticket);
     }    
 
     public void execTicketUpdate() throws BasicException {
