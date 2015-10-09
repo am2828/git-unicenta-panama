@@ -85,7 +85,7 @@ public class InsertProductstoDB {
                 if (products.length > 0){
                     dlintegration.syncProductsBefore();                
                     Date now = new Date();
-                    
+                    System.out.println(products.length);
                     for (Product product : products) {
                         System.out.println("Registering Product: "+product.getName());
                             if (product==null) break;
