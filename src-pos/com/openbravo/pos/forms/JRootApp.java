@@ -762,6 +762,7 @@ public class JRootApp extends JPanel implements AppView {
      */
 private void readConfigActiveMQ(DataLogicSystem dlsystem){
         Properties activeMQProp = dlsystem.getResourceAsProperties("openbravo.properties");
+        if(!activeMQProp.isEmpty()){
         String lastUpdateCustomers = dlsystem.getResourceAsText("queue.lastUpdateCustomers");
         String lastupdateProducts = dlsystem.getResourceAsText("queue.lastUpdateProducts");
         String lastupdatePeople = dlsystem.getResourceAsText("queue.lastUpdatePeople");
@@ -792,12 +793,13 @@ private void readConfigActiveMQ(DataLogicSystem dlsystem){
         Sync(this,userName,password,host,port,lastupdateResendOrders, topicResendOrders);
         syncOrders(this,userName,password,host,port,minuteSyncOrders,topicOrder);
         syncClosedCash(this,userName,password,host,port,minuteSyncOrders,topicClosedCash);
+        }
     }
     
     private void Sync(JRootApp rootApp, String userName, String password, String host,int port, String lastUpdate, 
         String topic){
         //Primero revisa en la cola de Products y Customers para ver si hay datos sin sincronizar
-        String url = "tcp://"+host+":"+port+"?jms.optimizeAcknowledge=true&keepAlive=true&jms.prefetchPolicy.queuePrefetch=1";
+        String url = "tcp://"+host+":"+port;
         syncQueue = new SyncERPQueue(userName, password, url, lastUpdate, topic, rootApp);
         syncQueue.start();
 
@@ -809,7 +811,8 @@ private void readConfigActiveMQ(DataLogicSystem dlsystem){
     private void syncOrders(JRootApp rootApp,String userName, String password, String host,int port, Double minuteSyncOrders,String p_topicOrder){
         if(!minuteSyncOrders.equals(0.0)){
             //syncOrders = new SyncERPOrders(p_topicOrder,rootApp, minuteSyncOrders);
-            String url = "tcp://"+host+":"+port+"?jms.optimizeAcknowledge=true&keepAlive=true&jms.prefetchPolicy.queuePrefetch=1";
+            //String url = "tcp://"+host+":"+port+"?jms.optimizeAcknowledge=true&keepAlive=true&jms.prefetchPolicy.queuePrefetch=1";
+            String url = "tcp://"+host+":"+port;
             syncOrders = new SyncERPOrders(p_topicOrder,rootApp, minuteSyncOrders,userName, password, url);
             syncOrders.start();
         }
@@ -817,7 +820,8 @@ private void readConfigActiveMQ(DataLogicSystem dlsystem){
     
     private void syncClosedCash(JRootApp rootApp,String userName, String password, String host,int port, Double minuteSyncClosedCash,String p_topicClosedCash){
         if(!minuteSyncClosedCash.equals(0.0)){
-            String url = "tcp://"+host+":"+port+"?jms.optimizeAcknowledge=true&keepAlive=true&jms.prefetchPolicy.queuePrefetch=1";
+            //String url = "tcp://"+host+":"+port+"?jms.optimizeAcknowledge=true&keepAlive=true&jms.prefetchPolicy.queuePrefetch=1";
+            String url = "tcp://"+host+":"+port;
             syncClosedCash = new SyncClosedCash(p_topicClosedCash,rootApp, minuteSyncClosedCash,userName, password, url);
             syncClosedCash.start();
         }
