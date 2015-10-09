@@ -49,6 +49,7 @@ import com.openbravo.pos.erp.externalsales.BPartner;
 import com.openbravo.pos.erp.externalsales.Order;
 import com.openbravo.pos.erp.externalsales.OrderIdentifier;
 import com.openbravo.pos.erp.externalsales.OrderLine;
+import javax.xml.stream.XMLStreamException;
 
 public class OrdersQueueSync implements ProcessAction {
      
@@ -99,11 +100,11 @@ public class OrdersQueueSync implements ProcessAction {
             throw new BasicException(AppLocal.getIntString("message.serviceexception"), e);
         } catch (MalformedURLException e){
             throw new BasicException(AppLocal.getIntString("message.malformedurlexception"), e);
-        } catch (IOException e) {
-            throw new BasicException(AppLocal.getIntString("message.IOexception"), e);
-		} catch (Exception e) {
-            throw new BasicException(AppLocal.getIntString("message.exception"), e);
-		}
+        } //catch (IOException e) {
+           // throw new BasicException(AppLocal.getIntString("message.IOexception"), e);
+		//} catch (Exception e) {
+            //throw new BasicException(AppLocal.getIntString("message.exception"), e);
+		//}
     }  
     
     private String transformTickets(List<TicketInfo> ticketlist) {
@@ -227,8 +228,7 @@ public class OrdersQueueSync implements ProcessAction {
             writer.writeEndDocument();
             return res.toString();
 	      
-    	 } catch (Exception ex) { 
-    		    ex.printStackTrace(); 
+    	 } catch (XMLStreamException ex) { 
     		    return "ERROR creating XML"; 
     		  }         
     }
