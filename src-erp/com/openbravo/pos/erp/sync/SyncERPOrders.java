@@ -76,6 +76,8 @@ public class SyncERPOrders extends Thread{
     private final String adClientId;
     private final String poslocator;
     private final String AD_Org_ID;
+    private final String country;
+    private final String city;
     private Connection connection;
     private Session session;
     
@@ -84,7 +86,7 @@ public class SyncERPOrders extends Thread{
          app = rootApp;
          this.minutesSyncOrders = minuteSyncOrders;   // indica el intervalo de tiempo que se enviarán las ordenes     
          dlsystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
-         dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.possync.DataLogicIntegration");
+         dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.sync.DataLogicIntegration");
          this.queueOrders =queueOrders;
          Properties activeMQProp = dlsystem.getResourceAsProperties("openbravo.properties");
          this.host = activeMQProp.getProperty("queue-host");
@@ -94,13 +96,15 @@ public class SyncERPOrders extends Thread{
          poslocator = activeMQProp.getProperty("pos");
          this.adClientId = activeMQProp.getProperty("id");
          this.AD_Org_ID = activeMQProp.getProperty("org");
+         this.country= activeMQProp.getProperty("country");
+         this.city= activeMQProp.getProperty("city");
     
     }
     public SyncERPOrders(String queueOrders, JRootApp rootApp, Double minuteSyncOrders,String userName, String password, String url) {
          app = rootApp;
          this.minutesSyncOrders = minuteSyncOrders;   // indica el intervalo de tiempo que se enviarán las ordenes     
          dlsystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
-         dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.possync.DataLogicIntegration");
+         dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.sync.DataLogicIntegration");
          this.queueOrders =queueOrders;
          Properties activeMQProp = dlsystem.getResourceAsProperties("openbravo.properties");
          this.host = url;
@@ -110,7 +114,8 @@ public class SyncERPOrders extends Thread{
          poslocator = activeMQProp.getProperty("pos");
          this.adClientId = activeMQProp.getProperty("id");
          this.AD_Org_ID = activeMQProp.getProperty("org");
-    
+         this.country= activeMQProp.getProperty("country");
+         this.city= activeMQProp.getProperty("city");
     }
     
     
@@ -346,6 +351,13 @@ public class SyncERPOrders extends Thread{
                             writer.writeEndElement();
                             writer.writeStartElement("line");
                             writer.writeCharacters(Integer.toString(line.getTicketLine()));
+                            writer.writeEndElement();
+                            
+                            writer.writeStartElement("C_Country_ID");
+                            writer.writeCharacters(country);
+                            writer.writeEndElement();
+                            writer.writeStartElement("C_City_ID");
+                            writer.writeCharacters(city);
                             writer.writeEndElement();
                             writer.writeEndElement();   //detail  
                         }
