@@ -30,7 +30,6 @@ import com.openbravo.data.gui.MessageInf;
 import com.openbravo.pos.erp.externalsales.Order;
 import com.openbravo.pos.erp.externalsales.OrderIdentifier;
 import com.openbravo.pos.erp.externalsales.OrderLine;
-import com.openbravo.pos.erp.possync.DataLogicIntegration;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.DataLogicSystem;
 import com.openbravo.pos.forms.JRootApp;

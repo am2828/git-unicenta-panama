@@ -18,7 +18,6 @@
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 package com.openbravo.pos.erp.sync;
 
-import com.openbravo.pos.erp.possync.DataLogicIntegration;
 import com.openbravo.pos.forms.DataLogicSales;
 import com.openbravo.pos.forms.DataLogicSystem;
 import com.openbravo.pos.forms.JRootApp;

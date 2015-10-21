@@ -8,7 +8,6 @@ import com.openbravo.basic.BasicException;
 import com.openbravo.pos.erp.customers.Customer;
 
 import com.openbravo.pos.forms.AppLocal;
-import com.openbravo.pos.erp.possync.DataLogicIntegration;
 import com.openbravo.pos.customers.CustomerInfoExt;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

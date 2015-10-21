@@ -32,7 +32,6 @@ import com.openbravo.pos.erp.externalsales.Category;
 import com.openbravo.pos.erp.externalsales.Product;
 import com.openbravo.pos.erp.externalsales.ProductPlus;
 import com.openbravo.pos.erp.externalsales.Tax;
-import com.openbravo.pos.erp.possync.DataLogicIntegration;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URLDecoder;

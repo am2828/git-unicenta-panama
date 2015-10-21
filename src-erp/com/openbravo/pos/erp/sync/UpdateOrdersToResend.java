@@ -5,7 +5,6 @@
 package com.openbravo.pos.erp.sync;
 
 import com.openbravo.basic.BasicException;
-import com.openbravo.pos.erp.possync.DataLogicIntegration;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
