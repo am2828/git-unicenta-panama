@@ -28,7 +28,6 @@ package com.openbravo.pos.erp.sync;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.MessageInf;
 
-import com.openbravo.pos.erp.possync.DataLogicIntegration;
 import com.openbravo.pos.forms.AppLocal;
 
 import com.openbravo.pos.forms.DataLogicSystem;

@@ -9,7 +9,6 @@ import com.openbravo.pos.customers.CustomerInfoExt;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.erp.customers.Customer;
 import com.openbravo.pos.erp.customers.Location;
-import com.openbravo.pos.erp.possync.DataLogicIntegration;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
