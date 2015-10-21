@@ -81,7 +81,7 @@ public class SyncERPQueue extends Thread implements MessageListener{
         count = 0;
         this.queueMQ = queueMQ;
         dlSystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
-        dli = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.possync.DataLogicIntegration");
+        dli = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.sync.DataLogicIntegration");
         dlsales = (DataLogicSales) app.getBean("com.openbravo.pos.forms.DataLogicSales");
         productsQueueSync = new InsertProductstoDB(dlSystem, dli, dlsales, app.getInventoryLocation());
         customersQueueSyn =  new InsertCustomerstoDB(dli);
