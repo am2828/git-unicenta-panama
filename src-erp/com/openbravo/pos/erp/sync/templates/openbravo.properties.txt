@@ -5,8 +5,11 @@
 	<entry key="id">11</entry>
 	<entry key="org">11</entry>
 	<entry key="pos">ALMACEN GENERAL</entry>
+        <entry key="country">100</entry>
+        <entry key="city">100</entry>
 	<entry key="user">test</entry>
 	<entry key="password">adempiere</entry>
+
 
 	<entry key="queue-host">localhost</entry>
 	<entry key="queue-port">61616</entry>
