@@ -76,10 +76,11 @@ public class SyncERPOrders extends Thread{
     private final String adClientId;
     private final String poslocator;
     private final String AD_Org_ID;
-    private final String country;
-    private final String city;
     private Connection connection;
     private Session session;
+    private String country;
+    private String region;
+    private String city;
     
     
     public SyncERPOrders(String queueOrders, JRootApp rootApp, Double minuteSyncOrders) {
@@ -355,6 +356,16 @@ public class SyncERPOrders extends Thread{
                             
                             writer.writeStartElement("C_Country_ID");
                             writer.writeCharacters(country);
+                            writer.writeEndElement();
+                            writer.writeStartElement("C_City_ID");
+                            writer.writeCharacters(city);
+                            writer.writeEndElement();
+                            
+                            writer.writeStartElement("C_Country_ID");
+                            writer.writeCharacters(country);
+                            writer.writeEndElement();
+                            writer.writeStartElement("C_Region_ID");
+                            writer.writeCharacters(region);
                             writer.writeEndElement();
                             writer.writeStartElement("C_City_ID");
                             writer.writeCharacters(city);
