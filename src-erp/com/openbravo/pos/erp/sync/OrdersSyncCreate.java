@@ -39,7 +39,7 @@ public class OrdersSyncCreate extends BeanFactoryCache {
         
         
         DataLogicSystem dlSystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
-        DataLogicIntegration dli = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.possync.DataLogicIntegration");
+        DataLogicIntegration dli = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.sync.DataLogicIntegration");
         Properties activeMQProp = dlSystem.getResourceAsProperties("openbravo.properties");
         
         String userName = activeMQProp.getProperty("user");

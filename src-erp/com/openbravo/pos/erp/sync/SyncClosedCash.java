@@ -87,7 +87,7 @@ public class SyncClosedCash extends Thread{
          app = rootApp;
          this.minutesSyncClosedCash = minuteSyncClosedCash;   // indica el intervalo de tiempo que se enviarán los cierres     
          dlsystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
-         dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.possync.DataLogicIntegration");
+         dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.sync.DataLogicIntegration");
          this.queue =queue; 
          Properties activeMQProp = dlsystem.getResourceAsProperties("openbravo.properties");
          this.host = activeMQProp.getProperty("queue-host");
