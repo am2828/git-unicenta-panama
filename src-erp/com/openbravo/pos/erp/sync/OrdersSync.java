@@ -79,22 +79,27 @@ public class OrdersSync implements ProcessAction {
     private Connection connection;
     private Session session;
     private final Timestamp OrdersSyncDate;
+    private final String country;
+    private final String region;
+    private final String city;
    
     public OrdersSync(String queueOrders, JRootApp rootApp, Double minuteSyncOrders,String userName, String password, String url,String pOrdersSync) {
-         app = rootApp;
-         this.minutesSyncOrders = minuteSyncOrders;   // indica el intervalo de tiempo que se enviarán las ordenes     
-         dlsystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
-         dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.possync.DataLogicIntegration");
-         this.queueOrders =queueOrders;
-         Properties activeMQProp = dlsystem.getResourceAsProperties("openbravo.properties");
-         this.host = url;
-         this.port = Integer.parseInt(activeMQProp.getProperty("queue-port")); 
-         this.user = userName;
-         this.password = password;
-         poslocator = activeMQProp.getProperty("pos");
-         this.adClientId = activeMQProp.getProperty("id");
-         this.AD_Org_ID = activeMQProp.getProperty("org");
-
+        app = rootApp;
+        this.minutesSyncOrders = minuteSyncOrders;   // indica el intervalo de tiempo que se enviarán las ordenes     
+        dlsystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
+        dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.possync.DataLogicIntegration");
+        this.queueOrders =queueOrders;
+        Properties activeMQProp = dlsystem.getResourceAsProperties("openbravo.properties");
+        this.host = url;
+        this.port = Integer.parseInt(activeMQProp.getProperty("queue-port")); 
+        this.user = userName;
+        this.password = password;
+        poslocator = activeMQProp.getProperty("pos");
+        this.adClientId = activeMQProp.getProperty("id");
+        this.AD_Org_ID = activeMQProp.getProperty("org");
+        this.country= activeMQProp.getProperty("country");
+        this.region= activeMQProp.getProperty("region");
+        this.city= activeMQProp.getProperty("city");
          //get properties for resend date
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR, 0);
@@ -327,6 +332,16 @@ public class OrdersSync implements ProcessAction {
                             writer.writeEndElement();
                             writer.writeStartElement("line");
                             writer.writeCharacters(Integer.toString(line.getTicketLine()));
+                            writer.writeEndElement();
+                            
+                            writer.writeStartElement("C_Country_ID");
+                            writer.writeCharacters(country);
+                            writer.writeEndElement();
+                            writer.writeStartElement("C_Region_ID");
+                            writer.writeCharacters(region);
+                            writer.writeEndElement();
+                            writer.writeStartElement("C_City_ID");
+                            writer.writeCharacters(city);
                             writer.writeEndElement();
                             writer.writeEndElement();   //detail  
                         }
