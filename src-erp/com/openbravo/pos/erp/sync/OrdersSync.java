@@ -87,7 +87,7 @@ public class OrdersSync implements ProcessAction {
         app = rootApp;
         this.minutesSyncOrders = minuteSyncOrders;   // indica el intervalo de tiempo que se enviarán las ordenes     
         dlsystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
-        dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.possync.DataLogicIntegration");
+        dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.sync.DataLogicIntegration");
         this.queueOrders =queueOrders;
         Properties activeMQProp = dlsystem.getResourceAsProperties("openbravo.properties");
         this.host = url;
