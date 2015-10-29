@@ -98,6 +98,7 @@ public class SyncERPOrders extends Thread{
          this.adClientId = activeMQProp.getProperty("id");
          this.AD_Org_ID = activeMQProp.getProperty("org");
          this.country= activeMQProp.getProperty("country");
+         this.region= activeMQProp.getProperty("region");
          this.city= activeMQProp.getProperty("city");
     
     }
@@ -116,6 +117,7 @@ public class SyncERPOrders extends Thread{
          this.adClientId = activeMQProp.getProperty("id");
          this.AD_Org_ID = activeMQProp.getProperty("org");
          this.country= activeMQProp.getProperty("country");
+         this.region= activeMQProp.getProperty("region");
          this.city= activeMQProp.getProperty("city");
     }
     
