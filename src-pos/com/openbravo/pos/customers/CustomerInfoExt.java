@@ -19,6 +19,9 @@
 
 package com.openbravo.pos.customers;
 
+import com.openbravo.basic.BasicException;
+import com.openbravo.data.loader.DataRead;
+import com.openbravo.data.loader.SerializerRead;
 import com.openbravo.format.Formats;
 import com.openbravo.pos.util.RoundUtils;
 import java.util.Date;
@@ -55,6 +58,42 @@ public class CustomerInfoExt extends CustomerInfo {
      * @param id */
     public CustomerInfoExt(String id) {
         super(id);
+    } 
+    /** red1 - needed during Orders Sync */
+    public CustomerInfoExt(String id, String name) {
+        super(id);
+        this.setName(name);  
+        this.setSearchkey(id);
+    } 
+    //this method was in class DataLogicSales
+     public static SerializerRead getSerializerRead () {
+        return new SerializerRead() {
+            public Object readValues(DataRead dr) throws BasicException {
+                CustomerInfoExt c = new CustomerInfoExt(dr.getString(1));
+                c.setTaxid(dr.getString(2));
+                c.setSearchkey(dr.getString(3));
+                c.setName(dr.getString(4));
+                c.setCard(dr.getString(5));
+                c.setTaxCustomerID(dr.getString(6));
+                c.setNotes(dr.getString(7));
+                c.setMaxdebt(dr.getDouble(8));
+                c.setVisible(dr.getBoolean(9).booleanValue());
+                c.setCurdate(dr.getTimestamp(10));
+                c.setCurdebt(dr.getDouble(11));
+                c.setFirstname(dr.getString(12));
+                c.setLastname(dr.getString(13));
+                c.setEmail(dr.getString(14));
+                c.setPhone(dr.getString(15));
+                c.setPhone2(dr.getString(16));
+                c.setFax(dr.getString(17));
+                c.setAddress(dr.getString(18));
+                c.setAddress2(dr.getString(19));
+                c.setPostal(dr.getString(20));
+                c.setCity(dr.getString(21));
+                c.setRegion(dr.getString(22));
+                c.setCountry(dr.getString(23));
+          return c;
+        }};
     }
 
     /**
