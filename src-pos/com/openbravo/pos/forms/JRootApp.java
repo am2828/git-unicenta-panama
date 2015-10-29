@@ -763,36 +763,35 @@ public class JRootApp extends JPanel implements AppView {
 private void readConfigActiveMQ(DataLogicSystem dlsystem){
         Properties activeMQProp = dlsystem.getResourceAsProperties("openbravo.properties");
         if(!activeMQProp.isEmpty()){
-        String lastUpdateCustomers = dlsystem.getResourceAsText("queue.lastUpdateCustomers");
-        String lastupdateProducts = dlsystem.getResourceAsText("queue.lastUpdateProducts");
-        String lastupdatePeople = dlsystem.getResourceAsText("queue.lastUpdatePeople");
-        String lastupdateCreditmemo = dlsystem.getResourceAsText("queue.lastUpdateCreditMemo");
-        String lastupdateResendOrders = dlsystem.getResourceAsText("queue.lastUpdateResendOrders");
-        String userName = activeMQProp.getProperty("user");
-        String password = activeMQProp.getProperty("password");
-        String host = activeMQProp.getProperty("queue-host");
-        int port = Integer.parseInt(activeMQProp.getProperty("queue-port"));
-        String topicProducts = activeMQProp.getProperty("products-queue");
-        String topicPeople = activeMQProp.getProperty("users-queue");
-        String topicCustomers = activeMQProp.getProperty("customers-queue");
-        String topicCreditmemo = activeMQProp.getProperty("creditmemo-queue");
-        String topicOrder = activeMQProp.getProperty("orders-queue");
-        String topicClosedCash = activeMQProp.getProperty("closedcash-queue");
-        String topicResendOrders = activeMQProp.getProperty("resendorders-queue");
-        Double minuteSyncOrders;
-        try {
-            minuteSyncOrders = Double.parseDouble(activeMQProp.getProperty("syncOrders.minutes"));
-        } catch (Exception e) {
-            minuteSyncOrders= 1.0;
-        }
-       
-        Sync(this,userName,password,host,port,lastUpdateCustomers, topicCustomers);
-        Sync(this,userName,password,host,port,lastupdateProducts, topicProducts);
-        Sync(this,userName,password,host,port,lastupdatePeople, topicPeople);
-        Sync(this,userName,password,host,port,lastupdateCreditmemo, topicCreditmemo);
-        Sync(this,userName,password,host,port,lastupdateResendOrders, topicResendOrders);
-        syncOrders(this,userName,password,host,port,minuteSyncOrders,topicOrder);
-        syncClosedCash(this,userName,password,host,port,minuteSyncOrders,topicClosedCash);
+            String lastUpdateCustomers = dlsystem.getResourceAsText("queue.lastUpdateCustomers");
+            String lastupdateProducts = dlsystem.getResourceAsText("queue.lastUpdateProducts");
+            String lastupdatePeople = dlsystem.getResourceAsText("queue.lastUpdatePeople");
+            String lastupdateCreditmemo = dlsystem.getResourceAsText("queue.lastUpdateCreditMemo");
+            String lastupdateResendOrders = dlsystem.getResourceAsText("queue.lastUpdateResendOrders");
+            String userName = activeMQProp.getProperty("user");
+            String password = activeMQProp.getProperty("password");
+            String host = activeMQProp.getProperty("queue-host");
+            int port = Integer.parseInt(activeMQProp.getProperty("queue-port"));
+            String topicProducts = activeMQProp.getProperty("products-queue");
+            String topicPeople = activeMQProp.getProperty("users-queue");
+            String topicCustomers = activeMQProp.getProperty("customers-queue");
+            String topicCreditmemo = activeMQProp.getProperty("creditmemo-queue");
+            String topicOrder = activeMQProp.getProperty("orders-queue");
+            String topicClosedCash = activeMQProp.getProperty("closedcash-queue");
+            String topicResendOrders = activeMQProp.getProperty("resendorders-queue");
+            Double minuteSyncOrders;
+            try {
+                minuteSyncOrders = Double.parseDouble(activeMQProp.getProperty("orders-minutes"));
+            } catch (Exception e) {
+                minuteSyncOrders= 1.0;
+            }
+            Sync(this,userName,password,host,port,lastUpdateCustomers, topicCustomers);
+            Sync(this,userName,password,host,port,lastupdateProducts, topicProducts);
+            Sync(this,userName,password,host,port,lastupdatePeople, topicPeople);
+            Sync(this,userName,password,host,port,lastupdateCreditmemo, topicCreditmemo);
+            
+            syncOrders(this,userName,password,host,port,minuteSyncOrders,topicOrder);
+            syncClosedCash(this,userName,password,host,port,minuteSyncOrders,topicClosedCash);
         }
     }
     
