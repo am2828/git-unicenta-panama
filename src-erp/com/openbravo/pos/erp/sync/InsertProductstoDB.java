@@ -127,6 +127,11 @@ public class InsertProductstoDB {
                         p.setCategoryID(c.getID());
                         p.setTaxCategoryID(tc.getID());
                         p.setImage(ImageUtils.readImage(product.getImageUrl()));
+                        // build html display like <html><font size=-2>MIRACLE NOIR<br> MASK</font>
+                        
+                        p.setDisplay("<html><font size=-2>"+product.getName().substring(0, product.getName().length()>15?15:product.getName().length()) 
+                                    + "<br>" + product.getName().substring(15, product.getName().length()>30?30:product.getName().length())
+                                    + "</font>");
                         dlintegration.syncProduct(p);
                         
                         // Synchronization of stock          
@@ -151,8 +156,7 @@ public class InsertProductstoDB {
                             dlsales.getStockDiaryInsert().exec(diary);   
                         }
                     }
-                    
-                    // datalogic.syncProductsAfter();
+                    dlintegration.syncProductsAfter();
                     return true;
                 }
         } catch (SAXException ex) {
