@@ -96,20 +96,21 @@ public class DataLogicIntegration extends BeanFactoryDataSingle {
                 // Try to update
 	        // Add the field TaxID to sync...
                 if (new PreparedSentence(s,
-                            "UPDATE CUSTOMERS SET TAXID = ?, NAME = ?, ADDRESS = ?, VISIBLE = ? WHERE SEARCHKEY = ? OR ID=? ",
+                            "UPDATE CUSTOMERS SET TAXID = ?, NAME = ?, ADDRESS = ?, VISIBLE = ?, MAXDEBT=? WHERE SEARCHKEY = ? OR ID=? ",
                             SerializerWriteParams.INSTANCE
                             ).exec(new DataParams() { public void writeValues() throws BasicException {
                                 setString(1, customer.getTaxid());
                                 setString(2, customer.getName());
                                 setString(3, customer.getAddress());
                                 setBoolean(4, customer.isVisible());
-                                setString(5, customer.getSearchkey());
-                                setString(6, customer.getId());
+                                setDouble(5, customer.getMaxdebt());
+                                setString(6, customer.getSearchkey());
+                                setString(7, customer.getId());
                             }}) == 0) {
 
                     // If not updated, try to insert
                     new PreparedSentence(s,
-                            "INSERT INTO CUSTOMERS(ID, TAXID, SEARCHKEY, NAME, NOTES, VISIBLE) VALUES (?, ?, ?, ?, ?, ?)",
+                            "INSERT INTO CUSTOMERS(ID, TAXID, SEARCHKEY, NAME, NOTES, VISIBLE, MAXDEBT) VALUES (?, ?, ?, ?, ?, ?, ?)",
                             SerializerWriteParams.INSTANCE
                             ).exec(new DataParams() { public void writeValues() throws BasicException {
                                 setString(1, customer.getId());
@@ -118,6 +119,7 @@ public class DataLogicIntegration extends BeanFactoryDataSingle {
                                 setString(4, customer.getName());
                                 setString(5, customer.getAddress());
                                 setBoolean(6, customer.isVisible());
+                                setDouble(7, customer.getMaxdebt());
                             }});
                 }
 
@@ -431,7 +433,8 @@ public class DataLogicIntegration extends BeanFactoryDataSingle {
     }
     public List getTicketLines(final String ticket) throws BasicException {
         return new PreparedSentence(s
-                , "SELECT L.TICKET, L.LINE, L.PRODUCT, L.ATTRIBUTESETINSTANCE_ID, L.UNITS, L.PRICE, T.ID, T.NAME, T.CATEGORY, T.VALIDFROM, T.CUSTCATEGORY, T.PARENTID, T.RATE, T.RATECASCADE, T.RATEORDER, L.ATTRIBUTES " +
+                //, "SELECT L.TICKET, L.LINE, L.PRODUCT, L.ATTRIBUTESETINSTANCE_ID, L.UNITS, L.PRICE, T.ID, T.NAME, T.CATEGORY, T.VALIDFROM, T.CUSTCATEGORY, T.PARENTID, T.RATE, T.RATECASCADE, T.RATEORDER, L.ATTRIBUTES " +
+                , "SELECT L.TICKET, L.LINE, L.PRODUCT, L.ATTRIBUTESETINSTANCE_ID, L.UNITS, L.PRICE, T.ID, T.NAME, T.CATEGORY, T.CUSTCATEGORY, T.PARENTID, T.RATE, T.RATECASCADE, T.RATEORDER, L.ATTRIBUTES " +
                 "FROM TICKETLINES L, TAXES T WHERE L.TAXID = T.ID AND L.TICKET = ? ORDER BY L.LINE"
 //  red1       , "SELECT L.TICKET, L.LINE, L.PRODUCT, L.UNITS, L.PRICE, T.ID, T.NAME, T.CATEGORY, T.CUSTCATEGORY, T.PARENTID, T.RATE, T.RATECASCADE, T.RATEORDER, L.ATTRIBUTES " +
 //  red1         "FROM TICKETLINES L, TAXES T WHERE L.TAXID = T.ID AND L.TICKET = ?"
@@ -458,7 +461,7 @@ public class DataLogicIntegration extends BeanFactoryDataSingle {
                   ", C.ADDRESS, C.ADDRESS2, C.POSTAL, C.CITY, C.REGION, C.COUNTRY" +
                 " FROM CUSTOMERS C INNER JOIN TICKETS T ON C.ID = T.CUSTOMER WHERE T.ID = ?"
                 , SerializerWriteString.INSTANCE
-                //, CustomerInfoExt.getSerializerRead()
+                , CustomerInfoExt.getSerializerRead()
                 ).find(ticket);
     }    
 
