@@ -100,7 +100,7 @@ public class SyncERPQueue extends Thread implements MessageListener{
         try {
             
             
-                stopLoop = receive==true? (3.0):0.25; 
+                stopLoop = receive==true? (10.0):0.25; 
             
                 //si es la primera vez que entra no se detiene el ciclo
                if(c !=0){
@@ -149,7 +149,7 @@ public class SyncERPQueue extends Thread implements MessageListener{
     public void onMessage(Message msg) {
         try{
             count++;
-            System.out.println("VALUE OF COUNT " + count);
+            
             validarMensaje(msg);
             msg.acknowledge();
         } catch (JMSException ex) {

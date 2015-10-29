@@ -217,7 +217,11 @@ public class DataLogicIntegration extends BeanFactoryDataSingle {
     
     public void syncProductsBefore() throws BasicException {
         new StaticSentence(s, "DELETE FROM PRODUCTS_CAT").exec();
-    }   
+    }
+    public void syncProductsAfter() throws BasicException {
+        new StaticSentence(s, "INSERT INTO PRODUCTS_CAT SELECT ID,NULL FROM PRODUCTS").exec();
+    }
+    
     
     public void syncTaxCategory(final TaxCategoryInfo taxcat) throws BasicException {
         
@@ -327,33 +331,30 @@ public class DataLogicIntegration extends BeanFactoryDataSingle {
         
         Transaction t;
         t = new Transaction(s) {
-public Object transact() throws BasicException {
+    public Object transact() throws BasicException {
     // Sync the Product in a transaction
     
     // Try to update
     if (new PreparedSentence(s, 
-                "UPDATE PRODUCTS SET REFERENCE = ?, CODE = ?, NAME = ?, PRICEBUY = ?, PRICESELL = ?, CATEGORY = ?, TAXCAT = ?, IMAGE = ?, STOCKVOLUME = ? WHERE ID = ?", 
+                "UPDATE PRODUCTS SET REFERENCE = ?, CODE = ?, NAME = ?, PRICEBUY = ?, PRICESELL = ?, CATEGORY = ?, TAXCAT = ?, IMAGE = ?, STOCKVOLUME = ?, DISPLAY = ? WHERE ID = ?", 
                 SerializerWriteParams.INSTANCE
                 ).exec(new DataParams() { public void writeValues() throws BasicException {
                     setString(1, prod.getReference());
                     setString(2, prod.getCode());
                     setString(3, prod.getName());
-                    // setBoolean(x, p.isCom());
-                    // setBoolean(x, p.isScale());
                     setDouble(4, prod.getPriceBuy());
                     setDouble(5, prod.getPriceSell());
                     setString(6, prod.getCategoryID());
                     setString(7, prod.getTaxCategoryID());
                     setBytes(8, ImageUtils.writeImage(prod.getImage()));
                     setDouble(9, prod.getStockVolume());
-                    // setDouble(x, 0.0);
-                    // setDouble(x, 0.0);
-                    setString(10, prod.getID());  
+                    setString(10, prod.getDisplay());
+                    setString(11, prod.getID());  
                 }}) == 0) 
     {
         // If not updated, try to insert
         new PreparedSentence(s, 
-                "INSERT INTO PRODUCTS (ID, REFERENCE, CODE, NAME, ISCOM, ISSCALE, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, IMAGE, STOCKCOST, STOCKVOLUME) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO PRODUCTS (ID, REFERENCE, CODE, NAME, ISCOM, ISSCALE, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, IMAGE, STOCKCOST, STOCKVOLUME, DISPLAY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 SerializerWriteParams.INSTANCE
                 ).exec(new DataParams() { public void writeValues() throws BasicException {
                     setString(1, prod.getID());
@@ -369,7 +370,7 @@ public Object transact() throws BasicException {
                     setBytes(11, ImageUtils.writeImage(prod.getImage()));
                     setDouble(12, 0.0);
                     setDouble(13, prod.getStockVolume());
-//                    setDouble(13, getstockvolume());                               
+                    setString(14, prod.getDisplay());                               
                 }});
         // Insert in catalog
         new StaticSentence(s, 
