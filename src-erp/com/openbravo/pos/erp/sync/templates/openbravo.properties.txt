@@ -5,7 +5,8 @@
 	<entry key="id">11</entry>
 	<entry key="org">11</entry>
 	<entry key="pos">HQ Warehouse</entry>
-        <entry key="country">142</entry>
+        <entry key="country">100</entry>
+        <entry key="region">142</entry>
         <entry key="city">100</entry>
 	<entry key="user">admin</entry>
 	<entry key="password">admin</entry>
