@@ -4,16 +4,15 @@
  	<comment>Openbravo Websevice configuration</comment>
 	<entry key="id">11</entry>
 	<entry key="org">11</entry>
-	<entry key="pos">ALMACEN GENERAL</entry>
-        <entry key="country">100</entry>
+	<entry key="pos">HQ Warehouse</entry>
+        <entry key="country">142</entry>
         <entry key="city">100</entry>
-	<entry key="user">test</entry>
-	<entry key="password">adempiere</entry>
-
-
-	<entry key="queue-host">localhost</entry>
+	<entry key="user">admin</entry>
+	<entry key="password">admin</entry>
+	<entry key="queue-host">unicenta.algeconsultores.com</entry>
 	<entry key="queue-port">61616</entry>
-	<entry key="orders-queue">/queue/Orders</entry>
+	<entry key="orders-queue">Orders</entry>
+        <entry key="orders-minutes">1</entry>
 	<entry key="products-queue">Products</entry>
 	<entry key="customers-queue">Customers</entry>
 	<entry key="users-queue">Users</entry>
