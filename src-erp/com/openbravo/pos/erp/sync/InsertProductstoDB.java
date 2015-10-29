@@ -77,6 +77,8 @@ public class InsertProductstoDB {
     public boolean ImportProducts(String productsXML){
         try {
             ProductPlus[] products = importQueue2Products(productsXML);
+            
+            
             if (products == null){
                     throw new BasicException(AppLocal.getIntString("message.returnnull"));
                 }
@@ -134,7 +136,7 @@ public class InsertProductstoDB {
                             
                             double diff = productplus.getQtyonhand() - dlsales.findProductStock(warehouse, p.getID(), null);
                             
-                            Object[] diary = new Object[8];
+                            Object[] diary = new Object[9];
                             diary[0] = UUID.randomUUID().toString();
                             diary[1] = now;
                             diary[2] = diff > 0.0 
@@ -144,7 +146,8 @@ public class InsertProductstoDB {
                             diary[4] = p.getID();
                             diary[5] = null; ///TODO find out where to get AttributeInstanceID -- red1
                             diary[6] = new Double(diff);
-                            diary[7] = new Double(p.getPriceBuy());                                
+                            diary[7] = new Double(p.getPriceBuy());
+                            diary[8] = dlsystem.getUser();
                             dlsales.getStockDiaryInsert().exec(diary);   
                         }
                     }
