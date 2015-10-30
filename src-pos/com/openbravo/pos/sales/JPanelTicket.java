@@ -385,7 +385,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
 
         // Authorization for buttons
-        btnSplit.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Total"));
+        btnSplit.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.split"));
         m_jDelete.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.EditLines"));
         m_jNumberKeys.setMinusEnabled(m_App.getAppUserView().getUser().hasPermission("sales.EditLines"));
         m_jNumberKeys.setEqualsEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Total"));
