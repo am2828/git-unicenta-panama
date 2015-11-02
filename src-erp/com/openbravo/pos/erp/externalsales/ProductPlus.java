@@ -13,7 +13,9 @@ public class ProductPlus extends com.openbravo.pos.erp.externalsales.Product imp
     private static final long serialVersionUID = 9203746223092L;
     private double qtyonhand;
     private String reference;
-
+    private String location_id;
+    private String location_name;        
+            
     public ProductPlus() {
     }
 
@@ -29,7 +31,11 @@ public class ProductPlus extends com.openbravo.pos.erp.externalsales.Product imp
             double purchasePrice,
             com.openbravo.pos.erp.externalsales.Tax tax,
             double qtyonhand,
-            java.lang.String reference) {
+            
+            
+            java.lang.String reference,
+            java.lang.String location_id,
+            java.lang.String location_name) {
         super(
                 category,
                 description,
@@ -43,6 +49,24 @@ public class ProductPlus extends com.openbravo.pos.erp.externalsales.Product imp
                 tax);
         this.qtyonhand = qtyonhand;
         this.reference = reference;
+        this.location_id = location_id;
+        this.location_name = location_name;
+    }
+
+    public String getLocation_id() {
+        return location_id;
+    }
+
+    public void setLocation_id(String location_id) {
+        this.location_id = location_id;
+    }
+
+    public String getLocation_name() {
+        return location_name;
+    }
+
+    public void setLocation_name(String location_name) {
+        this.location_name = location_name;
     }
 
     /**

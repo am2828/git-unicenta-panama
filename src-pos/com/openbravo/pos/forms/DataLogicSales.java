@@ -35,7 +35,9 @@ import com.openbravo.pos.promotion.PromoTypeInfo;
 import com.openbravo.pos.ticket.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -1697,6 +1699,32 @@ public Object transact() throws BasicException {
             , new int[] {0}
         );
     }
+     public final List<ProductInfoExt> searchProductByNameOrCodeBar(String nameOrCodeBar)throws BasicException{
+        List<ProductInfoExt>  listProd1,listProd2 = null;
+         HashSet<ProductInfoExt> set = new HashSet<ProductInfoExt>();
+
+         
+         listProd1 = new PreparedSentence(s
+            , "SELECT P.ID, P.REFERENCE, P.CODE, P.NAME, P.ISCOM, P.ISSCALE, P.PRICEBUY, P.PRICESELL, P.TAXCAT, P.CATEGORY, P.ATTRIBUTESET_ID, P.IMAGE, P.ATTRIBUTES,P.NEEDRECIPE,P.STOCKVOLUME  " +
+              "FROM PRODUCTS P WHERE  UPPER(P.CODE) LIKE ? " +
+              " ORDER BY  P.NAME"
+            , SerializerWriteString.INSTANCE
+            , ProductInfoExt.getSerializerRead()).list("%"+nameOrCodeBar.toUpperCase()+"%");
+         
+          if (listProd1.isEmpty()){
+                listProd2 = new PreparedSentence(s
+                  , "SELECT P.ID, P.REFERENCE, P.CODE, P.NAME, P.ISCOM, P.ISSCALE, P.PRICEBUY, P.PRICESELL, P.TAXCAT, P.CATEGORY, P.ATTRIBUTESET_ID, P.IMAGE, P.ATTRIBUTES, P.NEEDRECIPE, P.STOCKVOLUME  " +
+                    "FROM PRODUCTS P WHERE  UPPER(P.NAME) LIKE ? " +
+                    " ORDER BY  P.NAME"
+                  , SerializerWriteString.INSTANCE
+                  , ProductInfoExt.getSerializerRead()).list("%"+nameOrCodeBar.toUpperCase()+"%");
+                 set.addAll(listProd2);
+          }
+
+         set.addAll(listProd1);
+         return  new ArrayList<ProductInfoExt>(set);
+
+    }
 
     /**
      *
@@ -1738,5 +1766,13 @@ public Object transact() throws BasicException {
 
             return c;
         }
-    }  
+    }
+    public List<StockCurrentInfo> searchStockOfProduct(final String product) throws BasicException {
+        return new PreparedSentence(s
+                , "SELECT SC.LOCATION, SC.PRODUCT, SC.ATTRIBUTESETINSTANCE_ID, SC.UNITS, "
+                        + " L.NAME " +
+                "FROM STOCKCURRENT SC INNER JOIN LOCATIONS L ON SC.LOCATION=L.ID  WHERE PRODUCT=?"
+                , SerializerWriteString.INSTANCE
+                , StockCurrentInfo.getSerializerRead()).list(product);
+    }
 }

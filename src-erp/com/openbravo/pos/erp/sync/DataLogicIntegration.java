@@ -63,6 +63,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import com.openbravo.pos.forms.DataLogicSales;
+import com.openbravo.pos.inventory.StockCurrentInfo;
 
 /**
  *
@@ -255,7 +256,36 @@ public class DataLogicIntegration extends BeanFactoryDataSingle {
         };
         t.execute();                   
     }
-    
+    public void syncLocations(final String location_id,final String location_name) throws BasicException {
+        
+        Transaction t = new Transaction(s) {
+            public Object transact() throws BasicException {
+                // Sync the Tax in a transaction
+                
+                // Try to update                
+                if (new PreparedSentence(s, 
+                            "UPDATE LOCATIONS SET NAME = ?  WHERE ID = ?",
+                            SerializerWriteParams.INSTANCE
+                            ).exec(new DataParams() { public void writeValues() throws BasicException {
+                                setString(1, location_name);
+                                setString(2, location_id);                                    
+                            }}) == 0) {
+                       
+                    // If not updated, try to insert
+                    new PreparedSentence(s, 
+                            "INSERT INTO LOCATIONS(ID, NAME) VALUES (?, ?)", 
+                            SerializerWriteParams.INSTANCE
+                            ).exec(new DataParams() { public void writeValues() throws BasicException {
+                                setString(1, location_id);
+                                setString(2, location_name);
+                            }});
+                }
+                
+                return null;
+            }
+        };
+        t.execute();                   
+    }
     public void syncTax(final TaxInfo tax) throws BasicException {
         
         Transaction t = new Transaction(s) {

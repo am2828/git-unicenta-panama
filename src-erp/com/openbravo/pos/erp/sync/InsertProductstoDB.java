@@ -77,8 +77,6 @@ public class InsertProductstoDB {
     public boolean ImportProducts(String productsXML){
         try {
             ProductPlus[] products = importQueue2Products(productsXML);
-            
-            
             if (products == null){
                     throw new BasicException(AppLocal.getIntString("message.returnnull"));
                 }
@@ -138,16 +136,18 @@ public class InsertProductstoDB {
                         if (product instanceof ProductPlus) {
                             
                             ProductPlus productplus = (ProductPlus) product;
+                            //  Synchonization of locations
+                            dlintegration.syncLocations(productplus.getLocation_id(),productplus.getLocation_name());
+                            double diff = productplus.getQtyonhand() - dlsales.findProductStock(productplus.getLocation_id(), p.getID(), null);
                             
-                            double diff = productplus.getQtyonhand() - dlsales.findProductStock(warehouse, p.getID(), null);
-                            
-                            Object[] diary = new Object[9];
+			    Object[] diary = new Object[9];
                             diary[0] = UUID.randomUUID().toString();
                             diary[1] = now;
                             diary[2] = diff > 0.0 
                                     ? MovementReason.IN_MOVEMENT.getKey()
                                     : MovementReason.OUT_MOVEMENT.getKey();
-                            diary[3] = warehouse;
+                            //diary[3] = warehouse;
+                            diary[3] = productplus.getLocation_id();
                             diary[4] = p.getID();
                             diary[5] = null; ///TODO find out where to get AttributeInstanceID -- red1
                             diary[6] = new Double(diff);
@@ -156,6 +156,7 @@ public class InsertProductstoDB {
                             dlsales.getStockDiaryInsert().exec(diary);   
                         }
                     }
+                    
                     dlintegration.syncProductsAfter();
                     return true;
                 }
@@ -208,12 +209,20 @@ public class InsertProductstoDB {
 		    		if (column.equals("POSLocatorName")) 
 		    		{
 		    			//checking if right POS Name
-		    			if (!poslocator.equals(n.getTextContent()))
-		    				break; 
+		    			//if (!poslocator.equals(n.getTextContent()))
+		    			//	break; 
+                                        
+                                        
                                     	cnt++;
-			    		product[cnt] = new ProductPlus();
+			    		product[cnt] = new ProductPlus();                 
                                         cate = new Category();
                                         newtax = new Tax();
+                                        
+                                        product[cnt].setLocation_name(n.getTextContent());
+		    		}
+                                else if (column.equals("M_Warehouse_ID")) 
+		    		{
+                                    product[cnt].setLocation_id(n.getTextContent());
 		    		}
 
                                 else if (column.equals("ProductName")) 
