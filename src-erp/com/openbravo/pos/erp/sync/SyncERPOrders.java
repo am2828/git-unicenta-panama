@@ -31,9 +31,11 @@ import com.openbravo.pos.erp.externalsales.Order;
 import com.openbravo.pos.erp.externalsales.OrderIdentifier;
 import com.openbravo.pos.erp.externalsales.OrderLine;
 import com.openbravo.pos.forms.AppLocal;
+import com.openbravo.pos.forms.DataLogicSales;
 import com.openbravo.pos.forms.DataLogicSystem;
 import com.openbravo.pos.forms.JRootApp;
 import com.openbravo.pos.payment.PaymentInfo;
+import com.openbravo.pos.ticket.ProductInfoExt;
 import com.openbravo.pos.ticket.TicketInfo;
 import com.openbravo.pos.ticket.TicketLineInfo;
 import java.io.File;
@@ -68,6 +70,7 @@ public class SyncERPOrders extends Thread{
     private JRootApp app;
     private final DataLogicSystem dlsystem;
     private final DataLogicIntegration dlintegration;
+    private final DataLogicSales dlsales;
     private final String queueOrders;
     private final String host;
     private final int port;
@@ -87,6 +90,7 @@ public class SyncERPOrders extends Thread{
          app = rootApp;
          this.minutesSyncOrders = minuteSyncOrders;   // indica el intervalo de tiempo que se enviarán las ordenes     
          dlsystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
+         dlsales = (DataLogicSales) app.getBean("com.openbravo.pos.forms.DataLogicSales");
          dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.sync.DataLogicIntegration");
          this.queueOrders =queueOrders;
          Properties activeMQProp = dlsystem.getResourceAsProperties("openbravo.properties");
@@ -106,6 +110,7 @@ public class SyncERPOrders extends Thread{
          app = rootApp;
          this.minutesSyncOrders = minuteSyncOrders;   // indica el intervalo de tiempo que se enviarán las ordenes     
          dlsystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
+         dlsales = (DataLogicSales) app.getBean("com.openbravo.pos.forms.DataLogicSales");
          dlintegration = (DataLogicIntegration) app.getBean("com.openbravo.pos.erp.sync.DataLogicIntegration");
          this.queueOrders =queueOrders;
          Properties activeMQProp = dlsystem.getResourceAsProperties("openbravo.properties");
@@ -286,11 +291,17 @@ public class SyncERPOrders extends Thread{
                             writer.writeEndElement(); 
                             if (line.getProductID() == null) {
                                 orderLine[j].setProductId("0");
+                                orderLine[j].setProductValue("0");
                             } else {
                                 orderLine[j].setProductId(line.getProductID());
-                                writer.writeStartElement(I_I_Order.COLUMNNAME_ProductValue);
+                                writer.writeStartElement(I_I_Order.COLUMNNAME_M_Product_ID);
                                 writer.writeCharacters(line.getProductID());
-                                writer.writeEndElement();     
+                                writer.writeEndElement(); 
+                                ProductInfoExt productinfo=dlsales.getProductInfo(line.getProductID());
+                                writer.writeStartElement(I_I_Order.COLUMNNAME_ProductValue);
+                                writer.writeCharacters(productinfo.getReference());
+                                writer.writeEndElement();
+                                
                             }
                             //red1 - convert to XML
                             orderLine[j].setUnits(line.getMultiply());
@@ -354,13 +365,6 @@ public class SyncERPOrders extends Thread{
                             writer.writeEndElement();
                             writer.writeStartElement("line");
                             writer.writeCharacters(Integer.toString(line.getTicketLine()));
-                            writer.writeEndElement();
-                            
-                            writer.writeStartElement("C_Country_ID");
-                            writer.writeCharacters(country);
-                            writer.writeEndElement();
-                            writer.writeStartElement("C_City_ID");
-                            writer.writeCharacters(city);
                             writer.writeEndElement();
                             
                             writer.writeStartElement("C_Country_ID");

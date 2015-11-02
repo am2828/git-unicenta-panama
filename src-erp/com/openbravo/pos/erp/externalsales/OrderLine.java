@@ -14,7 +14,7 @@ public class OrderLine implements java.io.Serializable {
     private java.lang.String productId;
     private java.lang.String taxId;
     private double units;
-
+    private java.lang.String productValue;
     public OrderLine() {
     }
 
@@ -23,12 +23,13 @@ public class OrderLine implements java.io.Serializable {
             double price,
             java.lang.String productId,
             java.lang.String taxId,
-            double units) {
+            double units,String productValue) {
         this.orderLineId = orderLineId;
         this.price = price;
         this.productId = productId;
         this.taxId = taxId;
         this.units = units;
+        this.productValue = productValue;
     }
 
     /**
@@ -120,6 +121,15 @@ public class OrderLine implements java.io.Serializable {
     public void setUnits(double units) {
         this.units = units;
     }
+
+    public String getProductValue() {
+        return productValue;
+    }
+
+    public void setProductValue(String productValue) {
+        this.productValue = productValue;
+    }
+    
     private java.lang.Object __equalsCalc = null;
 
     public synchronized boolean equals(java.lang.Object obj) {
