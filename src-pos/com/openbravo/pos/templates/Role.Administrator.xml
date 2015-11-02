@@ -161,8 +161,8 @@
           <!-- <class name="/com/openbravo/reports/dailyschedulereport.bs" /> -->
           <!-- <class name="/com/openbravo/reports/performancereport.bs" />  -->
     
-<!--    <class name="com.openbravo.possync.ProductsSyncCreate"/> -->
-<!--    <class name="com.openbravo.possync.OrdersSyncCreate"/> -->
+    <class name="com.openbravo.pos.erp.sync.ProductsSyncCreate"/> 
+    <class name="com.openbravo.pos.erp.sync.OrdersSyncCreate"/> 
     <class name="Menu.ChangePassword"/>
     <class name="com.openbravo.pos.panels.JPanelPrinter"/>
     <class name="com.openbravo.pos.config.JPanelConfiguration"/>
