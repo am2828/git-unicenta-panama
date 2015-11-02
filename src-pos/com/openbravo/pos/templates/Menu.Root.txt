@@ -109,7 +109,9 @@ group = menu.addGroup("Menu.Backoffice");
         submenu.addPanel("/com/openbravo/images/location.png", "Menu.Locations", "com.openbravo.pos.inventory.LocationsPanel");
         submenu.addPanel("/com/openbravo/images/floors.png", "Menu.Floors", "com.openbravo.pos.mant.JPanelFloors");
         submenu.addPanel("/com/openbravo/images/tables.png", "Menu.Tables", "com.openbravo.pos.mant.JPanelPlaces");
-
+    submenu.addTitle("Menu.Maintenance.ERP");
+        submenu.addExecution("/com/openbravo/images/maintain.png", "Menu.ERPProducts", "com.openbravo.pos.erp.sync.ProductsSyncCreate");
+        submenu.addExecution("/com/openbravo/images/maintain.png", "Menu.ERPOrders", "com.openbravo.pos.erp.sync.OrdersSyncCreate");
     submenu.addTitle("Menu.Maintenance.Reports");
         submenu.addPanel("/com/openbravo/images/reports.png", "Menu.UsersReport", "/com/openbravo/reports/people.bs");
         submenu.addPanel("/com/openbravo/images/reports.png", "Menu.UserSells", "/com/openbravo/reports/usersales.bs");
@@ -145,9 +147,7 @@ group = menu.addGroup("Menu.Backoffice");
     group.addPanel("/com/openbravo/images/printer.png", "Menu.Printer", "com.openbravo.pos.panels.JPanelPrinter");
     group.addPanel("/com/openbravo/images/timer.png", "Menu.CheckInCheckOut", "com.openbravo.pos.epm.JPanelEmployeePresence");
 
-// Deprecated options. Only required with Openbravo ERP software
-//       submenu.addTitle("Menu.Maintenance.ERP");
-//       submenu.addExecution("/com/openbravo/images/openbravo.png", "Menu.ERPProducts", "com.openbravo.possync.ProductsSyncCreate");
-//       submenu.addExecution("/com/openbravo/images/openbravo.png", "Menu.ERPOrders", "com.openbravo.possync.OrdersSyncCreate");
+
+       
 
     group.addExitAction();
