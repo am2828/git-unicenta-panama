@@ -63,6 +63,7 @@ public class InsertCustomerstoDB {
                         loc=customer.getLocations();
                         cinfo.setAddress(loc[0].getAddress1());
                         cinfo.setVisible(customer.getVisible());
+                        cinfo.setMaxdebt(customer.getMaxdebt());
                         // TODO: Finish the integration of all fields.
                         dlintegration.syncCustomer(cinfo);
                     }
