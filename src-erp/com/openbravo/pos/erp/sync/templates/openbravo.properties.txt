@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
- 	<comment>Openbravo Websevice configuration</comment>
-	<entry key="id">11</entry>
-	<entry key="org">11</entry>
-	<entry key="pos">HQ Warehouse</entry>
-        <entry key="country">100</entry>
-        <entry key="region">142</entry>
-        <entry key="city">100</entry>
-	<entry key="user">admin</entry>
-	<entry key="password">admin</entry>
-	<entry key="queue-host">unicenta.algeconsultores.com</entry>
-	<entry key="queue-port">61616</entry>
-	<entry key="orders-queue">Orders</entry>
-        <entry key="orders-minutes">1</entry>
-	<entry key="products-queue">Products</entry>
-	<entry key="customers-queue">Customers</entry>
-	<entry key="users-queue">Users</entry>
-        <entry key="creditmemo-queue">CreditMemo</entry>
-        <entry key="closedcash-queue">ClosedCash</entry>
+    <comment>Sync configuration</comment>
+    <entry key="id">11</entry>
+    <entry key="org">11</entry>
+    <entry key="pos">HQ Warehouse</entry>
+    <entry key="country">100</entry>
+    <entry key="region">142</entry>
+    <entry key="city">100</entry>
+    <entry key="user">admin</entry>
+    <entry key="password">admin</entry>
+    <entry key="queue-host">104.196.21.193</entry>
+    <entry key="queue-port">61616</entry>
+    <entry key="orders-queue">Orders</entry>
+    <entry key="orders-minutes">1</entry>
+    <entry key="products-queue">Products</entry>
+    <entry key="customers-queue">Customers</entry>
+    <entry key="users-queue">Users</entry>
+    <entry key="creditmemo-queue">CreditMemo</entry>
+    <entry key="closedcash-queue">ClosedCash</entry>
 </properties>
