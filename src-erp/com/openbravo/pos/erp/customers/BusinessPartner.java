@@ -20,7 +20,15 @@ public class BusinessPartner implements java.io.Serializable {
     private java.lang.String searchKey;
     private java.lang.Boolean vendor;
     private java.lang.Boolean visible;
+    private double maxdebt;
 
+    public double getMaxdebt() {
+        return maxdebt;
+    }
+
+    public void setMaxdebt(double maxdebt) {
+        this.maxdebt = maxdebt;
+    }
     public Boolean getVisible() {
         return visible;
     }
