@@ -368,7 +368,7 @@ public class DataLogicIntegration extends BeanFactoryDataSingle {
     
     // Try to update
     if (new PreparedSentence(s, 
-                "UPDATE PRODUCTS SET REFERENCE = ?, CODE = ?, NAME = ?, PRICEBUY = ?, PRICESELL = ?, CATEGORY = ?, TAXCAT = ?, IMAGE = ?, STOCKVOLUME = ?, DISPLAY = ? WHERE ID = ?", 
+                "UPDATE PRODUCTS SET REFERENCE = ?, CODE = ?, NAME = ?, PRICEBUY = ?, PRICESELL = ?, CATEGORY = ?, TAXCAT = ?, IMAGE = ?, STOCKVOLUME = ?, DISPLAY = ? WHERE ID = ? OR CODE = ?", 
                 SerializerWriteParams.INSTANCE
                 ).exec(new DataParams() { public void writeValues() throws BasicException {
                     setString(1, prod.getReference());
@@ -381,7 +381,8 @@ public class DataLogicIntegration extends BeanFactoryDataSingle {
                     setBytes(8, ImageUtils.writeImage(prod.getImage()));
                     setDouble(9, prod.getStockVolume());
                     setString(10, prod.getDisplay());
-                    setString(11, prod.getID());  
+                    setString(11, prod.getID());
+                    setString(12, prod.getCode());
                 }}) == 0) 
     {
         // If not updated, try to insert
