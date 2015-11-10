@@ -317,6 +317,9 @@ public class SyncERPOrders extends Thread{
                             writer.writeStartElement(I_I_Order.COLUMNNAME_C_Tax_ID);
                             writer.writeCharacters(line.getTaxInfo().getId());
                             writer.writeEndElement();
+                            writer.writeStartElement("TaxName");
+                            writer.writeCharacters(line.getTaxInfo().getName());
+                            writer.writeEndElement();
                             writer.writeStartElement(I_I_Order.COLUMNNAME_TaxAmt);
                             writer.writeCharacters(Double.toString(line.getTax()));
                             writer.writeEndElement();
