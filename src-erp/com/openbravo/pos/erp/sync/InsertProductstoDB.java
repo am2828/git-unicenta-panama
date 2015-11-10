@@ -91,12 +91,12 @@ public class InsertProductstoDB {
                         // Synchonization of taxcategories
                         TaxCategoryInfo tc = new TaxCategoryInfo(product.getTax().getId(), URLDecoder.decode(product.getTax().getName(),"UTF-8"));
                         dlintegration.syncTaxCategory(tc);
-                        
+                        TaxCategoryInfo tcaux = dlintegration.getTaxCategoryInfoByName(tc.getName());
                         // Synchonization of taxes
                         TaxInfo t = new TaxInfo(
                                 product.getTax().getId(),
                                 URLDecoder.decode(product.getTax().getName(),"UTF-8"),
-                                tc.getID(),
+                                tcaux.getID(),
                                 //new Date(Long.MIN_VALUE),
                                 null,
                                 null,
@@ -108,7 +108,7 @@ public class InsertProductstoDB {
                         // Synchonization of categories
                         CategoryInfo c = new CategoryInfo(product.getCategory().getId(), URLDecoder.decode(product.getCategory().getName(),"UTF-8"), null,null,null);
                         dlintegration.syncCategory(c);
-
+                        CategoryInfo caux = dlintegration.getCategoryInfoByName(c.getName());
                         // Synchonization of products
                         ProductInfoExt p = new ProductInfoExt();
                         p.setID(product.getId());
@@ -122,8 +122,8 @@ public class InsertProductstoDB {
                         p.setScale(false);
                         p.setPriceBuy(product.getPurchasePrice());
                         p.setPriceSell(product.getListPrice());
-                        p.setCategoryID(c.getID());
-                        p.setTaxCategoryID(tc.getID());
+                        p.setCategoryID(caux.getID());
+                        p.setTaxCategoryID(tcaux.getID());
                         p.setImage(ImageUtils.readImage(product.getImageUrl()));
                         // build html display like <html><font size=-2>MIRACLE NOIR<br> MASK</font>
                         
@@ -136,6 +136,7 @@ public class InsertProductstoDB {
                         if (product instanceof ProductPlus) {
                             
                             ProductPlus productplus = (ProductPlus) product;
+                            ProductInfoExt productaux=dlsales.getProductInfoByCode(productplus.getReference());
                             //  Synchonization of locations
                             dlintegration.syncLocations(productplus.getLocation_id(),productplus.getLocation_name());
                             double diff = productplus.getQtyonhand() - dlsales.findProductStock(productplus.getLocation_id(), p.getID(), null);
@@ -148,7 +149,10 @@ public class InsertProductstoDB {
                                     : MovementReason.OUT_MOVEMENT.getKey();
                             //diary[3] = warehouse;
                             diary[3] = productplus.getLocation_id();
-                            diary[4] = p.getID();
+                            String pid=p.getID();
+                            if (productaux.getID()!=null)
+                                   pid=productaux.getID();
+                            diary[4] = pid;
                             diary[5] = null; ///TODO find out where to get AttributeInstanceID -- red1
                             diary[6] = new Double(diff);
                             diary[7] = new Double(p.getPriceBuy());
