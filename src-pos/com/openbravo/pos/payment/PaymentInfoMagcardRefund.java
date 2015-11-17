@@ -48,6 +48,9 @@ public class PaymentInfoMagcardRefund extends PaymentInfoMagcard {
         super(sHolderName, sCardNumber, sExpirationDate, sTransactionID, dTotal);
     }
     
+    public PaymentInfoMagcardRefund(String sHolderName, String sCardNumber, String sExpirationDate, String track1, String track2, String track3, String sTransactionID, double dTotal,String puntoVenta, String carType) {
+       super(sHolderName, sCardNumber, sExpirationDate, track1, track2, track3, sTransactionID, dTotal,puntoVenta,carType);
+    }
     /**
      *
      * @return

@@ -134,7 +134,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
         public void propertyChange(PropertyChangeEvent evt) {
 
             Double value = m_jPrice.getDoubleValue();
-            if (value == null || value == 0.0) {
+            if (value == null ) {
                 m_bpriceok = false;
             } else {
                 m_oLine.setPrice(value);
@@ -151,7 +151,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
         public void propertyChange(PropertyChangeEvent evt) {
 
             Double value = m_jPriceTax.getDoubleValue();
-            if (value == null || value == 0.0) {
+            if (value == null ) {
                 // m_jPriceTax.setValue(m_oLine.getPriceTax());
                 m_bpriceok = false;
             } else {

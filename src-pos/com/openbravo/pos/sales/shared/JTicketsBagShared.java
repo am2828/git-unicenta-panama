@@ -69,6 +69,8 @@ public class JTicketsBagShared extends JTicketsBag {
         
         // Authorisation
         m_jDelTicket.setEnabled(m_App.getAppUserView().getUser().hasPermission("com.openbravo.pos.sales.JPanelTicketEdits"));
+        m_jNewTicket.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.newticket"));
+        m_jListTickets.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.listtickets"));
        
     }
     
