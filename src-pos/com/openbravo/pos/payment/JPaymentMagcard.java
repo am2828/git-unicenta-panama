@@ -53,6 +53,8 @@ public class JPaymentMagcard extends javax.swing.JPanel implements JPaymentInter
         } else {           
             // Se van a poder efectuar pagos con tarjeta
             m_cardpanel = PaymentPanelFac.getPaymentPanel(app.getProperties().getProperty("payment.magcardreader"), notifier);
+            if(m_cardpanel instanceof PaymentPanelKeyboard)
+                ((PaymentPanelKeyboard)m_cardpanel).setAppView(app);
             add(m_cardpanel.getComponent(), BorderLayout.CENTER);
             jlblMessage.setText(null);
             // jlblMessage.setText(AppLocal.getIntString("message.nocardreader"));

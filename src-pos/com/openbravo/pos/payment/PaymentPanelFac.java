@@ -43,7 +43,7 @@ public class PaymentPanelFac {
             case "Generic":
                 return new PaymentPanelMagCard(new MagCardReaderGeneric(), notifier);
             case "Keyboard":
-                return new PaymentPanelType(notifier);
+                return new PaymentPanelKeyboard(notifier);
             default:
                 // "Not defined
            return new PaymentPanelBasic(notifier);

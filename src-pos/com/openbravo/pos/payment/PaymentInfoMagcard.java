@@ -83,7 +83,10 @@ public class PaymentInfoMagcard extends PaymentInfo {
     /**
      *
      */
-    protected String m_dCardName =null; 
+    protected String m_dCardName =null;
+    
+    protected String pointOfSales;
+    protected String carType;
   
     /** Creates a new instance of PaymentInfoMagcard
      * @param sHolderName
@@ -117,6 +120,25 @@ public class PaymentInfoMagcard extends PaymentInfo {
         m_sAuthorization = null;
         m_sErrorMessage = null;
         m_sReturnMessage = null;
+    }
+    
+    public PaymentInfoMagcard(String sHolderName, String sCardNumber, String sExpirationDate, String track1, String track2, 
+            String track3, String sTransactionID, double dTotal, String pointOfSales, String carType) {
+        m_sHolderName = sHolderName;
+        m_sCardNumber = sCardNumber;
+        m_sExpirationDate = sExpirationDate;
+        this.track1 = track1;
+        this.track2 = track2;
+        this.track3 = track3;
+        
+        m_sTransactionID = sTransactionID;
+        m_dTotal = dTotal;
+        
+        m_sAuthorization = null;
+        m_sErrorMessage = null;
+        m_sReturnMessage = null;
+        this.pointOfSales = pointOfSales;
+        this.carType = carType;
     }
     
     /** Creates a new instance of PaymentInfoMagcard
