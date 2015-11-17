@@ -139,12 +139,13 @@ public class DataLogicIntegration extends BeanFactoryDataSingle {
                 // Try to update
 	        // Add the field TaxID to sync...
                 if (new PreparedSentence(s,
-                            "UPDATE PEOPLE SET NAME = ?, VISIBLE = ? WHERE ID = ?",
+                            "UPDATE PEOPLE SET NAME = ?, VISIBLE = ? WHERE ID = ? OR NAME = ?",
                             SerializerWriteParams.INSTANCE
                             ).exec(new DataParams() { public void writeValues() throws BasicException {
                                 setString(1, user.getName());
                                 setBoolean(2, user.getVisible());
                                 setString(3, user.getId());
+                                setString(4, user.getName());
                             }}) == 0) {
 
                     // If not updated, try to insert

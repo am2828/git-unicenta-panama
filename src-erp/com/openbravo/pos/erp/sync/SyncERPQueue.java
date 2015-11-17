@@ -64,13 +64,15 @@ public class SyncERPQueue extends Thread implements MessageListener{
     private final InsertCreditmemotoDB creditmemoQueueSyn;
     private final UpdateOrdersToResend resendordersQueueSyn;
     private final String lastUpdate;
-    //private Message msg2;
     
     /**
      *
      * @param userName
      * @param password
      * @param url
+     * @param lastUpdate
+     * @param queueMQ
+     * @param app
      */
     public SyncERPQueue(String userName, String password, String url, String lastUpdate, String queueMQ,JRootApp app){
         sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
@@ -97,50 +99,38 @@ public class SyncERPQueue extends Thread implements MessageListener{
         int c =0;
         boolean keep=true;
         while (keep) { 
-        try {
-            
-            
-                stopLoop = receive==true? (10.0):0.25; 
-            
+            try {
+                stopLoop = receive==true? (1.0):0.25; 
                 //si es la primera vez que entra no se detiene el ciclo
-               if(c !=0){
-                  sleep(converter(stopLoop));
-               }
-            //Hacemos la conexion con el ActiveMQ
-            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(userName, password, url);
-            connection = connectionFactory.createConnection();
-            connection.start();
-            
-            
-            session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
-            Destination destination = session.createQueue(queueMQ);
-            
-            consumer = session.createConsumer(destination);
-            //msg2 = consumer.receive();
-            System.out.println("-Sync with Queue "+queueMQ);
-            
-            numbOnQueue=  numberMsgOnQueue(session); // Contamos el numero de Mensajes en la cola
-            System.out.println("Numero de mensajes en la cola "+ queueMQ+ " " + numbOnQueue);
-            if(numbOnQueue == 0) {// Cerramos la conexion si no hay mensajes en la cola
-                closedConnection(session, consumer, connection); 
-            }
-            else{
+                if(c != 0){
+                    sleep(converter(stopLoop));
+                }
+
+                System.out.println("-Sync with Queue "+queueMQ);
+                if(connection!=null || session!=null || consumer!=null)
+                    closedConnection(session, consumer, connection);
+
+                ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(userName, password, url);
+                connection = connectionFactory.createConnection();           
+                session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+                Destination destination = session.createQueue(queueMQ);
+                consumer = session.createConsumer(destination);
                 consumer.setMessageListener(this);
+                connection.start();    
+            } catch (JMSException ex) {
+                Logger.getLogger(SyncERPQueue.class.getName()).log(Level.SEVERE, null, ex);
+                receive = false;
+                closedConnection(session,consumer,connection);
+            }catch (InterruptedException ex) {
+                   Logger.getLogger(SyncERPQueue.class.getName()).log(Level.SEVERE, null, ex);
+                receive = false;
+                closedConnection(session,consumer,connection);
             }
-            receive = true;
-            
-        } catch (JMSException ex) {
-            Logger.getLogger(SyncERPQueue.class.getName()).log(Level.SEVERE, null, ex);
-            receive = false;
-        }catch (InterruptedException ex) {
-               Logger.getLogger(SyncERPQueue.class.getName()).log(Level.SEVERE, null, ex);
-            receive = false;
-        
-        }
-        c++;
+            c++;
         }
     }
-     public long converter(Double min){
+    
+    public long converter(Double min){
         long millis = (long) (min*60*1000);
         return millis;
     }
@@ -148,58 +138,45 @@ public class SyncERPQueue extends Thread implements MessageListener{
     @Override
     public void onMessage(Message msg) {
         try{
-            count++;
-            
             validarMensaje(msg);
             msg.acknowledge();
         } catch (JMSException ex) {
             Logger.getLogger(SyncERPQueue.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (numbOnQueue == count) // Si ya se recorrido todos los mensajes cerramos la conexion
+        }finally{
             closedConnection(session,consumer,connection);
+        }
     }
     
     // validamos si el mensaje recibido ya no halla sido registrado en el sistema
     public void validarMensaje(Message message){  
-    try {
-           Calendar messageTime = Calendar.getInstance();
-           messageTime.setTimeInMillis(message.getJMSTimestamp());
-           Calendar lastUpdateDB = readLastDateDB();
-           if(lastUpdateDB != null && (lastUpdateDB.after(messageTime) || lastUpdateDB.equals(messageTime))){
-              System.out.println(" Updated "+queueMQ);
-            }
-            else{
-              System.out.println(" Registering "+queueMQ);
-              TextMessage tMsg = (TextMessage)message;
-              importToDataBase(tMsg.getText(),messageTime);
-            }
+        try {
+            Calendar messageTime = Calendar.getInstance();
+            messageTime.setTimeInMillis(message.getJMSTimestamp());
+            System.out.println("Registering "+queueMQ);
+            TextMessage tMsg = (TextMessage)message;
+            importToDataBase(tMsg.getText(),messageTime);
         } catch (JMSException ex) {
-            Logger.getLogger(SyncERPTopic.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SyncERPQueue.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }
     
-  public void importToDataBase(String xml, Calendar messageTime){
-          if(queueMQ.toUpperCase().contains("PRODUCT")){
-              if(productsQueueSync.ImportProducts(xml)) // si se registra al menos un productos se guarda la fecha de los Registros
-                  writeLastDateDB(messageTime);
-          }
-          else if(queueMQ.toUpperCase().contains("CUSTOMER")){
-               if(customersQueueSyn.ImportCustomers(xml))
-                   writeLastDateDB(messageTime);           
-          }
-          else if(queueMQ.toUpperCase().contains("USERS")){
+    public void importToDataBase(String xml, Calendar messageTime){
+        if(queueMQ.toUpperCase().contains("PRODUCT")){
+            if(productsQueueSync.ImportProducts(xml)) // si se registra al menos un productos se guarda la fecha de los Registros
+                writeLastDateDB(messageTime);
+        }else if(queueMQ.toUpperCase().contains("CUSTOMER")){
+            if(customersQueueSyn.ImportCustomers(xml))
+                writeLastDateDB(messageTime);           
+        }else if(queueMQ.toUpperCase().contains("USERS")){
                if(peopleQueueSyn.Import(xml))
                    writeLastDateDB(messageTime);           
-          }
-          else if(queueMQ.toUpperCase().contains("CREDITMEMO")){
-               if(creditmemoQueueSyn.Import(xml))
-                   writeLastDateDB(messageTime);           
-          }
-           else if(queueMQ.toUpperCase().contains("RESENDORDERS")){
-               if(resendordersQueueSyn.Import(xml))
-                   writeLastDateDB(messageTime);           
-          }
-   
+        }else if(queueMQ.toUpperCase().contains("CREDITMEMO")){
+            if(creditmemoQueueSyn.Import(xml))
+                writeLastDateDB(messageTime);           
+        }else if(queueMQ.toUpperCase().contains("RESENDORDERS")){
+            if(resendordersQueueSyn.Import(xml))
+                writeLastDateDB(messageTime);           
+        }
     }
 
   //leemos la fecha en que se realizó la ultima actualización
@@ -215,7 +192,7 @@ public class SyncERPQueue extends Thread implements MessageListener{
               return dateini;
             }
         } catch (ParseException ex) {
-            Logger.getLogger(SyncERPTopic.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SyncERPQueue.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;    
     }
@@ -229,22 +206,20 @@ public class SyncERPQueue extends Thread implements MessageListener{
     private int numberMsgOnQueue(Session session) {
         try {
             Queue queue  = new Queue() {
-
-                   @Override
-                   public String getQueueName() throws JMSException {
-                       return queueMQ;
-                   }
-               };
-                           
-               QueueBrowser inQBrowser = session.createBrowser(queue);  
-               Enumeration messagesOnQ = inQBrowser.getEnumeration();  
-               int numOnQueue = 0;
-               while (messagesOnQ.hasMoreElements()) {  
-                   messagesOnQ.nextElement();  
-                   numOnQueue++;  
-               }  
-               inQBrowser.close();
-               return numOnQueue;
+            @Override
+            public String getQueueName() throws JMSException {
+                return queueMQ;
+            }
+        };
+            QueueBrowser inQBrowser = session.createBrowser(queue);  
+            Enumeration messagesOnQ = inQBrowser.getEnumeration();  
+            int numOnQueue = 0;
+            while (messagesOnQ.hasMoreElements()) {  
+                messagesOnQ.nextElement();
+                numOnQueue++;  
+            }  
+            inQBrowser.close();
+            return numOnQueue;
         } catch (JMSException ex) {
             Logger.getLogger(SyncERPQueue.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -255,14 +230,17 @@ public class SyncERPQueue extends Thread implements MessageListener{
     private void closedConnection(Session session, MessageConsumer consumer, Connection connection) {
         try {
             System.out.println(" Closing Conecction Queue " +queueMQ);
+            if(consumer!=null)
+                consumer.close();
             
-            //msg2.acknowledge();
-            consumer.close();
-            session.close();
-            connection.close();
+            if(session!=null)
+                session.close();
+            
+            if(connection!=null)
+                connection.close();
+            
         } catch (JMSException ex) {
             Logger.getLogger(SyncERPQueue.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-  
 }
