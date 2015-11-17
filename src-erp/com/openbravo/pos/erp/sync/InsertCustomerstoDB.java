@@ -125,6 +125,9 @@ public class InsertCustomerstoDB {
                         customer[i].setVisible(Boolean.TRUE);
                     else
                         customer[i].setVisible(Boolean.FALSE);
+                
+                }else if(column.equals("TotalOpenBalance")){
+                    customer[i].setMaxdebt(Double.parseDouble(n.getTextContent()));
                 }
 	    }
     	}
