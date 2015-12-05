@@ -51,6 +51,8 @@ public interface BemaFI extends Library {
     public int Bematech_FI_AbreNotaDeCredito(String var1, String var2, String var3, String var4, String var5, String var6, String var7, String var8, String var9, String var10, String var11);
 
     public int Bematech_FI_AbreFacturaFis(String var1, String var2, String var3, String var4, String var5);
+    
+    public int Bematech_FI_Abre_Nota_Cred_Fis(String var1, String var2, String var3, String var4, String var5);
 
     public int Bematech_FI_LecturaX();
 
@@ -119,4 +121,14 @@ public interface BemaFI extends Library {
     public int Bematech_FI_CierraPuertaSerial();
 
     public int Bematech_FI_RetornoImpresora(int var1, int var2, int var3);
+    
+    public int Bematech_FI_LecturaMemoriaFiscalFecha(String FechaInicial,String FechaFinal);
+    
+    public int Bematech_FI_LecturaMemoriaFiscalReduccion(String ReduccionInicial, String ReduccionFinal);
+    
+    public int Bematech_FI_LecturaMemoriaFiscalSerialFecha(String FechaInicial,String FechaFinal);
+    
+    public int Bematech_FI_LecturaMemoriaFiscalSerialReduccion(String ReduccionInicial, String ReduccionFinal);
+    
+    public int Bematech_FI_VerificaEstadoImpresora(int ACK, int ST1,int ST2);
 }
