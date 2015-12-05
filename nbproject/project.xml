@@ -8,6 +8,7 @@
                 <root id="src.dir"/>
                 <root id="locales.dir"/>
                 <root id="reports.dir"/>
+                <root id="src.src-fiscal.dir"/>
                 <root id="src.src-erp.dir"/>
                 <root id="src-beans.dir"/>
                 <root id="src-data.dir"/>
