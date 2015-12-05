@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import com.openbravo.pos.forms.DataLogicSales; 
 import com.openbravo.pos.forms.DataLogicSystem;
-import com.openbravo.pos.erp.possync.DataLogicIntegration;
+import com.openbravo.pos.erp.sync.DataLogicIntegration;
 import com.openbravo.pos.ticket.ProductInfoExt; 
 import com.openbravo.data.loader.Session;
 import com.openbravo.pos.ticket.TicketLineInfo;
@@ -27,12 +27,15 @@ logicintegration.init(session);
 Properties p = logicsystem.getResourceAsProperties("fiscalprint.properties");
 
 BemaFI print = (BemaFI) Native.loadLibrary(p.getProperty("library"),BemaFI.class);
-int iRetorno;
+int iRetorno=1;
 File file=null;
 File fileStatus=null;
 String auxname="CONTADO";
 String auxaddress="Panama";
-
+String auxtaxid="000-000-000";
+System.out.println("Tipo de ticket");
+System.out.println(ticket.getTicketType());
+if(ticket.getCustomer()!=null){
         if(ticket.printCustomer()!=null){
             if(ticket.printCustomer().trim().compareTo("")!=0){
                 auxname=ticket.printCustomer().replace("&amp;", "&").replace("&quot;", "\"").replace("&apos;", "\'");
@@ -44,43 +47,79 @@ String auxaddress="Panama";
 
             }
         }
+        if(ticket.getCustomer().printTaxid()!=null){
+            if(ticket.getCustomer().printTaxid().trim().compareTo("")!=0){
+                auxtaxid=ticket.getCustomer().printTaxid().trim();
+
+            }
+        }
+}
         if(ticket.getTicketType()==0){
-            iRetorno = print.Bematech_FI_AbreComprobanteDeVentaEx(auxname,ticket.getCustomer().printTaxid(),auxaddress);
             
-        }else if(ticket.getTicketType()==1){
-            iRetorno = print.Bematech_FI_AbreNotaDeCredito(auxname,ticket.printId(),ticket.getCustomer().printTaxid(),"", "", "", "", "", "", "", "");
+            iRetorno = print.Bematech_FI_AbreFacturaFis("2",auxtaxid,auxname,auxaddress,"");
+            iRetorno = print.Bematech_FI_AbreComprobanteDeVentaEx(auxtaxid,auxname,auxaddress);
+            
+        }else {
+            System.out.println("entro aqui nota de credito");
+            //return 1;
+            iRetorno = print.Bematech_FI_Abre_Nota_Cred_Fis("3",  ticket.printId(), auxtaxid , auxname , "");
+            iRetorno = print.Bematech_FI_AbreNotaDeCredito(auxname,ticket.printId(),auxtaxid,ticket.printDate().substring(0,2), ticket.printDate().substring(3,5), ticket.printDate().substring(8,10), ticket.printDate().substring(11,13),ticket.printDate().substring(14,16),ticket.printDate().substring(17,19),"" ,ticket.printId());
+
         }
         if (iRetorno!=1){
-            System.out.printl()
+            System.out.println(iRetorno);
+//            iRetorno=print.Bematech_FI_AnulaCupon();
             return 1;
         }
-
-	length=ticket.getLinesCount();
-	String aux=null;
+        length=ticket.getLinesCount();
+        String aux=null;
         Double totalLines=0;
         NumberFormat f = NumberFormat.getInstance(Locale.ENGLISH);
         if (f instanceof DecimalFormat) {
               ((DecimalFormat) f).setDecimalSeparatorAlwaysShown(true);
         }
-	//DecimalFormat fo = new DecimalFormat("00000000.00");
-        
-	for (int i = 0; i < length; i++) {
-            //Bematech_FI_VendeArticulo("123","Pantalon","FF","I","2",2,"350,00","%","0100");
+        DecimalFormat fo = new DecimalFormat("#0.00");
+        int pstrlength=25;
+
+        for (int i = 0; i < length; i++) {
             line = ticket.getLine(i);
             product = logicsale.getProductInfo(line.getProductID());
             
-            if(ticket.getTicketType()==0){
-                iRetorno=print.Bematech_FI_VendeArticulo(product.getReference(),line.printName(),"01","F",Double.toString(line.getMultiply()).replace(".",","),2,Double.toString(line.getPrice()).replace(".",","),"%","0000");
-            }else{
-                iRetorno=print.Bematech_FI_DevolucionArticulo(product.getReference(), line.printName(), "01", "F",Double.toString(Math.abs(line.getMultiply())).replace(".",","),2,Double.toString(line.getPrice()).replace(".",","),"%","0000");
+            desc=line.printName();
+            if(desc.length()<=pstrlength){
+              pstrlength=desc.length();			
             }
-            totalLines+=(line.getPrice()*Math.abs(line.getMultiply())*(1+line.getTaxRate()));
+            desc=desc.substring(0,pstrlength);
+            String tax="FF";
+            System.out.println(line.getTaxRate());
+                        if (line.getTaxRate()==0.07){
+            System.out.println("impuesto de 7 %");
+                            tax="01";
+                        }else if (line.getTaxRate()==0.1){
+            System.out.println("impuesto de 10 %");
+                            tax="02";
+                        }else if (line.getTaxRate()==0.15){
+            System.out.println("impuesto de 15 %");
+                             tax="03";
+                        }else{
+            System.out.println("impuesto exento");
+                             tax="FF";
+                        }
+            
+                iRetorno=print.Bematech_FI_VendeArticulo(product.getReference(),desc,tax,"I",fo.format(line.getMultiply()).replace(".00",""),2,fo.format(line.getPrice()).replace(".",","),"%","0000");
+            
+            totalLines+=line.getPrice()*Math.abs(line.getMultiply())*(1+line.getTaxRate());
             if (iRetorno!=1){
-                return 1;
+               System.out.println(iRetorno);
+               iRetorno=print.Bematech_FI_AnulaCupon();
+               return 1;
             } 
-	}
-        iRetorno=print.BemaFI.Bematech_FI_CierraCupon("Efectivo","A","%","0000",Double.toString(totalLines).replace(".",","),"Vuelva Pronto!");
+        }
+
+
+iRetorno=print.Bematech_FI_CierraCuponReducido("Efectivo","Vuelva Pronto");
+            System.out.println("-----------Finalizar cupon");
+            System.out.println(iRetorno);
         if (iRetorno!=1){
             return 1;
         }
-        
