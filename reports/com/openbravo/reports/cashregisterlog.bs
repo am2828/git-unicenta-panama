@@ -33,8 +33,8 @@ report.setSentence("SELECT " +
                         "LEFT JOIN TICKETS ON  RECEIPTS.ID = TICKETS.ID " +
                         "LEFT JOIN PEOPLE ON TICKETS.PERSON = PEOPLE.ID " +
                     "WHERE ?(QBF_FILTER) " + 
-                    "GROUP BY PEOPLE.NAME,RECEIPTS.DATENEW, PAYMENTS.PAYMENT " + 
-                    "ORDER BY PEOPLE.NAME,RECEIPTS.DATENEW, PAYMENTS.PAYMENT");
+                    "GROUP BY RECEIPTS.DATENEW,PEOPLE.NAME, PAYMENTS.PAYMENT " + 
+                    "ORDER BY RECEIPTS.DATENEW,PEOPLE.NAME, PAYMENTS.PAYMENT");
 
 report.addParameter("RECEIPTS.DATENEW");
 report.addParameter("RECEIPTS.DATENEW");
