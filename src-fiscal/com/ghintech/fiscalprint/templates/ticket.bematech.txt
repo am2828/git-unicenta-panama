@@ -35,6 +35,12 @@ String auxaddress="Panama";
 String auxtaxid="000-000-000";
 System.out.println("Tipo de ticket");
 System.out.println(ticket.getTicketType());
+iRetorno=print.Bematech_FI_AccionaGaveta();
+            if (iRetorno!=1){
+               System.out.println(iRetorno);
+               iRetorno=print.Bematech_FI_AnulaCupon();
+               return 1;
+            }
 if(ticket.getCustomer()!=null){
         if(ticket.printCustomer()!=null){
             if(ticket.printCustomer().trim().compareTo("")!=0){
@@ -114,6 +120,7 @@ if(ticket.getCustomer()!=null){
                iRetorno=print.Bematech_FI_AnulaCupon();
                return 1;
             } 
+             
         }
 
 
@@ -123,3 +130,4 @@ iRetorno=print.Bematech_FI_CierraCuponReducido("Efectivo","Vuelva Pronto");
         if (iRetorno!=1){
             return 1;
         }
+
