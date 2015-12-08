@@ -773,7 +773,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
             if (dMargin == null || dPriceBuy == null) {
                 setPriceSell(null);
             } else {
-                setPriceSell(dPriceBuy * (1.0 + dMargin));
+                setPriceSell(dPriceBuy / (1.0 - dMargin));
             }
 
             reportlock = false;
