@@ -1,0 +1,88 @@
+//    uniCenta oPOS - touch friendly EPoS
+//    Copyright (c) 2009-2014 uniCenta & previous Openbravo POS works
+//    http://www.unicenta.net
+//
+//    This file is part of uniCenta oPOS
+//
+//    uniCenta oPOS is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    uniCenta oPOS is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with uniCenta oPOS.  If not, see <http://www.gnu.org/licenses/>.
+
+report = new com.openbravo.pos.reports.PanelReportBean();
+
+report.setTitleKey("Menu.DailySales");
+report.setReport("/com/openbravo/reports/dailysales");
+report.setResourceBundle("com/openbravo/reports/dailysales_messages");
+
+report.setSentence(
+				"select sum(base) total_brute,sum(case when taxtype ='001' then amount else 0 end) as tax_001, " +
+				"sum(case when taxtype ='002' then amount else 0 end) as tax_002, "  +
+				"sum(case when taxtype ='003' then amount else 0 end) as tax_003, " +
+				"sum(case when taxtype ='004' then amount else 0 end) as tax_004, " +
+				"sum(total) total, " +
+				"sum(case when payment='cash' then total else 0 end) as tcash, " +
+				"sum(case when payment='cheque' then total else 0 end) as tcheck, " +
+				"sum(case when payment='magcard' then total else 0 end) as tmagcard, " +
+				"sum(case when payment='debt' then total else 0 end) as tdebt, " +
+				"count(DISTINCT case when payment='cash' then receipts else null end) as ccash, " +
+				"count(DISTINCT case when payment='cheque' then receipts else null end) as ccheck, " +
+				"count(DISTINCT case when payment='magcard' then receipts else null end) as cmagcard, " +
+				"count(DISTINCT case when payment='debt' then receipts else null end) as cdebt, " +
+				"count(DISTINCT receipts) ctotal, " +
+				"sum(cost) tcost, " +
+				"(sum(total)-sum(cost)) util, " +
+                                "tickettype " +
+				"from receipts " +
+				"join payments on payments.receipt=receipts.id " +
+				"join taxlines on taxlines.receipt=receipts.id " +
+				"join tickets on tickets.id=receipts.id " +
+				"join (select product,sum(units*pricebuy) as cost,ticket,taxid taxtype from ticketlines " +
+				"join products on ticketlines.product=products.id " +
+				"group by product,ticket,taxid order by ticket) ticketlines on ticketlines.ticket=tickets.id and taxtype = taxlines.taxid " +
+				"where ?(QBF_FILTER) " +
+				"group by tickettype");
+
+
+report.addParameter("RECEIPTS.DATENEW");
+report.addParameter("RECEIPTS.DATENEW");
+
+paramdates = new com.openbravo.pos.reports.JParamsDatesInterval();
+
+paramdates.setStartDate(com.openbravo.beans.DateUtils.getToday());
+// JG - 8 Jan 14 paramdates.setEndDate(com.openbravo.beans.DateUtils.getToday());
+paramdates.setEndDate(com.openbravo.beans.DateUtils.getTodayMinutes());
+
+
+report.addQBFFilter(paramdates);
+
+report.addField("tax_001", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("tax_002", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("tax_003", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("tax_004", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("total_brute", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("total", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("tcash", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("tcheck", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("tmagcard", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("tdebt", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("ccash", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("ccheck", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("cmagcard", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("cdebt", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("ctotal", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("tcost", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("util", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("tickettype", com.openbravo.data.loader.Datas.DOUBLE);
+
+
+
+report;
