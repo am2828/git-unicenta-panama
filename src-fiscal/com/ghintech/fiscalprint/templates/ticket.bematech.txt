@@ -66,10 +66,20 @@ if(ticket.getCustomer()!=null){
             iRetorno = print.Bematech_FI_AbreComprobanteDeVentaEx(auxtaxid,auxname,auxaddress);
             
         }else {
-            System.out.println("entro aqui nota de credito");
+            //System.out.println("entro aqui nota de credito");
             //return 1;
+            //Tomar la fecha como un timstamp
+
+            //Datetime date = ticket.printDate().getTimestamp();
+
+            //formatearlo en el formato dd/MM/aaaa forzadamente
+            //SimpleDateFormat dateFormated
+            
+            //Asignarlo a una variable
+            //asignarlo a la impresion de la nota de credito
+
             iRetorno = print.Bematech_FI_Abre_Nota_Cred_Fis("3",  ticket.printId(), auxtaxid , auxname , "");
-            iRetorno = print.Bematech_FI_AbreNotaDeCredito(auxname,ticket.printId(),auxtaxid,ticket.printDate().substring(0,2), ticket.printDate().substring(3,5), ticket.printDate().substring(8,10), ticket.printDate().substring(11,13),ticket.printDate().substring(14,16),ticket.printDate().substring(17,19),"" ,ticket.printId());
+            iRetorno = print.Bematech_FI_AbreNotaDeCredito(auxname,ticket.printId(),auxtaxid,ticket.printDate().substring(0,2), ticket.printDate().substring(3,5), ticket.printDate().substring(8,10), ticket.printDate().substring(11,13),ticket.printDate().substring(14,16),ticket.printDate().substring(17,19),"00" ,ticket.printId());
 
         }
         if (iRetorno!=1){

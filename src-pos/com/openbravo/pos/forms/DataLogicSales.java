@@ -463,6 +463,20 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 , null
                 , new SerializerReadClass(PromoTypeInfo.class));
         }
+    
+    /**
+     *
+     * @param pProduct
+     * @return
+     */
+    public final List<AuxiliarInfo> getRecipeList(String pProduct) throws BasicException {
+            return new PreparedSentence(s
+                , "SELECT PRODUCT2, "
+                    + "QTY "
+                    + "FROM PRODUCTS_COM WHERE RECIPE=" + s.DB.TRUE() + " AND PRODUCT=? "
+                , SerializerWriteString.INSTANCE
+                , AuxiliarInfo.getSerializerRead()).list(pProduct);
+        }
 
     /**
      *
@@ -723,7 +737,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
      *
      * @return
      */
-        public final SentenceList getUserList() {
+    public final SentenceList getUserList() {
         return new StaticSentence(s
             , "SELECT "
                 + "ID, "
@@ -732,12 +746,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "ORDER BY NAME"
             , null
             , new SerializerRead() { @Override
- public Object readValues(DataRead dr) throws BasicException {
+            public Object readValues(DataRead dr) throws BasicException {
                 return new TaxCategoryInfo(
                         dr.getString(1), 
                         dr.getString(2));
             }});
     }
+        
+    
    
     // Listados para combo
 
@@ -1284,6 +1300,49 @@ public Object transact() throws BasicException {
         t.execute();
     }
 
+    /**
+     *
+     * @param ticket
+     * @param location
+     * @throws BasicException
+     */
+    public final void updateTicketRecipe(final TicketInfo ticket, final String location) throws BasicException {
+
+        Transaction t = new Transaction(s) {
+            @Override
+            public Object transact() throws BasicException {
+
+                // update the inventory
+                Date d = new Date();
+                
+                
+                for (int i = 0; i < ticket.getLinesCount(); i++) {
+                    List<AuxiliarInfo> AuxiliarInfoList = getRecipeList(ticket.getLine(i).getProductID());
+                    for(AuxiliarInfo aux : AuxiliarInfoList){
+                        System.out.println("Producto auxiliar" + aux.getProduct2());
+                        
+                        if (aux.getProduct2() != null)  {
+                            // Hay que actualizar el stock si el hay producto
+                            getStockDiaryInsert().exec( new Object[] {
+                                UUID.randomUUID().toString(),
+                                d,
+                                ticket.getLine(i).getMultiply() < 0.0 ? MovementReason.IN_REFUND.getKey()
+                                                : MovementReason.OUT_SALE.getKey(),
+                                location,
+                                aux.getProduct2(),
+                                null, 
+                                ticket.getLine(i).getMultiply() < 0.0 ? aux.getQty() : -aux.getQty()
+                                , 0.0,
+                                ticket.getUser().getName() 
+                            });
+                        }
+                    }
+                }
+                return null;
+            }
+        };
+        t.execute();
+    }
     /**
      *
      * @return

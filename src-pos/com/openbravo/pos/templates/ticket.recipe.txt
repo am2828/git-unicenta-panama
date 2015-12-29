@@ -1,0 +1,18 @@
+import com.openbravo.pos.inventory.MovementReason;
+import com.openbravo.pos.forms.DataLogicSales;
+import com.openbravo.pos.forms.DataLogicSystem;
+import com.openbravo.data.loader.Session;
+import com.openbravo.pos.ticket.TicketLineInfo;
+import com.openbravo.pos.ticket.TicketProductInfo;
+import java.util.Properties;
+
+Session session = new Session(dbURL, dbUser, dbPassword);
+DataLogicSales logicsale = new DataLogicSales();
+logicsale.init(session);
+DataLogicSystem logicsystem = new DataLogicSystem();
+logicsystem.init(session);
+Properties pr = logicsystem.getResourceAsProperties(hostname + "/properties");
+String location = pr.getProperty("location");
+
+
+logicsale.updateTicketRecipe(ticket,location);
