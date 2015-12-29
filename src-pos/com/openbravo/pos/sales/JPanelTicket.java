@@ -1367,32 +1367,35 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.nosaveticket"), eData);
                                 msg.show(this);
                             }
-
-                            executeEvent(ticket, ticketext, "ticket.close", new ScriptArg("print", paymentdialog.isPrintSelected()));
-
-                            // Print receipt. 
-// John L July 2014 previous || warranty print reinstated
-                            printTicket(paymentdialog.isPrintSelected() || warrantyPrint
-                                    ? "Printer.Ticket"
-//                                    ? ticketPrintType
-                                    : "Printer.Ticket2", ticket, ticketext);  
-                            
-//                            if (m_oTicket.getLoyaltyCardNumber() != null){
-// add points to the card
-//                                System.out.println("Point added to card = " + ticket.getTotal()/100);
-// reset card pointer                                
-                              //  loyaltyCardNumber = null;
+                            if (executeEvent(ticket, ticketext, "ticket.recipe")== null) {
                                 
-//                            }
-                            resultok = true;
-// if restaurant clear any customer name in table for this table once receipt is printed
-//                            if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag"))&&  m_oTicket.getTicketType() !=1) {  
-                            if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag"))&&  !ticket.getOldTicket()) { 
-                                restDB.clearCustomerNameInTable(ticketext.toString());
-                                restDB.clearWaiterNameInTable(ticketext.toString());
-                                restDB.clearTicketIdInTable(ticketext.toString());
-//                                restDB.
-                            }                                
+                            
+                                executeEvent(ticket, ticketext, "ticket.close", new ScriptArg("print", paymentdialog.isPrintSelected()));
+
+                                // Print receipt. 
+    // John L July 2014 previous || warranty print reinstated
+                                printTicket(paymentdialog.isPrintSelected() || warrantyPrint
+                                        ? "Printer.Ticket"
+    //                                    ? ticketPrintType
+                                        : "Printer.Ticket2", ticket, ticketext);  
+
+    //                            if (m_oTicket.getLoyaltyCardNumber() != null){
+    // add points to the card
+    //                                System.out.println("Point added to card = " + ticket.getTotal()/100);
+    // reset card pointer                                
+                                  //  loyaltyCardNumber = null;
+
+    //                            }
+                                resultok = true;
+    // if restaurant clear any customer name in table for this table once receipt is printed
+    //                            if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag"))&&  m_oTicket.getTicketType() !=1) {  
+                                if ("restaurant".equals(m_App.getProperties().getProperty("machine.ticketsbag"))&&  !ticket.getOldTicket()) { 
+                                    restDB.clearCustomerNameInTable(ticketext.toString());
+                                    restDB.clearWaiterNameInTable(ticketext.toString());
+                                    restDB.clearTicketIdInTable(ticketext.toString());
+    //                                restDB.
+                                }
+                            }
                         }
                     }
                 }

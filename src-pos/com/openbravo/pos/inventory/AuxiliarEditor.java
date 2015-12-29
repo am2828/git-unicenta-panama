@@ -45,6 +45,8 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
     private Object product;
     private Object product2;
     private Object name;
+    private Object recipe;
+    private Object qty;
     
     private Object insertproduct;
 
@@ -58,6 +60,9 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
         initComponents();
      
         m_jProduct.getDocument().addDocumentListener(dirty);
+        m_jQty.getDocument().addDocumentListener(dirty);
+        jRecipe.addActionListener(dirty);
+        
     }
     
     /**
@@ -100,6 +105,12 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
         m_jEnter1.setEnabled(false);
         m_jEnter2.setEnabled(false);
         m_jSearch.setEnabled(false);
+    
+        recipe =null;
+        qty = null;
+        jRecipe.setEnabled(false);
+        m_jQty.setEnabled(false);
+        
     }
 
     /**
@@ -122,6 +133,12 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
         m_jEnter1.setEnabled(true);
         m_jEnter2.setEnabled(true);
         m_jSearch.setEnabled(true);
+        
+        jRecipe.setSelected(false);
+        jRecipe.setEnabled(true);
+        m_jQty.setText(null);
+        m_jQty.setEnabled(true);
+    
     }
 
     /**
@@ -135,10 +152,10 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
         id = obj[0];
         product = obj[1];
         product2 = obj[2];
-        name = obj[5];
-        m_jReference.setText(Formats.STRING.formatValue(obj[3]));
-        m_jBarcode.setText(Formats.STRING.formatValue(obj[4]));
-        m_jProduct.setText(Formats.STRING.formatValue(obj[3]) + " - " + Formats.STRING.formatValue(obj[5]));        
+        name = obj[7];
+        m_jReference.setText(Formats.STRING.formatValue(obj[5]));
+        m_jBarcode.setText(Formats.STRING.formatValue(obj[6]));
+        m_jProduct.setText(Formats.STRING.formatValue(obj[5]) + " - " + Formats.STRING.formatValue(obj[7]));        
 
         m_jReference.setEnabled(true);
         m_jBarcode.setEnabled(true);
@@ -146,6 +163,12 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
         m_jEnter1.setEnabled(true);
         m_jEnter2.setEnabled(true);
         m_jSearch.setEnabled(true);
+        
+        jRecipe.setSelected((Boolean)obj[3]);
+        jRecipe.setEnabled(true);
+        m_jQty.setText(Formats.DOUBLE.formatValue(obj[4]));
+        m_jQty.setEnabled(true);
+        
     }
 
     /**
@@ -159,10 +182,10 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
         id = obj[0];
         product = obj[1];
         product2 = obj[2];
-        name = obj[5];
-        m_jReference.setText(Formats.STRING.formatValue(obj[3]));
-        m_jBarcode.setText(Formats.STRING.formatValue(obj[4]));
-        m_jProduct.setText(Formats.STRING.formatValue(obj[3]) + " - " + Formats.STRING.formatValue(obj[5]));        
+        name = obj[7];
+        m_jReference.setText(Formats.STRING.formatValue(obj[5]));
+        m_jBarcode.setText(Formats.STRING.formatValue(obj[6]));
+        m_jProduct.setText(Formats.STRING.formatValue(obj[5]) + " - " + Formats.STRING.formatValue(obj[7]));        
 
         
         m_jReference.setEnabled(false);
@@ -171,6 +194,10 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
         m_jEnter1.setEnabled(false);
         m_jEnter2.setEnabled(false);
         m_jSearch.setEnabled(false);       
+        m_jQty.setText(Formats.DOUBLE.formatValue(obj[4]));
+        m_jQty.setEnabled(false);
+        jRecipe.setSelected((Boolean)obj[3]);
+        jRecipe.setEnabled(false);
     }
 
     /**
@@ -180,13 +207,17 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
      */
     @Override
     public Object createValue() throws BasicException {
+        
         return new Object[] {
             id, 
             product, 
             product2,
+            jRecipe.isSelected(),
+            Formats.DOUBLE.parseValue(m_jQty.getText()),
             m_jReference.getText(),
             m_jBarcode.getText(),
-            name,
+            name
+            
         };
     }
 
@@ -208,12 +239,16 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
                 m_jBarcode.setText(null);
                 m_jProduct.setText(null);
                 name = null;
+                recipe = null;
+                qty = null;
             } else {
                 product2 = prod.getID();
                 m_jReference.setText(prod.getReference());
                 m_jBarcode.setText(prod.getCode());
                 m_jProduct.setText(prod.getReference() + " - " + prod.getName());
                 name = prod.getName();
+                recipe = false;
+                qty = null;
             }
         }
 
@@ -265,6 +300,9 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
         m_jProduct = new javax.swing.JTextField();
         m_jBarcode = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        m_jQty = new javax.swing.JTextField();
+        jRecipe = new javax.swing.JCheckBox();
 
         setPreferredSize(new java.awt.Dimension(700, 100));
         setLayout(null);
@@ -292,7 +330,7 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
             }
         });
         add(m_jEnter1);
-        m_jEnter1.setBounds(250, 11, 57, 33);
+        m_jEnter1.setBounds(250, 11, 36, 36);
 
         m_jEnter2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/barcode.png"))); // NOI18N
         m_jEnter2.addActionListener(new java.awt.event.ActionListener() {
@@ -301,7 +339,7 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
             }
         });
         add(m_jEnter2);
-        m_jEnter2.setBounds(557, 11, 55, 31);
+        m_jEnter2.setBounds(557, 11, 34, 34);
 
         m_jSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/search24.png"))); // NOI18N
         m_jSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -310,7 +348,7 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
             }
         });
         add(m_jSearch);
-        m_jSearch.setBounds(10, 50, 57, 33);
+        m_jSearch.setBounds(10, 50, 36, 36);
 
         m_jProduct.setEditable(false);
         m_jProduct.setPreferredSize(new java.awt.Dimension(200, 25));
@@ -330,13 +368,34 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
             }
         });
         add(m_jBarcode);
-        m_jBarcode.setBounds(397, 11, 150, 25);
+        m_jBarcode.setBounds(380, 10, 150, 25);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText(AppLocal.getIntString("label.prodbarcode")); // NOI18N
+        jLabel4.setText(AppLocal.getIntString("label.qty")); // NOI18N
         jLabel4.setPreferredSize(new java.awt.Dimension(70, 25));
         add(jLabel4);
-        jLabel4.setBounds(317, 11, 70, 25);
+        jLabel4.setBounds(320, 50, 40, 25);
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText(AppLocal.getIntString("label.prodbarcode")); // NOI18N
+        jLabel5.setPreferredSize(new java.awt.Dimension(70, 25));
+        add(jLabel5);
+        jLabel5.setBounds(317, 11, 70, 25);
+
+        m_jQty.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        m_jQty.setPreferredSize(new java.awt.Dimension(150, 25));
+        m_jQty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jQtyActionPerformed(evt);
+            }
+        });
+        add(m_jQty);
+        m_jQty.setBounds(360, 50, 80, 25);
+
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jRecipe.setText(bundle.getString("label.recipe")); // NOI18N
+        add(jRecipe);
+        jRecipe.setBounds(490, 50, 130, 25);
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jSearchActionPerformed
@@ -365,16 +424,23 @@ public class AuxiliarEditor extends javax.swing.JPanel implements EditorRecord {
 
     }//GEN-LAST:event_m_jProductActionPerformed
 
+    private void m_jQtyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jQtyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_m_jQtyActionPerformed
+
   
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JCheckBox jRecipe;
     private javax.swing.JTextField m_jBarcode;
     private javax.swing.JButton m_jEnter1;
     private javax.swing.JButton m_jEnter2;
     private javax.swing.JTextField m_jProduct;
+    private javax.swing.JTextField m_jQty;
     private javax.swing.JTextField m_jReference;
     private javax.swing.JButton m_jSearch;
     // End of variables declaration//GEN-END:variables

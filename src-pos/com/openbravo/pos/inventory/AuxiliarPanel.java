@@ -56,18 +56,27 @@ public class AuxiliarPanel extends JPanelTable2 {
                 new Field("ID", Datas.STRING, Formats.STRING),
                 new Field("PRODUCT1", Datas.STRING, Formats.STRING),
                 new Field("PRODUCT2", Datas.STRING, Formats.STRING),
+                new Field("RECIPE", Datas.BOOLEAN, Formats.BOOLEAN),
+                new Field("QTY", Datas.DOUBLE, Formats.DOUBLE),
                 new Field(AppLocal.getIntString("label.prodref"), Datas.STRING, Formats.STRING, true, true, true),
                 new Field(AppLocal.getIntString("label.prodbarcode"), Datas.STRING, Formats.STRING, false, true, true),
                 new Field(AppLocal.getIntString("label.prodname"), Datas.STRING, Formats.STRING, true, true, true)
+                
         );        
         Table table = new Table(
                 "PRODUCTS_COM",
                 new PrimaryKey("ID"),
                 new Column("PRODUCT"),
-                new Column("PRODUCT2"));
+                new Column("PRODUCT2"),
+//                new Column("REFERENCE"),
+//                new Column("BARCODE"),
+//                new Column("NAME"),
+                new Column("RECIPE"),
+                new Column("QTY")
+        );
          
         lpr = row.getListProvider(app.getSession(), 
-                "SELECT COM.ID, COM.PRODUCT, COM.PRODUCT2, P.REFERENCE, P.CODE, P.NAME " +
+                "SELECT COM.ID, COM.PRODUCT, COM.PRODUCT2, COM.RECIPE, COM.QTY, P.REFERENCE, P.CODE, P.NAME " +
                 "FROM PRODUCTS_COM COM, PRODUCTS P " +
                 "WHERE COM.PRODUCT2 = P.ID AND COM.PRODUCT = ?", filter);
         spr = row.getSaveProvider(app.getSession(), table);              

@@ -116,4 +116,6 @@
          <!-- <taxcategoryid value="001"/> -->
          <!-- <pricevisible value="true" /> -->
          
+         <!-- SET Update Recipe Products Sale (Default=ENABLED -->
+        <event key="ticket.recipe" code="ticket.recipe"/>
 </configuration>
