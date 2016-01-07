@@ -1,0 +1,67 @@
+//    uniCenta oPOS - touch friendly EPoS
+//    Copyright (c) 2009-2014 uniCenta & previous Openbravo POS works
+//    http://www.unicenta.net
+//
+//    This file is part of uniCenta oPOS
+//
+//    uniCenta oPOS is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    uniCenta oPOS is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with uniCenta oPOS.  If not, see <http://www.gnu.org/licenses/>.
+
+report = new com.openbravo.pos.reports.PanelReportBean();
+
+report.setTitleKey("Menu.DailySales");
+report.setReport("/com/openbravo/reports/dailysales2");
+report.setResourceBundle("com/openbravo/reports/dailysales2_messages");
+
+report.setSentence( "select case when tickets.tickettype=0 then 'Factura' else 'Nota de Credito' end as tickettype,tickets.id,tickets.ticketid,datenew datenew,case when customers.name is null then 'Contado' else " +
+                    "customers.name end as name,sum(price*units) subtotal, sum(price*units*rate) tax, " +
+                    "sum(price*units*(1+rate)) total ,coalesce((select sum(total) from payments where receipt=tickets.id " +
+                    "and payment='cash' group by payment),0) as totalcash,coalesce((select sum(total) from payments where receipt=tickets.id and payment='cashrefund' group by payment),0) as totalcre,coalesce((select sum(total) from payments "+
+                    "where receipt=tickets.id and payment='magcard' group by payment),0) as totalmag, "+
+                    "coalesce((select sum(total) from payments where receipt=tickets.id and payment='cheque' group by payment),0) as totalcheque, "+
+                    "coalesce((select sum(total) from payments where receipt=tickets.id and payment='debt' group by payment),0) as totalfaccre "+
+                    "from tickets inner join receipts on tickets.id=receipts.id " +
+                    "inner join ticketlines on ticketlines.ticket=tickets.id " +
+                    "inner join taxes on taxes.id=ticketlines.taxid " +
+                    "left join customers on tickets.customer=customers.id " +
+                    "where ?(QBF_FILTER) " +
+                    "group by tickets.id,tickets.ticketid,datenew,customers.name order by tickets.ticketid");
+
+
+report.addParameter("RECEIPTS.DATENEW");
+report.addParameter("RECEIPTS.DATENEW");
+
+paramdates = new com.openbravo.pos.reports.JParamsDatesInterval();
+
+paramdates.setStartDate(com.openbravo.beans.DateUtils.getToday());
+// JG - 8 Jan 14 paramdates.setEndDate(com.openbravo.beans.DateUtils.getToday());
+paramdates.setEndDate(com.openbravo.beans.DateUtils.getTodayMinutes());
+
+
+report.addQBFFilter(paramdates);
+report.addField("tickettype", com.openbravo.data.loader.Datas.STRING);
+report.addField("id", com.openbravo.data.loader.Datas.STRING);
+report.addField("ticketid", com.openbravo.data.loader.Datas.STRING);
+report.addField("datenew", com.openbravo.data.loader.Datas.TIMESTAMP);
+report.addField("name", com.openbravo.data.loader.Datas.STRING);
+report.addField("subtotal", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("tax", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("total", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("totalcash", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("totalcre", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("totalmag", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("totalcheque", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("totalfaccre", com.openbravo.data.loader.Datas.DOUBLE);
+
+
+report;
