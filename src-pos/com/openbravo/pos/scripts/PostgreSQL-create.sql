@@ -139,7 +139,7 @@ INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('60', 'Window.Title', 0
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('61', 'openbravo.properties', 0, $FILE{/com/openbravo/pos/erp/sync/templates/openbravo.properties.txt});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('62', 'fiscalprint.properties', 0, $FILE{/com/ghintech/fiscalprint/templates/fiscalprint.properties.txt});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('63', 'ticket.bematech', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.bematech.txt});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('63', 'ticket.thefactory', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.thefactory.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('64', 'ticket.thefactory', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.thefactory.txt});
 
 CREATE TABLE TAXCUSTCATEGORIES (
     ID VARCHAR NOT NULL,
