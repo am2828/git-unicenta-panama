@@ -1,3 +1,7 @@
+/** Elaborado por Eduardo Gil. Ghintech 
+    Historial de Modificaciones:
+        07/01/2016 Apertura de Gaveta
+**/
 import java.io.*;
 import java.net.*;
 import java.util.*;
