@@ -140,7 +140,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 // ADDED JDL 25.05.13 Warranty flag                 
                 new Field("WARRANTY", Datas.BOOLEAN, Formats.BOOLEAN),                                                      //23
 //  JG July 2014
-                new Field(AppLocal.getIntString("label.stockunits"), Datas.DOUBLE, Formats.DOUBLE)                          //24
+                new Field(AppLocal.getIntString("label.stockunits"), Datas.DOUBLE, Formats.DOUBLE),                          //24
+                new Field(AppLocal.getIntString("SUPPLIER"), Datas.STRING, Formats.STRING)                          //25
                               
                 );
     }
@@ -888,6 +889,19 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 return new AttributeSetInfo(dr.getString(1), dr.getString(2));
             }});
     }
+    public final SentenceList getSuppliersList() {
+        return new StaticSentence(s
+            , "SELECT "
+                + "ID, "
+                + "NAME "
+                + "FROM SUPPLIERS "
+                + "ORDER BY NAME"
+            , null
+            , new SerializerRead() {@Override
+ public Object readValues(DataRead dr) throws BasicException {
+                return new AttributeSetInfo(dr.getString(1), dr.getString(2));
+            }});
+    }
 
     /**
      *
@@ -1403,7 +1417,7 @@ public Object transact() throws BasicException {
                                 + "THEN " + s.DB.FALSE() + " ELSE " + s.DB.TRUE() + " END, "
                                 + "C.CATORDER, P.ATTRIBUTES, P.ISKITCHEN, "
                                 + "P.ISSERVICE, P.DISPLAY, P.ISVPRICE, "
-                                + "P.ISVERPATRIB, P.TEXTTIP, P.WARRANTY, P.STOCKUNITS " +
+                                + "P.ISVERPATRIB, P.TEXTTIP, P.WARRANTY, P.STOCKUNITS,P.SUPPLIER " +
 			"FROM PRODUCTS P LEFT OUTER JOIN PRODUCTS_CAT C "
                                 + "ON P.ID = C.PRODUCT " +
 			"WHERE ?(QBF_FILTER) " +
@@ -1444,15 +1458,15 @@ public Object transact() throws BasicException {
                        + "ISSCALE, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, "
                        + "ATTRIBUTESET_ID, IMAGE, STOCKCOST, STOCKVOLUME, "
                        + "ATTRIBUTES, ISKITCHEN, ISSERVICE, DISPLAY, ISVPRICE, "
-                       + "ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS) "
-                       + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                       + "ISVERPATRIB, TEXTTIP, WARRANTY, STOCKUNITS,SUPPLIER) "
+                       + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)"
 				, new SerializerWriteBasicExt(productsRow.getDatas(), 
                                         new int[]{0, 
                                             1, 2, 3, 4, 
                                             5, 6, 7, 8, 9, 
                                             10, 11, 12, 13, 
                                             16, 17, 18, 19, 20, 
-                                            21, 22, 23, 24})).exec(params);
+                                            21, 22, 23, 24,25})).exec(params);
 //JG Aug 2014 - see ProductsEditor setCurrentStock explain				
                         new PreparedSentence(s
                             , "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, UNITS) VALUES ('0', ?, 0.0)"
@@ -1489,12 +1503,13 @@ public Object transact() throws BasicException {
                                         + "ISKITCHEN = ?, ISSERVICE = ?, "
                                         + "DISPLAY = ?, ISVPRICE = ?, "
                                         + "ISVERPATRIB = ?, TEXTTIP = ?, "
-                                        + "WARRANTY = ? "
+                                        + "WARRANTY = ?, "
+                                        + "SUPPLIER = ? "
                                         + "WHERE ID = ?"
 				, new SerializerWriteBasicExt(productsRow.getDatas(), 
                                         new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 
                                             10, 11, 12, 13, 16, 17, 18, 19, 20, 
-                                            21, 22, 23, 0})).exec(params);
+                                            21, 22, 23, 25, 0})).exec(params);
                     
 			if (i > 0) {
 				if (((Boolean)values[14])) {

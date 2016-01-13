@@ -36,14 +36,17 @@ report.setSentence("SELECT " +
                 "COALESCE(PRODUCTS.STOCKVOLUME, 0) AS STOCKVOLUME, " +
                 "COALESCE(PRODUCTS.STOCKCOST, 0) AS STOCKCOST, " +
                 "COALESCE(STOCKLEVEL.STOCKSECURITY, 0) AS STOCKSECURITY, " +
-                "COALESCE(STOCKLEVEL.STOCKMAXIMUM, 0) AS STOCKMAXIMUM " +
+                "COALESCE(STOCKLEVEL.STOCKMAXIMUM, 0) AS STOCKMAXIMUM, " +
+                "PRODUCTS.SUPPLIER, " +
+                "SUPPLIERS.NAME AS SUPPLIERNAME " +
                 "FROM STOCKCURRENT " +
                 "JOIN LOCATIONS ON STOCKCURRENT.LOCATION = LOCATIONS.ID " +
                 "JOIN PRODUCTS ON STOCKCURRENT.PRODUCT = PRODUCTS.ID " +
                 "JOIN CATEGORIES ON PRODUCTS.CATEGORY = CATEGORIES.ID " +
                 "LEFT OUTER JOIN STOCKLEVEL ON STOCKCURRENT.LOCATION = STOCKLEVEL.LOCATION AND STOCKCURRENT.PRODUCT = STOCKLEVEL.PRODUCT " +
+                "LEFT OUTER JOIN SUPPLIERS ON PRODUCTS.SUPPLIER=SUPPLIERS.ID " +
                 "WHERE ?(QBF_FILTER) " +
-                "GROUP BY STOCKCURRENT.LOCATION, LOCATIONS.NAME, PRODUCTS.REFERENCE, PRODUCTS.NAME, PRODUCTS.CATEGORY, CATEGORIES.NAME, PRODUCTS.PRICEBUY, PRODUCTS.PRICESELL, PRODUCTS.STOCKVOLUME, PRODUCTS.STOCKCOST, STOCKLEVEL.STOCKSECURITY, STOCKLEVEL.STOCKMAXIMUM " +
+                "GROUP BY STOCKCURRENT.LOCATION, LOCATIONS.NAME, PRODUCTS.REFERENCE, PRODUCTS.NAME, PRODUCTS.CATEGORY, CATEGORIES.NAME, PRODUCTS.PRICEBUY, PRODUCTS.PRICESELL, PRODUCTS.STOCKVOLUME, PRODUCTS.STOCKCOST, STOCKLEVEL.STOCKSECURITY, STOCKLEVEL.STOCKMAXIMUM,PRODUCTS.SUPPLIER,SUPPLIERS.NAME " +
                 "ORDER BY STOCKCURRENT.LOCATION, CATEGORIES.NAME, PRODUCTS.NAME");
 
 report.addParameter("PRODUCTS.NAME");
@@ -55,6 +58,9 @@ report.addQBFFilter(new com.openbravo.pos.ticket.ProductFilter());
 
 report.addParameter("STOCKCURRENT.LOCATION");
 report.addQBFFilter(new com.openbravo.pos.reports.JParamsLocationWithFirst());
+
+report.addParameter("PRODUCTS.SUPPLIER");
+report.addQBFFilter(new com.openbravo.pos.suppliers.SuppliersFilter());
 
 report.addField("LOCATIONID", com.openbravo.data.loader.Datas.STRING);
 report.addField("LOCATIONNAME", com.openbravo.data.loader.Datas.STRING);
@@ -69,5 +75,7 @@ report.addField("STOCKVOLUME", com.openbravo.data.loader.Datas.DOUBLE);
 report.addField("STOCKCOST", com.openbravo.data.loader.Datas.DOUBLE);
 report.addField("STOCKSECURITY", com.openbravo.data.loader.Datas.DOUBLE);
 report.addField("STOCKMAXIMUM", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("SUPPLIER", com.openbravo.data.loader.Datas.STRING);
+report.addField("SUPPLIERNAME", com.openbravo.data.loader.Datas.STRING);
 
 report;
