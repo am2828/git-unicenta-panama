@@ -52,6 +52,7 @@ report.addQBFFilter(new com.openbravo.pos.ticket.ProductFilter());
 report.addParameter("STOCKCURRENT.LOCATION");
 report.addQBFFilter(new com.openbravo.pos.reports.JParamsLocationWithFirst());
 
+
 report.addField("LOCATIONID", com.openbravo.data.loader.Datas.STRING);
 report.addField("LOCATIONNAME", com.openbravo.data.loader.Datas.STRING);
 report.addField("REFERENCE", com.openbravo.data.loader.Datas.STRING);

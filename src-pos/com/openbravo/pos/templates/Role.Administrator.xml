@@ -94,6 +94,7 @@
     <class name="com.openbravo.pos.inventory.TaxCategoriesPanel"/>
     <class name="com.openbravo.pos.inventory.TaxCustCategoriesPanel"/>
     <class name="com.openbravo.pos.inventory.TaxPanel"/>
+    <class name="com.openbravo.pos.suppliers.SuppliersPanel"/>
 
             <class name="/com/openbravo/reports/barcodesheet.bs"/>
             <class name="/com/openbravo/reports/inventory.bs"/>
