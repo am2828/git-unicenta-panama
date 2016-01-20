@@ -158,9 +158,9 @@
     <class name="com.openbravo.pos.epm.LeavesPanel" />
     <class name="com.openbravo.pos.epm.JPanelEmployeePresence" />
     <!-- These reports will not work with Apache Derby -->  
-          <!-- <class name="/com/openbravo/reports/dailypresencereport.bs" /> -->
-          <!-- <class name="/com/openbravo/reports/dailyschedulereport.bs" /> -->
-          <!-- <class name="/com/openbravo/reports/performancereport.bs" />  -->
+    <!-- <class name="/com/openbravo/reports/dailypresencereport.bs" /> -->
+    <!-- <class name="/com/openbravo/reports/dailyschedulereport.bs" /> -->
+    <!-- <class name="/com/openbravo/reports/performancereport.bs" />  -->
     
     <class name="com.openbravo.pos.erp.sync.ProductsSyncCreate"/> 
     <class name="com.openbravo.pos.erp.sync.OrdersSyncCreate"/> 
