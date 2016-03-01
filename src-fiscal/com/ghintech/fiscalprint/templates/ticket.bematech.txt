@@ -138,11 +138,11 @@ if(ticket.getCustomer()!=null){
              
         }
 
-PaymentInfo p = ticket.payments.getFirst();
+PaymentInfo payment = ticket.payments.getFirst();
 
-if ("cash".equals(p.getName())) {
+if ("cash".equals(payment.getName())) {
     
-    iRetorno=print.Bematech_FI_CierraCuponReducido("Efectivo","Total: "+ fo.format(p.getPaid()).replace(".",",")+"Cambio"+fo.format(getChange()).replace(".",","));
+    iRetorno=print.Bematech_FI_CierraCuponReducido("Efectivo","Total: "+ fo.format(payment.getPaid()).replace(".",",")+"Cambio"+fo.format(payment.getChange()).replace(".",","));
 }else{
     iRetorno=print.Bematech_FI_CierraCuponReducido("Efectivo","Vuelva Pronto");
 }
