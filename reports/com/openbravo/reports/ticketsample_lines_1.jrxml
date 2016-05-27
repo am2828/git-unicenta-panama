@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ticketsample_lines" pageWidth="535" pageHeight="60" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<field name="productName" class="java.lang.String"/>
+	<field name="_THIS" class="com.openbravo.pos.ticket.TicketLineInfo"/>
+	<pageHeader>
+		<band height="24">
+			<staticText>
+				<reportElement key="staticText-2" x="330" y="5" width="88" height="14"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[P r e c i o]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="418" y="5" width="117" height="14"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[T o t a l]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" x="259" y="5" width="71" height="14"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[C a n t i d a d]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-1" x="0" y="5" width="248" height="14"/>
+				<box leftPadding="2"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[D e s c r i p c i ó n]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-1" x="0" y="2" width="259" height="18"/>
+				<box leftPadding="2"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="418" y="0" width="117" height="18"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{_THIS}.printSubValue()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-3" x="330" y="0" width="88" height="18"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{_THIS}.printPrice()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-4" x="259" y="0" width="71" height="18"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{_THIS}.printMultiply()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
