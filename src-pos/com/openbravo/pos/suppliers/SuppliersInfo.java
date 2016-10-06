@@ -29,15 +29,17 @@ public class SuppliersInfo implements IKeyed {
 
     private String id;
     private String name;
+    private String address;
 
     /**
      *
      * @param id
      * @param name
      */
-    public SuppliersInfo(String id, String name) {
+    public SuppliersInfo(String id, String name, String address) {
         this.id = id;
         this.name = name;
+        this.address = address;
     }
 
     /**
@@ -69,4 +71,14 @@ public class SuppliersInfo implements IKeyed {
     public String toString() {
         return name;
     }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    
+    
 }

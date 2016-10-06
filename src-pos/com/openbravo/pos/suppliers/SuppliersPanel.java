@@ -20,62 +20,103 @@
 package com.openbravo.pos.suppliers;
 
 import com.openbravo.pos.inventory.*;
-import com.openbravo.data.loader.Datas;
-import com.openbravo.data.model.*;
+import com.openbravo.data.gui.ListCellRendererBasic;
+import com.openbravo.data.loader.ComparatorCreator;
+import com.openbravo.data.loader.TableDefinition;
+import com.openbravo.data.loader.Vectorer;
 import com.openbravo.data.user.EditorRecord;
-import com.openbravo.format.Formats;
+import com.openbravo.data.user.ListProvider;
+import com.openbravo.data.user.ListProviderCreator;
+import com.openbravo.data.user.SaveProvider;
 import com.openbravo.pos.forms.AppLocal;
-import com.openbravo.pos.panels.JPanelTable2;
+import com.openbravo.pos.forms.DataLogicSales;
+import com.openbravo.pos.panels.JPanelTable;
+import javax.swing.ListCellRenderer;
 
 /**
  *
  * @author adrianromero
  */
-public class SuppliersPanel extends JPanelTable2 {
-
-    private EditorRecord editor;
-
+public class SuppliersPanel extends JPanelTable {
+    
+    private TableDefinition tsuppliers;
+    private SuppliersEditor jeditor;
+    
     /** Creates a new instance of JPanelCategories */
     public SuppliersPanel() {
+        
     }
 
     /**
      *
      */
     @Override
-    protected void init() {
-
-        row = new Row(
-                new Field("ID", Datas.STRING, Formats.STRING),
-                new Field(AppLocal.getIntString("Label.Name"), Datas.STRING, Formats.STRING, true, true, true)
-        );
-
-        Table table = new Table(
-                "SUPPLIERS",
-                new PrimaryKey("ID"),
-                new Column("NAME"));
-
-        lpr = row.getListProvider(app.getSession(), table);
-        spr = row.getSaveProvider(app.getSession(), table);
-
-        editor = new AttributeSetsEditor(dirty);
+    protected void init() {   
+        DataLogicSales dlSales = (DataLogicSales) app.getBean("com.openbravo.pos.forms.DataLogicSales");           
+        tsuppliers = dlSales.getTableSuppliers();
+        jeditor = new SuppliersEditor(app, dirty);    
     }
-
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public ListProvider getListProvider() {
+        return new ListProviderCreator(tsuppliers);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public SaveProvider getSaveProvider() {
+        return new SaveProvider(tsuppliers);      
+    }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public Vectorer getVectorer() {
+        return tsuppliers.getVectorerBasic(new int[]{1});
+    }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public ComparatorCreator getComparatorCreator() {
+        return tsuppliers.getComparatorCreator(new int[]{1});
+    }
+    
+    /**
+     *
+     * @return
+     */
+    @Override
+    public ListCellRenderer getListCellRenderer() {
+        return new ListCellRendererBasic(tsuppliers.getRenderStringBasic(new int[]{1}));
+    }
+    
     /**
      *
      * @return
      */
     @Override
     public EditorRecord getEditor() {
-        return editor;
+        return jeditor;
     }
-
+    
     /**
      *
      * @return
      */
     @Override
     public String getTitle() {
-        return AppLocal.getIntString("Menu.Suppliers");
-    }
+        return AppLocal.getIntString("Menu.Categories");
+    }        
 }
