@@ -956,7 +956,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             if (sCode.length() > 8) {
                                 sVariableNum = sCode.substring(8, 12);
                             } else {
-                                sVariableNum = null;
+                                sVariableNum = String.valueOf(dPriceSell);//null;
                             }
 //                            
                             if(sVariableTypePrefix.equals("20")) {
