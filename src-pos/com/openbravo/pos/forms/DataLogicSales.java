@@ -32,6 +32,7 @@ import com.openbravo.pos.payment.PaymentInfo;
 import com.openbravo.pos.payment.PaymentInfoTicket;
 import com.openbravo.pos.promotion.PromoInfo;
 import com.openbravo.pos.promotion.PromoTypeInfo;
+import com.openbravo.pos.suppliers.SuppliersInfo;
 import com.openbravo.pos.ticket.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -893,13 +894,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         return new StaticSentence(s
             , "SELECT "
                 + "ID, "
-                + "NAME "
+                + "NAME, "
+                + "ADDRESS "    
                 + "FROM SUPPLIERS "
                 + "ORDER BY NAME"
             , null
             , new SerializerRead() {@Override
  public Object readValues(DataRead dr) throws BasicException {
-                return new AttributeSetInfo(dr.getString(1), dr.getString(2));
+                return new SuppliersInfo(dr.getString(1), dr.getString(2), dr.getString(3));
             }});
     }
 
@@ -1713,7 +1715,16 @@ public Object transact() throws BasicException {
             , new int[] {0}
         );
     }
-
+public final TableDefinition getTableSuppliers() {
+        return new TableDefinition(s,
+            "SUPPLIERS"
+            , new String[] {"ID", "NAME", "ADDRESS","PHONE","EMAIL"}
+            , new String[] {"ID", AppLocal.getIntString("Label.Name"), "ADDRESS","PHONE","EMAIL"}
+            , new Datas[] {Datas.STRING, Datas.STRING, Datas.STRING,Datas.STRING, Datas.STRING}
+            , new Formats[] {Formats.STRING, Formats.STRING, Formats.STRING,Formats.STRING, Formats.STRING}
+            , new int[] {0}
+        );
+    }
     /**
      *
      * @return
