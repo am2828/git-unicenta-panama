@@ -56,7 +56,7 @@ public class SuppliersFilter extends javax.swing.JPanel implements ReportEditorC
             , null
             , new SerializerRead() {@Override
  public Object readValues(DataRead dr) throws BasicException {
-                return new SuppliersInfo(dr.getString(1), dr.getString(2));
+                return new SuppliersInfo(dr.getString(1), dr.getString(2),null);
             }});
         suppliermodel = new ComboBoxValModel();
     }

@@ -25,26 +25,33 @@ import com.openbravo.data.user.DirtyManager;
 import com.openbravo.data.user.EditorRecord;
 import com.openbravo.format.Formats;
 import com.openbravo.pos.forms.AppLocal;
+import com.openbravo.pos.forms.AppView;
 import java.awt.Component;
 import java.util.UUID;
+import javax.swing.JPanel;
 
 /**
  *
  * @author  adrianromero
  */
-public final class SuppliersEditor extends javax.swing.JPanel implements EditorRecord {
+public final class SuppliersEditor extends JPanel implements EditorRecord {
 
     private Object id;
 
     /** Creates new form AttributesEditor
      * @param dirty */
-    public SuppliersEditor(DirtyManager dirty) {
+    public SuppliersEditor(AppView app,DirtyManager dirty) {
         initComponents();
 
         m_jName.getDocument().addDocumentListener(dirty);
+        m_jAddress.getDocument().addDocumentListener(dirty);
+        m_jPhone.getDocument().addDocumentListener(dirty);
+        m_jEmail.getDocument().addDocumentListener(dirty);
 
         writeValueEOF();
     }
+
+    
 
     /**
      *
@@ -54,6 +61,12 @@ public final class SuppliersEditor extends javax.swing.JPanel implements EditorR
         id = null;
         m_jName.setText(null);
         m_jName.setEnabled(false);
+        m_jAddress.setText(null);
+        m_jAddress.setEnabled(false);
+        m_jPhone.setText(null);
+        m_jPhone.setEnabled(false);
+        m_jEmail.setText(null);
+        m_jEmail.setEnabled(false);
     }
 
     /**
@@ -64,6 +77,12 @@ public final class SuppliersEditor extends javax.swing.JPanel implements EditorR
         id = UUID.randomUUID().toString();
         m_jName.setText(null);
         m_jName.setEnabled(true);
+        m_jAddress.setText(null);
+        m_jAddress.setEnabled(true);
+        m_jPhone.setText(null);
+        m_jPhone.setEnabled(true);
+        m_jEmail.setText(null);
+        m_jEmail.setEnabled(true);
     }
 
     /**
@@ -77,6 +96,12 @@ public final class SuppliersEditor extends javax.swing.JPanel implements EditorR
         id = attrset[0];
         m_jName.setText(Formats.STRING.formatValue(attrset[1]));
         m_jName.setEnabled(false);
+        m_jAddress.setText(Formats.STRING.formatValue(attrset[2]));
+        m_jAddress.setEnabled(false);
+        m_jPhone.setText(Formats.STRING.formatValue(attrset[3]));
+        m_jPhone.setEnabled(false);
+        m_jEmail.setText(Formats.STRING.formatValue(attrset[4]));
+        m_jEmail.setEnabled(false);
     }
 
     /**
@@ -90,6 +115,12 @@ public final class SuppliersEditor extends javax.swing.JPanel implements EditorR
         id = attrset[0];
         m_jName.setText(Formats.STRING.formatValue(attrset[1]));
         m_jName.setEnabled(true);
+        m_jAddress.setText(Formats.STRING.formatValue(attrset[2]));
+        m_jAddress.setEnabled(true);
+        m_jPhone.setText(Formats.STRING.formatValue(attrset[3]));
+        m_jPhone.setEnabled(true);
+        m_jEmail.setText(Formats.STRING.formatValue(attrset[4]));
+        m_jEmail.setEnabled(true);
     }
 
     /**
@@ -100,10 +131,13 @@ public final class SuppliersEditor extends javax.swing.JPanel implements EditorR
     @Override
     public Object createValue() throws BasicException {
 
-        Object[] attrset = new Object[2];
+        Object[] attrset = new Object[5];
 
         attrset[0] = id;
         attrset[1] = m_jName.getText();
+        attrset[2] = m_jAddress.getText();
+        attrset[3] = m_jPhone.getText();
+        attrset[4] = m_jEmail.getText();
 
         return attrset;
     }
@@ -135,11 +169,32 @@ public final class SuppliersEditor extends javax.swing.JPanel implements EditorR
 
         jLabel2 = new javax.swing.JLabel();
         m_jName = new javax.swing.JTextField();
+        m_jAddress = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        m_jPhone = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        m_jEmail = new javax.swing.JTextField();
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText(AppLocal.getIntString("Label.Name")); // NOI18N
 
         m_jName.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+
+        m_jAddress.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel3.setText(AppLocal.getIntString("label.address")); // NOI18N
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText(AppLocal.getIntString("label.phone")); // NOI18N
+
+        m_jPhone.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText(AppLocal.getIntString("label.email")); // NOI18N
+
+        m_jEmail.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -147,10 +202,24 @@ public final class SuppliersEditor extends javax.swing.JPanel implements EditorR
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(m_jAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
+                        .addComponent(m_jPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
+                        .addComponent(m_jEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,14 +228,32 @@ public final class SuppliersEditor extends javax.swing.JPanel implements EditorR
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(m_jAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(m_jPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(m_jEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JTextField m_jAddress;
+    private javax.swing.JTextField m_jEmail;
     private javax.swing.JTextField m_jName;
+    private javax.swing.JTextField m_jPhone;
     // End of variables declaration//GEN-END:variables
 
 }
