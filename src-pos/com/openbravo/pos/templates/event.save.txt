@@ -1,0 +1,83 @@
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import com.openbravo.pos.forms.DataLogicSales; 
+import com.openbravo.pos.forms.DataLogicSystem;
+import com.openbravo.pos.erp.sync.DataLogicIntegration;
+import com.openbravo.pos.ticket.ProductInfoExt;
+import com.openbravo.pos.payment.PaymentInfo;
+import com.openbravo.pos.ticket.TicketInfo; 
+import com.openbravo.pos.ticket.TicketLineInfo;
+import java.math.*;
+import java.util.Properties;
+import com.openbravo.data.loader.*;
+import java.awt.Font; 
+import javax.swing.plaf.FontUIResource; 
+import javax.swing.JOptionPane;
+import javax.swing.JDialog;
+
+Session session = new Session(dbURL, dbUser, dbPassword);
+DataLogicSales logicsale = new DataLogicSales();
+logicsale.init(session);
+DataLogicSystem logicsystem = new DataLogicSystem();
+logicsystem.init(session);
+DataLogicIntegration logicintegration = new DataLogicIntegration();
+logicintegration.init(session);
+Integer found = 1;
+File file=null;
+File fileStatus=null;
+
+String auxname="CONTADO";
+String auxaddress="Panama";
+String prefix="j";
+try{
+    //eliminamos el status anterior si existe	
+    fileStatus = new File("C:/IntTFHKA/Status_Error.txt");    
+    if(fileStatus.exists()){
+        fileStatus.delete();
+    }
+    file = new File("C:/IntTFHKA/factura.txt");    
+    if(file.exists()){
+        file.delete();
+    }
+    boolean checkprinter=false;  
+//generamos el estatus de informacion para leer la informacin fiscal y ejecutamos el proceso
+	fileProcess=new File("C:/IntTFHKA/IntTFHKA.exe");
+	if(fileProcess.exists()){
+            String filePath2 = "C:/IntTFHKA/IntTFHKA.exe CheckFprinter()";
+            Process p1 = Runtime.getRuntime().exec(filePath2);
+            p1.waitFor();
+            //usamos filereader para extraer la informacion e insertarla en el ticket
+            fileStatus = new File("C:/IntTFHKA/Status_Error.txt");    
+
+            if(fileStatus.exists()){
+
+                // creates a FileReader Object
+                FileReader reader = new FileReader(fileStatus);
+                BufferedReader br = new BufferedReader(reader); 
+                String status; 
+                while((status = br.readLine()) != null) { 
+                        if(status.substring(0,4).compareTo("TRUE")==0){
+                                checkprinter=true;
+                        }
+
+                } 
+                reader.close(); 
+            }
+        
+	}
+	if(!checkprinter){
+            JOptionPane.showMessageDialog(null, 
+                                "No Existe Impresora Conectada o Esta Apagada", "POS", JOptionPane.PLAIN_MESSAGE);   
+                            return found;         
+        }
+
+}catch(Exception e){
+    e.printStackTrace();
+}
+
+
+

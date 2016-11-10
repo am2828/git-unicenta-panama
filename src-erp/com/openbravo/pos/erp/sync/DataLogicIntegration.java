@@ -617,22 +617,22 @@ public class DataLogicIntegration extends BeanFactoryDataSingle {
         if((status = br.readLine()) == null) {
             return false;
         }
-        final int zlength = status.substring(47,51).length();
-        final int znumber = Integer.parseInt(status.substring(47,51))+1;
-        final String fiscalprint_serial = status.substring(66,76);
-        final String fiscal_invoicenumber = status.substring(21,29);
+       
+        String aux = status.substring(21,29);
+        if (ticket.getTicketType()==1){
+            aux = status.substring(34,42);
+        }
+        final String fiscalnumber = aux;
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy hh:mm:ss");
-        final Date date= formatter.parse(status.substring(82,84)+"/"+status.substring(84,86)+"/"+status.substring(86,88)
-                +" "+status.substring(76,78)+":"+status.substring(78,80)+":"+status.substring(80,82) );
+        final Date date= formatter.parse(status.substring(122,124)+"/"+status.substring(124,126)+"/"+status.substring(126,128)
+                +" "+status.substring(116,118)+":"+status.substring(118,120)+":"+status.substring(120,122));
         
         SentenceExec ticketFiscalUpdate = new PreparedSentence(s
-                , "UPDATE TICKETS SET fiscal_invoicenumber=?, fiscalprint_serial=?, fiscal_zreport=? WHERE ID = ?"
+                , "UPDATE TICKETS SET fiscalnumber=? WHERE ID = ?"
                 , SerializerWriteParams.INSTANCE);
                         ticketFiscalUpdate.exec(new DataParams() { public void writeValues() throws BasicException {
-                            setString(1, fiscal_invoicenumber);
-                            setString(2, fiscalprint_serial);
-                            setString(3, String.format("%0" + String.valueOf(zlength) +"d", znumber));
-                            setString(4, ticket.getId());
+                            setString(1, fiscalnumber);
+                            setString(2, ticket.getId());
                        }});
         
         SentenceExec receiptFiscalUpdate = new PreparedSentence(s
