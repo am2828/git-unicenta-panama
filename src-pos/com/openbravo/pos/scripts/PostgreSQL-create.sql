@@ -70,13 +70,13 @@ CREATE UNIQUE INDEX RESOURCES_NAME_INX ON RESOURCES(NAME);
 
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('0', 'Menu.Root', 0, $FILE{/com/openbravo/pos/templates/Menu.Root.txt});
 
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('1', 'coin.2', 1, $FILE{/com/openbravo/pos/templates/coin.2.png});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('1', 'note.100', 1, $FILE{/com/openbravo/pos/templates/note.100.png});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('2', 'coin.1', 1, $FILE{/com/openbravo/pos/templates/coin.1.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('3', 'coin.50', 1, $FILE{/com/openbravo/pos/templates/coin.50.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('4', 'coin.20', 1, $FILE{/com/openbravo/pos/templates/coin.20.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('5', 'coin.10', 1, $FILE{/com/openbravo/pos/templates/coin.10.png});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('3', 'coin.050', 1, $FILE{/com/openbravo/pos/templates/coin.050.png});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('4', 'coin.025', 1, $FILE{/com/openbravo/pos/templates/coin.025.png});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('5', 'coin.010', 1, $FILE{/com/openbravo/pos/templates/coin.010.png});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('6', 'coin.05', 1, $FILE{/com/openbravo/pos/templates/coin.05.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('7', 'coin.02', 1, $FILE{/com/openbravo/pos/templates/coin.02.png});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('7', 'note.1', 1, $FILE{/com/openbravo/pos/templates/note.1.png});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('8', 'coin.01', 1, $FILE{/com/openbravo/pos/templates/coin.01.png});
 
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('9', 'img.cash', 1, $FILE{/com/openbravo/pos/templates/img.cash.png});
@@ -140,6 +140,10 @@ INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('61', 'openbravo.proper
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('62', 'fiscalprint.properties', 0, $FILE{/com/ghintech/fiscalprint/templates/fiscalprint.properties.txt});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('63', 'ticket.bematech', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.bematech.txt});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('64', 'ticket.thefactory', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.thefactory.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('65', 'event.total', 0, $FILE{/com/openbravo/pos/templates/event.total.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('66', 'img.linediscount', 1, $FILE{/com/openbravo/pos/templates/img.linediscount.png});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('67', 'ticket.thefactory.preview', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.thefactory.preview.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('68', 'event.save', 0, $FILE{/com/openbravo/pos/templates/event.save.txt});
 
 CREATE TABLE TAXCUSTCATEGORIES (
     ID VARCHAR NOT NULL,
@@ -180,6 +184,8 @@ CREATE UNIQUE INDEX CUSTOMERS_SKEY_INX ON CUSTOMERS(SEARCHKEY);
 CREATE INDEX CUSTOMERS_TAXID_INX ON CUSTOMERS(TAXID);
 CREATE INDEX CUSTOMERS_NAME_INX ON CUSTOMERS(NAME);
 CREATE INDEX CUSTOMERS_CARD_INX ON CUSTOMERS(CARD);
+
+INSERT INTO CUSTOMERS(ID,SEARCHKEY,TAXID, NAME) VALUES ('000', 'CONTADO', 'CONTADO', 'CONTADO');
 
 CREATE TABLE CATEGORIES (
     ID VARCHAR NOT NULL,
@@ -250,6 +256,9 @@ CREATE TABLE ATTRIBUTESET (
 CREATE TABLE SUPPLIERS (
     ID VARCHAR NOT NULL,
     NAME VARCHAR NOT NULL,
+    ADDRESS VARCHAR,
+    PHONE VARCHAR,
+    EMAIL VARCHAR,
     PRIMARY KEY (ID)
 );
 
@@ -318,8 +327,9 @@ CREATE TABLE PRODUCTS (
 CREATE UNIQUE INDEX PRODUCTS_INX_0 ON PRODUCTS(REFERENCE);
 CREATE UNIQUE INDEX PRODUCTS_INX_1 ON PRODUCTS(CODE);
 CREATE UNIQUE INDEX PRODUCTS_NAME_INX ON PRODUCTS(NAME);
+
 INSERT INTO PRODUCTS(ID, REFERENCE, CODE, NAME, PRICEBUY, PRICESELL, CATEGORY, TAXCAT, ISSERVICE, ISKITCHEN, ISVPRICE, ISVERPATRIB, TEXTTIP, WARRANTY) 
-VALUES ('xxx999_999xxx_x9x9x9', 'xxx999', 'xxx999', '***', 0.00, 0.00, '000', '001', TRUE, FALSE, FALSE, FALSE,'',FALSE);
+VALUES ('000', '000', '000', 'Servicio', 0.00, 0.00, '000', '000', TRUE, FALSE, FALSE, FALSE,'',FALSE);
 
 
 CREATE TABLE PRODUCTS_CAT (
