@@ -1,0 +1,190 @@
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import com.openbravo.pos.forms.DataLogicSales; 
+import com.openbravo.pos.forms.DataLogicSystem;
+import com.openbravo.pos.erp.possync.DataLogicIntegration;
+import com.openbravo.pos.ticket.ProductInfoExt; 
+import com.openbravo.data.loader.Session;
+import com.openbravo.pos.ticket.TicketLineInfo;
+import java.math.*;
+import java.util.Properties;
+import com.openbravo.pos.payment.PaymentInfo;
+import com.openbravo.pos.ticket.TicketInfo;
+
+Session session = new Session(dbURL, dbUser, dbPassword);
+DataLogicSales logicsale = new DataLogicSales();
+logicsale.init(session);
+DataLogicSystem logicsystem = new DataLogicSystem();
+logicsystem.init(session);
+DataLogicIntegration logicintegration = new DataLogicIntegration();
+logicintegration.init(session);
+
+File file=null;
+File fileStatus=null;
+//if(ticket.ticketType==0){
+String auxname="CONTADO";
+String auxaddress="Panama";
+String prefix="j";
+try{
+    //eliminamos el status anterior si existe	
+    fileStatus = new File("C:/IntTFHKA/Status_Error.txt");    
+    if(fileStatus.exists()){
+        fileStatus.delete();
+    }
+    file = new File("C:/IntTFHKA/factura.txt");    
+    if(file.exists())
+    file.delete();
+    file.createNewFile();
+	// creates a FileWriter Object
+	FileWriter writer = new FileWriter(file);
+        
+	//formateamos la caracteres especiales
+
+            if(ticket.printCustomer()!=null){
+                if(ticket.printCustomer().trim().compareTo("")!=0){
+                    auxname=ticket.printCustomer().replace("&amp;", "&").replace("&quot;", "\"").replace("&apos;", "\'");
+                }
+            }
+            //formateamos para que la descripcion del cliente no pase de 40 caracteres
+            int cstrlength=39;
+            int cstrlength2=79;
+            int cstrlength3=119;
+            int cstrlength4=159;
+        if(auxname.length()<=cstrlength){
+            cstrlength=auxname.length();			
+        }
+        if(ticket.getTicketType()==0){
+            writer.write(prefix+"1Nombre: " + auxname.substring(0,cstrlength) + "\n");
+            if((auxname.length())>cstrlength){
+                writer.write(prefix+"2        " + auxname.substring(cstrlength,((auxname.length()>cstrlength2)?cstrlength2:auxname.length())) + "\n");
+            }	
+            if((auxname.length())>cstrlength2){
+                writer.write(prefix+"3        " + auxname.substring(cstrlength2,((auxname.length()>cstrlength3)?cstrlength3:auxname.length())) + "\n");
+            }
+            if((auxname.length())>cstrlength3){
+                writer.write(prefix+"4        " + auxname.substring(cstrlength3,((auxname.length()>cstrlength4)?cstrlength4:auxname.length())) + "\n");
+            }
+            writer.write(prefix+"5C.I/RUC: " + ticket.getCustomer().printTaxid() + "\n");
+        }else if(ticket.getTicketType()==1){
+            writer.write("jSNombre: " + auxname.substring(0,cstrlength) + "\n");
+            writer.write("jRC.I/RUC: " + ticket.getCustomer().printTaxid() + "\n");
+            writer.write("jF" + ticket.printId() + "\n");
+        }
+        if(ticket.getCustomer().getAddress()!=null){
+            if(ticket.getCustomer().getAddress().trim().compareTo("")!=0){
+                auxaddress=ticket.getCustomer().getAddress().trim();
+
+            }
+        }
+        
+        if(ticket.getTicketType()==0){
+        	if(auxaddress.length()<=cstrlength){
+            		cstrlength=auxaddress.length();			
+	}
+	writer.write(prefix+"6Direccion: " + auxaddress.substring(0,cstrlength) + "\n");
+       	 if((auxaddress.length())>cstrlength){
+            		writer.write(prefix+"7        " + auxaddress.substring(cstrlength,((auxaddress.length()>cstrlength2)?cstrlength2:auxaddress.length())) + "\n");
+	}	
+	if((auxaddress.length())>cstrlength2){
+            		writer.write(prefix+"8        " + auxaddress.substring(cstrlength2,((auxaddress.length()>cstrlength3)?cstrlength3:auxaddress.length())) + "\n");
+	}
+
+	writer.write(prefix+"9Orden Nro.: " + ticket.printId() + "\n");
+          }
+	length=ticket.getLinesCount();
+	String aux=null;
+	NumberFormat f = NumberFormat.getInstance(Locale.ENGLISH);
+        if (f instanceof DecimalFormat) {
+              ((DecimalFormat) f).setDecimalSeparatorAlwaysShown(true);
+        }
+	DecimalFormat fo = new DecimalFormat("00000000.00");
+	DecimalFormat fcant = new DecimalFormat("00000.000");
+	BigDecimal bd =null;
+	ProductInfoExt product = null;
+	int pstrlength=40;
+	String desc=null;
+	Double totalLines=0;
+	for (int i = 0; i < length; i++) {
+		line = ticket.getLine(i);
+		desc=line.printName();
+		if(desc.length()<=pstrlength){
+			pstrlength=desc.length();			
+		}
+		desc=desc.substring(0,pstrlength);
+		product = logicsale.getProductInfo(line.getProductID());
+                String itemprefix="";
+		if(ticket.getTicketType()==0){
+                    writer.write("@Codigo: "+ product.getReference() +"\n");
+                    itemprefix="!";
+                }else{
+                    itemprefix="d1";
+                }
+                bd = new BigDecimal(line.getPrice());
+                //bd = bd.setScale(2, RoundingMode.DOWN);
+		aux=fo.format(bd.doubleValue());
+                		
+		writer.write(itemprefix+aux.replace(".","").replace(",",""));
+                
+		aux=fcant.format(Math.abs(line.getMultiply()));
+		writer.write(aux.replace(".","").replace(",",""));
+		writer.write(desc + "\n");
+                totalLines+=(line.getPrice()*line.getMultiply()*(1+line.getTaxRate()));
+	}
+        
+            
+	writer.write("101");
+	writer.flush();
+	writer.close();
+
+	String filePath = "C:/IntTFHKA/IntTFHKA.exe SendFileCmd(C:/IntTFHKA/factura.txt)";
+	Process p = Runtime.getRuntime().exec(filePath);
+        p.waitFor();
+
+	
+        //usamos filereader para extraer la informacion de si se imprimio exitosamente sino se envia un mensaje
+        Integer found = 1;
+        boolean checkprinter=false;
+        boolean StatusErrorExist=false;
+	while(!StatusErrorExist){
+	        fileStatus = new File("C:/IntTFHKA/Status_Error.txt");    
+		StatusErrorExist=fileStatus.exists();
+	}
+        if(fileStatus.exists()){
+            // creates a FileReader Object
+            FileReader reader = new FileReader(fileStatus);
+            BufferedReader br = new BufferedReader(reader); 
+            String status; 
+	    String[] statusError;
+            while((status = br.readLine()) != null) { 
+                statusError=status.split("\\t");
+                if(statusError[2].compareTo("0")==0){
+                    checkprinter=true;
+                }
+            } 
+            reader.close(); 
+        }
+//        if(!checkprinter){
+//            JOptionPane.showMessageDialog(null, 
+//                                "No se pudo imprimir el ticket correctamente", "POS", JOptionPane.PLAIN_MESSAGE);   
+            //logicsale.deleteTicket(ticket,"0");
+//            return found;         
+//        }
+        //generamos el estatus de informacion para leer la informacin fiscal y ejecutamos el proceso
+        String filePath2 = "C:/IntTFHKA/IntTFHKA.exe UploadStatusCmd(S1)";
+        Process p1 = Runtime.getRuntime().exec(filePath2);
+	p1.waitFor();
+        //usamos filereader para extraer la informacion e insertarla en el ticket
+        fileStatus = new File("C:/IntTFHKA/Status.txt");    
+        //if(!logicintegration.updateTicketFiscalTheFactory(ticket,fileStatus)){
+         //   JOptionPane.showMessageDialog(null, 
+         //       "Ocurrió un problema actualizando la información fiscal", "POS", JOptionPane.PLAIN_MESSAGE);   
+         //   return found;         
+        //}
+
+    }catch(Exception e){
+	e.printStackTrace();
+    }
+//}

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ticketsample" pageWidth="595" pageHeight="386" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="80" bottomMargin="0" whenResourceMissingType="Empty">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<field name="TICKET" class="com.openbravo.pos.ticket.TicketInfo"/>
+	<field name="PLACE" class="java.lang.String"/>
+	<field name="TAXESLOGIC" class="java.lang.Object"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="150">
+			<image>
+				<reportElement key="image-1" x="0" y="0" width="197" height="30"/>
+				<imageExpression class="java.awt.Image"><![CDATA[com.openbravo.data.loader.ImageUtils.readImageFromResource("/com/openbravo/images/poweredby.png")]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-4" x="109" y="73" width="188" height="19">
+					<printWhenExpression><![CDATA[Boolean.valueOf($F{TICKET}.getCustomer() != null)]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="4" leftPadding="4"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TICKET}.getCustomer().getName().replace("","  ")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-5" x="0" y="106" width="109" height="19"/>
+				<box topPadding="4" leftPadding="4"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[N o m b r e  V e n d e d o r :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="0" y="73" width="109" height="19"/>
+				<box topPadding="4" leftPadding="4"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[N o m b r e  C l i e n t e :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" x="321" y="111" width="37" height="19"/>
+				<box topPadding="4" leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[F e c h a :]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-5" x="109" y="87" width="188" height="19">
+					<printWhenExpression><![CDATA[Boolean.valueOf($F{TICKET}.getCustomer() != null)]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="4" leftPadding="4"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TICKET}.getCustomer().getTaxid().replace("","  ")]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement key="textField-3" x="358" y="111" width="177" height="19"/>
+				<box topPadding="4" leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TICKET}.printDate().replace("","  ")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="320" y="82" width="215" height="14"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["# "+$F{TICKET}.getTicketId()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-4" x="0" y="87" width="109" height="19"/>
+				<box topPadding="4" leftPadding="4"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[R I F / C I :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="320" y="73" width="215" height="14"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[P R E S U P U E S T O]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-5" x="109" y="106" width="188" height="19">
+					<printWhenExpression><![CDATA[Boolean.valueOf($F{TICKET}.getCustomer() != null)]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="4" leftPadding="4"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TICKET}.getUser().getName().replace("","  ")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="320" y="97" width="215" height="14"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[C O N T A D O]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" x="321" y="125" width="37" height="19"/>
+				<box topPadding="4" leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[P a g :]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="358" y="125" width="25" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-3" x="0" y="30" width="535" height="57"/>
+				<box topPadding="4" leftPadding="4"/>
+				<textElement>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[G  R  U  P  O   P  U  N  T  O   C  O  M  ,  C  .  A  .
+J - 4 0 3 5 5 0 0 3 - 4
+0 5 0 0 - P U N T O C O  /  0 5 0 0 - 7 8 6 8 6 2 6   /   0 4 1 4 - 8 1 6 6 0 7 7]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="15">
+			<staticText>
+				<reportElement key="staticText-1" x="0" y="0" width="81" height="14"/>
+				<box leftPadding="2"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[C ó d i g o]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="330" y="0" width="88" height="14"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[P r e c i o]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="418" y="0" width="117" height="14"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[T o t a l]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" x="259" y="0" width="45" height="14"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[C a n t]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-1" x="81" y="0" width="178" height="14"/>
+				<box leftPadding="2"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[D e s c r i p c i ó n]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="50">
+			<subreport isUsingCache="true">
+				<reportElement key="subreport-1" x="0" y="0" width="535" height="50"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
+$F{TICKET}.getLines()
+)]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[JasperCompileManager.compileReport(
+net.sf.jasperreports.engine.xml.JRXmlLoader.load(getClass().getResourceAsStream(
+"/com/openbravo/reports/ticketsample_lines.jrxml"
+))
+)]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="38">
+			<staticText>
+				<reportElement key="staticText-99" stretchType="RelativeToBandHeight" x="0" y="0" width="535" height="19"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[S I G U E N O S  E N  :   F a c e b o o k  :   P u n t o  C o m   /   I n s t a g r a m  :  P u n t o C o m  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-100" stretchType="RelativeToBandHeight" x="0" y="17" width="535" height="19"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[T w i t t e r  :  @ R P u n t o C o m   /   P I N  :   2 6 5 2 9 D A 3   /   w w w . g r u p o p u n t o c o m . c om  ]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="110">
+			<rectangle>
+				<reportElement key="rectangle-3" stretchType="RelativeToBandHeight" x="11" y="0" width="517" height="70"/>
+			</rectangle>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-6" stretchType="RelativeToBandHeight" x="325" y="24" width="188" height="19"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TICKET}.printTax().replace("","  ")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-7" stretchType="RelativeToBandHeight" x="325" y="49" width="188" height="19"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TICKET}.printTotal().replace("","  ")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-8" stretchType="RelativeToBandHeight" x="325" y="1" width="188" height="19"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TICKET}.printSubTotal().replace("","  ")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" stretchType="RelativeToBandHeight" x="165" y="1" width="160" height="19"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[S u b t o t a l :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" stretchType="RelativeToBandHeight" x="165" y="24" width="160" height="19"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[I m p u e s t o :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" stretchType="RelativeToBandHeight" x="165" y="49" width="160" height="19"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[T o t a l :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-100" stretchType="RelativeToBandHeight" x="0" y="87" width="535" height="19"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[T w i t t e r  :  @ R P u n t o C o m   /   P I N  :   2 6 5 2 9 D A 3   /   w w w . g r u p o p u n t o c o m . c om  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-99" stretchType="RelativeToBandHeight" x="0" y="74" width="535" height="19"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[S I G U E N O S  E N  :   F a c e b o o k  :   P u n t o  C o m   /   I n s t a g r a m  :  P u n t o C o m  ]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+</jasperReport>
