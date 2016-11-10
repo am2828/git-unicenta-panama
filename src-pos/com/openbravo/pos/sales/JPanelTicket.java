@@ -953,7 +953,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             String sVariableTypePrefix = sCode.substring(0, 2);
 // JG Aug 2014 - Check for EAN-8 construct
                             String sVariableNum; 
-                            if (sCode.length() > 8) {
+                            if (sCode.length() >= 12) {
                                 sVariableNum = sCode.substring(8, 12);
                             } else {
                                 sVariableNum = String.valueOf(dPriceSell);//null;
@@ -978,8 +978,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 weight = Double.parseDouble(sVariableNum) / 10; //weight in kg with one decimal (eg. 123,4 kg)
                             } 
                             else if(sVariableTypePrefix.equals("28")) {
-                                sVariableNum = sCode.substring(7, 12);
-                                dPriceSell = Double.parseDouble(sVariableNum) / 100; // price with two decimals
+                                if (sCode.length() >= 12){
+                                    sVariableNum = sCode.substring(7, 12);
+                                    dPriceSell = Double.parseDouble(sVariableNum) / 100;
+                                }
+                                 // price with two decimals
                             }
                             
                             if((sVariableTypePrefix.equals("20")) || (sVariableTypePrefix.equals("21")) || (sVariableTypePrefix.equals("22"))) {
@@ -994,7 +997,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
                                 dPriceSell /= (1.0 + tax.getRate());
                                 oProduct.setProperty("product.price", Double.toString(dPriceSell));
-                                weight = -1.0;
+                                if (sCode.length() >= 12){
+                                    weight = -1.0;
+                                }
                             }
                             
                             if(m_jaddtax.isSelected()) {
