@@ -1981,7 +1981,7 @@ if (pickupSize!=null && (Integer.parseInt(pickupSize) >= tmpPickupId.length())){
 
         j_btnKitchenPrt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/printer24.png"))); // NOI18N
         j_btnKitchenPrt.setText(bundle.getString("button.sendorder")); // NOI18N
-        j_btnKitchenPrt.setToolTipText("Send to Kichen Printer");
+        j_btnKitchenPrt.setToolTipText("Send to Kitchen Printer");
         j_btnKitchenPrt.setMargin(new java.awt.Insets(0, 4, 0, 4));
         j_btnKitchenPrt.setMaximumSize(new java.awt.Dimension(50, 40));
         j_btnKitchenPrt.setMinimumSize(new java.awt.Dimension(50, 40));
