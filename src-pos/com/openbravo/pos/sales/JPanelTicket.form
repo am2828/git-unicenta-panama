@@ -247,7 +247,7 @@
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                               <ResourceString bundle="pos_messages.properties" key="button.sendorder" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
-                            <Property name="toolTipText" type="java.lang.String" value="Send to Kichen Printer"/>
+                            <Property name="toolTipText" type="java.lang.String" value="Send to Kitchen Printer"/>
                             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                               <Insets value="[0, 4, 0, 4]"/>
                             </Property>

@@ -1,0 +1,152 @@
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import com.openbravo.format.Formats;
+import com.openbravo.pos.forms.DataLogicSales; 
+import com.openbravo.pos.forms.DataLogicSystem;
+import com.openbravo.pos.erp.sync.DataLogicIntegration;
+import com.openbravo.pos.ticket.ProductInfoExt;
+import com.openbravo.pos.payment.PaymentInfo;
+import com.openbravo.pos.ticket.TicketInfo; 
+import com.openbravo.pos.ticket.TicketLineInfo;
+import java.math.*;
+import java.util.Properties;
+import com.openbravo.data.loader.*;
+import java.awt.Font; 
+import javax.swing.plaf.FontUIResource; 
+import javax.swing.JOptionPane;
+import javax.swing.JDialog;
+
+Session session = new Session(dbURL, dbUser, dbPassword);
+DataLogicSales logicsale = new DataLogicSales();
+logicsale.init(session);
+DataLogicSystem logicsystem = new DataLogicSystem();
+logicsystem.init(session);
+DataLogicIntegration logicintegration = new DataLogicIntegration();
+logicintegration.init(session);
+Integer found = 1;
+File file=null;
+File fileStatus=null;
+
+String auxname="CONTADO";
+String auxaddress="Panama";
+String prefix="80>";
+System.out.println("Antes del try");
+try{
+    //eliminamos el status anterior si existe	
+    fileStatus = new File("C:/IntTFHKA/Status_Error.txt");    
+    if(fileStatus.exists()){
+        fileStatus.delete();
+    }
+    file = new File("C:/IntTFHKA/factura.txt");    
+    if(file.exists()){
+        file.delete();
+    }
+     boolean checkprinter=false;
+    //generamos el estatus de informacion para leer la informacin fiscal y ejecutamos el proceso
+    fileProcess=new File("C:/IntTFHKA/IntTFHKA.exe");
+    if(fileProcess.exists()){
+        String filePath2 = "C:/IntTFHKA/IntTFHKA.exe CheckFprinter()";
+        Process p1 = Runtime.getRuntime().exec(filePath2);
+        p1.waitFor();
+        //usamos filereader para extraer la informacion e insertarla en el ticket
+        fileStatus = new File("C:/IntTFHKA/Status_Error.txt");    
+        if(fileStatus.exists()){
+            // creates a FileReader Object
+            FileReader reader = new FileReader(fileStatus);
+            BufferedReader br = new BufferedReader(reader); 
+            String status; 
+            while((status = br.readLine()) != null) { 
+                if(status.substring(0,4).compareTo("TRUE")==0){
+                    checkprinter=true;
+                }
+            } 
+            reader.close(); 
+        }
+    }
+    if(!checkprinter){
+        JOptionPane.showMessageDialog(null,"No Existe Impresora Conectada o Esta Apagada", "POS", JOptionPane.PLAIN_MESSAGE);
+        return found;         
+    }
+    //eliminamos el status anterior si existe	
+    fileStatus = new File("C:/IntTFHKA/Status_Error.txt");    
+    if(fileStatus.exists()){
+        fileStatus.delete();
+    }
+    file = new File("C:/IntTFHKA/factura.txt");    
+    if(file.exists())
+    file.delete();
+    file.createNewFile();
+
+    // creates a FileWriter Object
+    FileWriter writer = new FileWriter(file);
+    System.out.println("Antes de cliente");
+    //formateamos la caracteres especiales
+    if(ticket.printCustomer()!=null){
+        if(ticket.printCustomer().trim().compareTo("")!=0){
+            auxname=ticket.printCustomer().replace("&amp;", "&").replace("&quot;", "\"").replace("&apos;", "\'");
+        }
+    }
+    //formateamos para que la descripcion del cliente no pase de 40 caracteres
+    int cstrlength=39;
+    int cstrlength2=79;
+    int cstrlength3=119;
+    int cstrlength4=159;
+    if(auxname.length()<=cstrlength){
+        cstrlength=auxname.length();			
+    }
+    writer.write(prefix+"Nombre: " + auxname.substring(0,cstrlength) + "\n");
+    if((auxname.length())>cstrlength){
+        writer.write(prefix+"        " + auxname.substring(cstrlength,((auxname.length()>cstrlength2)?cstrlength2:auxname.length())) + "\n");
+    }	
+    if((auxname.length())>cstrlength2){
+        writer.write(prefix+"        " + auxname.substring(cstrlength2,((auxname.length()>cstrlength3)?cstrlength3:auxname.length())) + "\n");
+    }
+    if((auxname.length())>cstrlength3){
+        writer.write(prefix+"        " + auxname.substring(cstrlength3,((auxname.length()>cstrlength4)?cstrlength4:auxname.length())) + "\n");
+    }
+    
+   
+    
+   
+    System.out.println("Despues de ticketid");
+    length=ticket.getLinesCount();
+    String aux=null;
+
+
+    int pstrlength=40;
+    String desc=null;
+    Double totalLines=0;
+    for (int i = 0; i < length; i++) {
+        line = ticket.getLine(i);
+        desc=line.printName();
+        if(desc.length()<=pstrlength){
+            pstrlength=desc.length();			
+        }
+	desc=desc.substring(0,pstrlength);
+        System.out.println(line.getProductID());
+        if(line.getProductID()!=null){
+            writer.write(prefix+line.getMultiply()+" " +desc +" "+line.printTax()+" "+line.printPrice()+"\n");
+	}
+    }
+    writer.write(prefix+"Subtotal: "+ticket.printSubTotal()+"\n");
+    subtotal = ticket.getSubTotal();
+    double tip =0.0; 
+    if (subtotal > 0.0) { 
+         tip = subtotal*0.10;
+    }
+    writer.write(prefix+"Propina Sugerida 10%: "+Formats.CURRENCY.formatValue(tip)+"\n");
+    writer.write(prefix+"Total: "+ticket.printTotal()+"\n");
+    writer.write("810");
+    writer.flush();
+    writer.close();
+    String filePath = "C:/IntTFHKA/IntTFHKA.exe SendFileCmd(C:/IntTFHKA/factura.txt)";
+    Process p = Runtime.getRuntime().exec(filePath);
+    p.waitFor();
+
+}catch(Exception e){
+    e.printStackTrace();
+}

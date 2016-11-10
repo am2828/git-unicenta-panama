@@ -91,8 +91,9 @@ group = menu.addGroup("Menu.Backoffice");
         submenu.addPanel("/com/openbravo/images/reports.png", "Menu.TaxCatSales", "/com/openbravo/reports/taxcatsales.bs");
         submenu.addPanel("/com/openbravo/images/reports.png", "Menu.ReportTaxes", "/com/openbravo/reports/taxes.bs");
         submenu.addPanel("/com/openbravo/images/reports.png", "Menu.DailySales", "/com/openbravo/reports/dailysales.bs");
-        submenu.addExecution("/com/openbravo/images/reports.png", "Menu.zreport", "com.ghintech.fiscalprint.PrintZReport");
         submenu.addExecution("/com/openbravo/images/reports.png", "Menu.xreport", "com.ghintech.fiscalprint.PrintXReport");
+        submenu.addExecution("/com/openbravo/images/reports.png", "Menu.zreport", "com.ghintech.fiscalprint.PrintZReport");
+
         
     submenu.addTitle("Menu.SalesManagement.Charts");
         submenu.addPanel("/com/openbravo/images/chart.png", "Menu.ProductSales", "/com/openbravo/reports/productsales.bs");
