@@ -108,7 +108,7 @@ try{
     if((auxname.length())>cstrlength3){
         writer.write(prefix+"        " + auxname.substring(cstrlength3,((auxname.length()>cstrlength4)?cstrlength4:auxname.length())) + "\n");
     }
-    System.out.println("Despues de ticketid");
+    
     length=ticket.getLinesCount();
     String aux=null;
     String desc=null;
