@@ -32,12 +32,12 @@ discountrate = sales.getInputValue()/100;
 index = sales.getSelectedIndex();
 if (index >= 0) {
     line = ticket.getLine(index);
-    if (line.getPrice() > 0.0 && discountrate > 0.0) {
+    if (line.getPrice() > 0.0 && discountrate >= 0.0) {
 
         sdiscount = Formats.PERCENT.formatValue(discountrate);
         ticket.insertLine(index + 1,
             new TicketLineInfo(
-                    "Line Discount " + sdiscount,
+                    "Descuento:" + sdiscount,
                     line.getProductTaxCategoryID(),
                     line.getMultiply(),
                     -(double)((line.getPriceTax() * discountrate * 100) / (1+line.getTaxRate()))/100,

@@ -30,7 +30,7 @@ discountrate = 1 - (sales.getInputValue())/100;
 
 index = sales.getSelectedIndex();
 if (index >= 0) {
-    if (ticket.getTotal() > 0.0 && discountrate > 0.0) {
+    if (ticket.getTotal() > 0.0 && discountrate >= 0.0) {
         sdiscount = Formats.PERCENT.formatValue((1-discountrate));
         for (int number= 0; number < ticket.getLinesCount(); number++) {
             line = ticket.getLine(number);
