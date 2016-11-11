@@ -108,11 +108,19 @@ try{
     DecimalFormat fdesc = new DecimalFormat("00.00");
     BigDecimal bd =null;
     ProductInfoExt product = null;
-    int pstrlength=40;
+    
     String desc=null;
     Double totalLines=0;
     for (int i = 0; i < length; i++) {
+        int pstrlength=40;
         line = ticket.getLine(i);
+        /*------- no imprimimos el servicio  -------*/
+        if(line.getProductID()!=null){
+            if(line.getProductID().compareTo("000")==0){
+                  break;
+            }
+        }
+        /*------- no imprimimos el servicio  -------*/
         desc=line.printName();
         if(desc.length()<=pstrlength){
             pstrlength=desc.length();			
