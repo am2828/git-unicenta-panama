@@ -1415,6 +1415,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_oTicket.resetPayments();
         }
         
+        executeEvent(ticket, ticketext, "ticket.totalcancel");
+            
+        
         // cancelled the ticket.total script
         // or canceled the payment dialog
         // or canceled the ticket.close script
