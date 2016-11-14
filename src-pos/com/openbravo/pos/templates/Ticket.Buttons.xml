@@ -104,11 +104,12 @@
 
         <!-- <event key="ticket.change" code="event.change"/> -->
         <!-- <event key="ticket.addline" code="event.addline"/> -->
-        <!-- <event key="ticket.removeline" code="event.removeline"/> -->
+        <event key="ticket.removeline" code="event.removeline"/>
         <!-- <event key="ticket.setline" code="event.setline"/> -->
         <!-- <event key="ticket.show" code="event.show"/> -->
         <!-- <event key="ticket.total" code="script.Event.Total"/> -->
         <event key="ticket.total" code="event.total"/> 
+        <event key="ticket.totalcancel" code="event.totalcancel"/>
         <event key="ticket.save" code="event.save"/>
 
 
