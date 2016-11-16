@@ -43,28 +43,29 @@ AppUser au;
 Session session = new Session(dbURL, dbUser, dbPassword);
 DataLogicSales logicsale = new DataLogicSales();
 logicsale.init(session);
-
 ls.init(session);
+Properties p = logicsystem.getResourceAsProperties("fiscalprint.properties");
+String invoicefolder = p.getProperty("invoicefolder");
 
 try{
     //eliminamos el status anterior si existe	
-    fileStatus = new File("C:/IntTFHKA/Status_Error.txt");    
+    fileStatus = new File(invoicefolder + "Status_Error.txt");    
     if(fileStatus.exists()){
         fileStatus.delete();
     }
-    file = new File("C:/IntTFHKA/factura.txt");    
+    file = new File(invoicefolder + "factura.txt");    
     if(file.exists()){
         file.delete();
     }
     boolean checkprinter=false;
 	//generamos el estatus de informacion para leer la informacin fiscal y ejecutamos el proceso
-	fileProcess=new File("C:/IntTFHKA/IntTFHKA.exe");
+	fileProcess=new File(invoicefolder + "IntTFHKA.exe");
 	if(fileProcess.exists()){
-            String filePath2 = "C:/IntTFHKA/IntTFHKA.exe CheckFprinter()";
+            String filePath2 = invoicefolder + "IntTFHKA.exe CheckFprinter()";
             Process p1 = Runtime.getRuntime().exec(filePath2);
             p1.waitFor();
             //usamos filereader para extraer la informacion e insertarla en el ticket
-            fileStatus = new File("C:/IntTFHKA/Status_Error.txt");    
+            fileStatus = new File(invoicefolder + "Status_Error.txt");    
 
             if(fileStatus.exists()){
 
@@ -103,11 +104,7 @@ if(ticket.getTicketType()==0){
         line = ticket.getLine(i); 
         if(line.getProductID()!=null){
             if(line.getProductID().compareTo("000")==0){
-
-                JOptionPane.showMessageDialog(null, 
-                                    "Elimine la linea de servicio", "POS", JOptionPane.PLAIN_MESSAGE);   
-                                return found;
-                return 1;
+                return null;
             }
         }
     } 
