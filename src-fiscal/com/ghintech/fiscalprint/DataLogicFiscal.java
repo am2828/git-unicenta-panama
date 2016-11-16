@@ -23,51 +23,25 @@
 
 package com.ghintech.fiscalprint;
 
-import com.openbravo.pos.erp.sync.*;
-import java.util.List;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.loader.DataParams;
-import com.openbravo.data.loader.DataRead;
-import com.openbravo.data.loader.Datas;
-import com.openbravo.data.loader.ImageUtils;
 import com.openbravo.data.loader.PreparedSentence;
 import com.openbravo.data.loader.SentenceExec;
-import com.openbravo.data.loader.SerializerRead;
-import com.openbravo.data.loader.SerializerReadClass;
-import com.openbravo.data.loader.SerializerReadDouble;
-import com.openbravo.data.loader.SerializerWriteBasic;
+import com.openbravo.data.loader.SerializerReadString;
 import com.openbravo.data.loader.SerializerWriteParams;
-import com.openbravo.data.loader.SerializerWriteString;
 import com.openbravo.data.loader.Session;
-import com.openbravo.data.loader.StaticSentence;
-import com.openbravo.data.loader.Transaction;
-import com.openbravo.pos.customers.CustomerInfoExt;
-import com.openbravo.pos.erp.customers.User;
-import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.BeanFactoryDataSingle;
-import com.openbravo.pos.inventory.TaxCategoryInfo;
-import com.openbravo.pos.payment.PaymentInfoTicket;
-import com.openbravo.pos.ticket.CategoryInfo;
-import com.openbravo.pos.erp.externalsales.ClosedCashInfo;
-import com.openbravo.pos.erp.externalsales.CreditNoteInfo;
-import com.openbravo.pos.ticket.ProductInfoExt;
-import com.openbravo.pos.ticket.TaxInfo;
 import com.openbravo.pos.ticket.TicketInfo;
-import com.openbravo.pos.ticket.TicketLineInfo;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
-import com.openbravo.pos.forms.DataLogicSales;
-import com.openbravo.pos.inventory.StockCurrentInfo;
+
 
 /**
  *
@@ -89,10 +63,28 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
     }
      
     
-    public final String findFiscalNumber(String ticketid) throws BasicException {
-        return (String) new PreparedSentence(s
-                , "SELECT FISCALNUMBER FROM TICKETS WHERE ID=?"
-                , SerializerWriteString.INSTANCE
-                , new SerializerReadClass(TicketInfo.class)).find(ticketid);
+    public final String findFiscalNumber(final int ticketid) throws BasicException {
+        PreparedSentence p = new PreparedSentence(s
+                , "SELECT FISCALNUMBER FROM TICKETS WHERE TICKETID=?"
+                //, new SerializerWriteBasic(new Datas[] {
+                //Datas.OBJECT, Datas.INT})
+                , SerializerWriteParams.INSTANCE
+                , SerializerReadString.INSTANCE);
+        String fNumber = (String) p.find(new DataParams() {@Override
+                                        public void writeValues() throws BasicException {
+                                            setInt(1, ticketid);
+                                        }});
+        return fNumber;
+    }
+    public final Boolean updateTicketFiscalCopyTheFactory(final TicketInfo ticket,final String fNumber) throws BasicException, FileNotFoundException, IOException, ParseException {
+                SentenceExec ticketFiscalUpdate = new PreparedSentence(s
+                , "UPDATE TICKETS SET fiscalnumber=? WHERE ID = ?"
+                , SerializerWriteParams.INSTANCE);
+                        ticketFiscalUpdate.exec(new DataParams() { public void writeValues() throws BasicException {
+                            setString(1, fNumber);
+                            setString(2, ticket.getId());
+                       }});
+        
+        return true;
     }
 }
