@@ -74,7 +74,7 @@ try{
         String filePath2 = invoicefolder + "IntTFHKA.exe " + cmd;
         System.out.println(filePath2);
         Process p1 = Runtime.getRuntime().exec(filePath2);
-        p1.waitFor(5,TimeUnit.SECONDS);
+        p1.waitFor();
         if(!logicfiscal.updateTicketFiscalCopyTheFactory(ticket,fNumber)){
             JOptionPane.showMessageDialog(null, 
                 "Ocurrio un problema actualizando la informacion fiscal", "POS", JOptionPane.PLAIN_MESSAGE);   
