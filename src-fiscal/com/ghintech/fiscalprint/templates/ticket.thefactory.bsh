@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 import com.ghintech.fiscalprint.DataLogicFiscal;
 import java.lang.String;
+import java.util.concurrent.TimeUnit;
 
 Session session = new Session(dbURL, dbUser, dbPassword);
 DataLogicSales logicsale = new DataLogicSales();
@@ -37,6 +38,7 @@ String invoicefolder = p.getProperty("invoicefolder");
 
 String auxname="CONTADO";
 String auxaddress="Panama";
+String auxtaxid="000-000-000";
 String prefix="j";
 try{
     //eliminamos el status anterior si existe	
@@ -52,51 +54,31 @@ try{
     file.createNewFile();
     // creates a FileWriter Object
     FileWriter writer = new FileWriter(file);
-    fileProcess=new File(invoicefolder + "IntTFHKA.exe");
-    if(fileProcess.exists()){
-        String filePath2 = invoicefolder + "IntTFHKA.exe CheckFprinter()";
-        Process p1 = Runtime.getRuntime().exec(filePath2);
-        p1.waitFor();
-        //usamos filereader para extraer la informacion e insertarla en el ticket
-        fileStatus = new File(invoicefolder + "Status_Error.txt");    
-        if(fileStatus.exists()){
-            // creates a FileReader Object
-            FileReader reader = new FileReader(fileStatus);
-            BufferedReader br = new BufferedReader(reader); 
-            String status; 
-            while((status = br.readLine()) != null) { 
-                if(status.substring(0,4).compareTo("TRUE")==0){
-                    checkprinter=true;
-                }
-            } 
-            reader.close(); 
-        }
-    }
-    if(!checkprinter){
-        JOptionPane.showMessageDialog(null,"No Existe Impresora Conectada o Esta Apagada", "POS", JOptionPane.PLAIN_MESSAGE);
-        return found;         
-    }
+        
     //verificamos si la factura ya ha sido impresa imprimimos un comprobante no fiscal
-    
     String fNumber = logicfiscal.findFiscalNumber(ticket.getTicketId());
-    
+    System.out.println(ticket.getTicketId());
     if(fNumber != null){
         String cmd = "SendCmd(R";
+        System.out.println(cmd);
+        System.out.println(ticket.getTicketType());
+        System.out.println(fNumber);
         if(ticket.getTicketType()==0){
             cmd +="F";
-            cmd += fNumber.substring((fNumber.length()-7),fNumber.length());
-            cmd += fNumber.substring((fNumber.length()-7),fNumber.length());
-            cmd +=")";
-            String filePath2 = invoicefolder + "IntTFHKA.exe " + cmd;
-            System.out.println(filePath2);
-            Process p1 = Runtime.getRuntime().exec(filePath2);
-            p1.waitFor();
-            if(!logicfiscal.updateTicketFiscalCopyTheFactory(ticket,fNumber)){
-                JOptionPane.showMessageDialog(null, 
-                    "Ocurrio un problema actualizando la informacion fiscal", "POS", JOptionPane.PLAIN_MESSAGE);   
-                return found;         
-            }
-            
+        }else{
+            cmd +="C";
+        }
+        cmd += fNumber.substring((fNumber.length()-7),fNumber.length());
+        cmd += fNumber.substring((fNumber.length()-7),fNumber.length());
+        cmd +=")";
+        String filePath2 = invoicefolder + "IntTFHKA.exe " + cmd;
+        System.out.println(filePath2);
+        Process p1 = Runtime.getRuntime().exec(filePath2);
+        p1.waitFor(5,TimeUnit.SECONDS);
+        if(!logicfiscal.updateTicketFiscalCopyTheFactory(ticket,fNumber)){
+            JOptionPane.showMessageDialog(null, 
+                "Ocurrio un problema actualizando la informacion fiscal", "POS", JOptionPane.PLAIN_MESSAGE);   
+            return found;         
         }
         return null;
     }
@@ -114,6 +96,13 @@ try{
     if(auxname.length()<=cstrlength){
         cstrlength=auxname.length();			
     }
+    if(ticket.getCustomer()!=null){
+        if(ticket.getCustomer().getTaxid() != null){
+            if(ticket.getCustomer().getTaxid().trim().compareTo("")!=0){
+                auxtaxid=ticket.getCustomer().getTaxid().trim();
+            }
+        }
+    }
     if(ticket.getTicketType()==0){
         writer.write(prefix+"1Nombre: " + auxname.substring(0,cstrlength) + "\n");
         if((auxname.length())>cstrlength){
@@ -125,15 +114,18 @@ try{
         if((auxname.length())>cstrlength3){
             writer.write(prefix+"4        " + auxname.substring(cstrlength3,((auxname.length()>cstrlength4)?cstrlength4:auxname.length())) + "\n");
         }
-        writer.write(prefix+"5C.I/RUC: " + ticket.getCustomer().printTaxid() + "\n");
+        
+        writer.write(prefix+"5C.I/RUC: " + auxtaxid + "\n");
     }else if(ticket.getTicketType()==1){
         writer.write("jSNombre: " + auxname.substring(0,cstrlength) + "\n");
-        writer.write("jRC.I/RUC: " + ticket.getCustomer().printTaxid() + "\n");
+        writer.write("jRC.I/RUC: " + auxtaxid + "\n");
         writer.write("jF" + ticket.printId() + "\n");
     }
-    if(ticket.getCustomer().getAddress()!=null){
-        if(ticket.getCustomer().getAddress().trim().compareTo("")!=0){
-            auxaddress=ticket.getCustomer().getAddress().trim();
+    if(ticket.getCustomer()!=null){
+        if(ticket.getCustomer().getAddress()!=null){
+            if(ticket.getCustomer().getAddress().trim().compareTo("")!=0){
+                auxaddress=ticket.getCustomer().getAddress().trim();
+            }
         }
     }
     if(ticket.getTicketType()==0){
