@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>Sync configuration</comment>
+    <entry key="AD_Client_ID">11</entry>
+    <entry key="AD_Org_ID">11</entry>
+    <entry key="M_Warehouse_ID">HQ Warehouse</entry>
+    <entry key="AD_Country_ID">100</entry>
+    <entry key="AD_Region_ID">142</entry>
+    <entry key="AD_City_ID">100</entry>
+    <entry key="UserName">admin</entry>
+    <entry key="UserPassword">admin</entry>
+    <entry key="queue-host">104.196.21.193</entry>
+    <entry key="queue-port">61616</entry>
+    <entry key="orders-queue">Orders</entry>
+    <entry key="products-queue">Products</entry>
+    <entry key="customers-queue">Customers</entry>
+    <entry key="users-queue">Users</entry>
+    <entry key="closedcash-queue">ClosedCash</entry>
+</properties>
