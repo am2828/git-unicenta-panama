@@ -232,7 +232,10 @@ try{
                 
                 writer.write("201"+aux.replace(".","").replace(",","")+ "\n");
             }if (paymentline.getName().compareTo("magcard")==0){
-                writer.write("202"+aux.replace(".","").replace(",","")+ "\n");
+                if(paymentline.getCarType().compareTo("Clave")==0)
+                    writer.write("203"+aux.replace(".","").replace(",","")+ "\n");
+                else
+                    writer.write("204"+aux.replace(".","").replace(",","")+ "\n");                
             }
 	}
     }
