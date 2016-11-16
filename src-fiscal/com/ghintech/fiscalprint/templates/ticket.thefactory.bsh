@@ -17,6 +17,7 @@ import javax.swing.plaf.FontUIResource;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 import com.ghintech.fiscalprint.DataLogicFiscal;
+import java.lang.String;
 
 Session session = new Session(dbURL, dbUser, dbPassword);
 DataLogicSales logicsale = new DataLogicSales();
@@ -76,23 +77,29 @@ try{
         return found;         
     }
     //verificamos si la factura ya ha sido impresa imprimimos un comprobante no fiscal
-    String fNumberfindFiscalNumber(ticket.getId())
+    
+    String fNumber = logicfiscal.findFiscalNumber(ticket.getTicketId());
+    
     if(fNumber != null){
         String cmd = "SendCmd(R";
-
         if(ticket.getTicketType()==0){
             cmd +="F";
-        }else
-            cmd +="C";
+            cmd += fNumber.substring((fNumber.length()-7),fNumber.length());
+            cmd += fNumber.substring((fNumber.length()-7),fNumber.length());
+            cmd +=")";
+            String filePath2 = invoicefolder + "IntTFHKA.exe " + cmd;
+            System.out.println(filePath2);
+            Process p1 = Runtime.getRuntime().exec(filePath2);
+            p1.waitFor();
+            if(!logicfiscal.updateTicketFiscalCopyTheFactory(ticket,fNumber)){
+                JOptionPane.showMessageDialog(null, 
+                    "Ocurrio un problema actualizando la informacion fiscal", "POS", JOptionPane.PLAIN_MESSAGE);   
+                return found;         
+            }
+            
         }
-        cmd += fNumber.substring(fNumber.length()-7,length());
-        cmd += fNumber.substring(fNumber.length()-7,length());
-        String filePath2 = invoicefolder + "IntTFHKA.exe " + cmd;
-        Process p1 = Runtime.getRuntime().exec(filePath2);
-        p1.waitFor();
         return null;
     }
-
     //formateamos la caracteres especiales
     if(ticket.printCustomer()!=null){
         if(ticket.printCustomer().trim().compareTo("")!=0){
