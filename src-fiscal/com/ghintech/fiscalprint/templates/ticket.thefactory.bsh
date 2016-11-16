@@ -56,7 +56,7 @@ try{
     FileWriter writer = new FileWriter(file);
         
     //verificamos si la factura ya ha sido impresa imprimimos un comprobante no fiscal
-    String fNumber = logicfiscal.findFiscalNumber(ticket.getTicketId());
+    String fNumber = logicfiscal.findFiscalNumber(ticket.getTicketId(),ticket.getTicketType());
     System.out.println(ticket.getTicketId());
     if(fNumber != null){
         String cmd = "SendCmd(R";
@@ -239,7 +239,7 @@ try{
     writer.write("101");
     writer.flush();
     writer.close();
-    String filePath = invoicefolder + "IntTFHKA.exe SendFileCmd(C:/IntTFHKA/factura.txt)";
+    String filePath = invoicefolder + "IntTFHKA.exe SendFileCmd(" + invoicefolder + "factura.txt)";
     Process p = Runtime.getRuntime().exec(filePath);
     p.waitFor();
     //usamos filereader para extraer la informacion de si se imprimio exitosamente sino se envia un mensaje
