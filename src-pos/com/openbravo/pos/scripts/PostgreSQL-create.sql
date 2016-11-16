@@ -136,14 +136,18 @@ INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('58', 'Ticket.TicketLin
 
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('59', 'Window.Logo', 1, $FILE{/com/openbravo/pos/templates/window.logo.png});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('60', 'Window.Title', 0, $FILE{/com/openbravo/pos/templates/Window.Title.txt});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('61', 'openbravo.properties', 0, $FILE{/com/openbravo/pos/erp/sync/templates/openbravo.properties.txt});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('62', 'fiscalprint.properties', 0, $FILE{/com/ghintech/fiscalprint/templates/fiscalprint.properties.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('61', 'openbravo2.properties', 0, $FILE{/com/openbravo/pos/erp/sync/templates/openbravo.properties.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('62', 'fiscalprint.properties', 0, $FILE{/com/ghintech/fiscalprint/templates/fiscalprint.properties.xml});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('63', 'ticket.bematech', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.bematech.txt});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('64', 'ticket.thefactory', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.thefactory.txt});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('65', 'event.total', 0, $FILE{/com/openbravo/pos/templates/event.total.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('64', 'ticket.thefactory', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.thefactory.bsh});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('65', 'event.total', 0, $FILE{/com/openbravo/pos/templates/event.total.bsh});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('66', 'img.linediscount', 1, $FILE{/com/openbravo/pos/templates/img.linediscount.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('67', 'ticket.thefactory.preview', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.thefactory.preview.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('67', 'ticket.thefactory.preview', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.thefactory.preview.bsh});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('68', 'event.save', 0, $FILE{/com/openbravo/pos/templates/event.save.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('69', 'event.removeline', 0, $FILE{/com/openbravo/pos/templates/event.removeline.bsh});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('70', 'event.totalcancel', 0, $FILE{/com/openbravo/pos/templates/event.totalcancel.bsh});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('71', 'script.totaldiscount', 0, $FILE{/com/openbravo/pos/templates/script.totaldiscount.bsh});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('72', 'script.linediscountoverprice', 0, $FILE{/com/openbravo/pos/templates/script.linediscountoverprice.bsh});
 
 CREATE TABLE TAXCUSTCATEGORIES (
     ID VARCHAR NOT NULL,
