@@ -63,9 +63,9 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
     }
      
     
-    public final String findFiscalNumber(final int ticketid) throws BasicException {
+    public final String findFiscalNumber(final int ticketid,final int tickettype) throws BasicException {
         PreparedSentence p = new PreparedSentence(s
-                , "SELECT FISCALNUMBER FROM TICKETS WHERE TICKETID=?"
+                , "SELECT FISCALNUMBER FROM TICKETS WHERE TICKETID=? AND TICKETTYPE=?"
                 //, new SerializerWriteBasic(new Datas[] {
                 //Datas.OBJECT, Datas.INT})
                 , SerializerWriteParams.INSTANCE
@@ -73,6 +73,7 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
         String fNumber = (String) p.find(new DataParams() {@Override
                                         public void writeValues() throws BasicException {
                                             setInt(1, ticketid);
+                                            setInt(2, tickettype);
                                         }});
         return fNumber;
     }
