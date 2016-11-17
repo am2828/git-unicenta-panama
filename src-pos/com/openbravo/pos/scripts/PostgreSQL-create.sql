@@ -146,7 +146,7 @@ INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('67', 'ticket.thefactor
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('68', 'event.save', 0, $FILE{/com/openbravo/pos/templates/event.save.txt});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('69', 'event.removeline', 0, $FILE{/com/openbravo/pos/templates/event.removeline.bsh});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('70', 'event.totalcancel', 0, $FILE{/com/openbravo/pos/templates/event.totalcancel.bsh});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('71', 'script.totaldiscount', 0, $FILE{/com/openbravo/pos/templates/script.totaldiscount.bsh});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('71', 'script.totaldiscount2', 0, $FILE{/com/openbravo/pos/templates/script.totaldiscount.bsh});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('72', 'script.linediscountoverprice', 0, $FILE{/com/openbravo/pos/templates/script.linediscountoverprice.bsh});
 
 CREATE TABLE TAXCUSTCATEGORIES (
