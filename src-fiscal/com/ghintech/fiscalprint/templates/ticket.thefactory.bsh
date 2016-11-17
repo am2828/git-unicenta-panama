@@ -227,15 +227,13 @@ try{
             
             aux=formatPayment.format(bd.doubleValue());
             if (paymentline.getName().compareTo("cash")==0){
-                if(paymentline.getChange()<=10000000.0)
+                if(paymentline.getChange()<=10000000.0){
                     bd = new BigDecimal(paymentline.getTotal()+paymentline.getChange());
-                
+                    aux=formatPayment.format(bd.doubleValue());
+                }
                 writer.write("201"+aux.replace(".","").replace(",","")+ "\n");
             }if (paymentline.getName().compareTo("magcard")==0){
-                if(paymentline.getCarType().compareTo("Clave")==0)
                     writer.write("203"+aux.replace(".","").replace(",","")+ "\n");
-                else
-                    writer.write("204"+aux.replace(".","").replace(",","")+ "\n");                
             }
 	}
     }
@@ -315,8 +313,8 @@ if(ticket.getTicketType()==0){
 
     UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20)));
     message = "Cambio: " + change;
-     JLabel FontText = new JLabel(message);
-     FontText.setFont (new Font ( "Arial", Font.BOLD, 36) );
+    JLabel FontText = new JLabel(message);
+    FontText.setFont (new Font ( "Arial", Font.BOLD, 36) );
 
     if(isCash) {
          JOptionPane pane = new JOptionPane();
