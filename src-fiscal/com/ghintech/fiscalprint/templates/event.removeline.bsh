@@ -26,14 +26,15 @@ String invoicefolder = p.getProperty("invoicefolder");
 
 Integer found = 1;
 File file2=null;
+if(checkInventoryOnDelete.compareTo("Y")==0){ 
 
-
-try{    
-    file2 = new File(invoicefolder+ "/Eliminadas/" + ticket.getId() + ".txt"); 
-    if(file2.exists()){
-        JOptionPane.showMessageDialog(null,"No puede eliminar el ticket porque ya se a impreso una precuenta", "POS", JOptionPane.PLAIN_MESSAGE);   
-        return 1;
+    try{    
+        file2 = new File(invoicefolder+ "/Eliminadas/" + ticket.getId() + ".txt"); 
+        if(file2.exists()){
+            JOptionPane.showMessageDialog(null,"No puede eliminar el ticket porque ya se a impreso una precuenta", "POS", JOptionPane.PLAIN_MESSAGE);   
+            return 1;
+        }
+    }catch(Exception e){
+        e.printStackTrace();
     }
-}catch(Exception e){
-    e.printStackTrace();
 }
