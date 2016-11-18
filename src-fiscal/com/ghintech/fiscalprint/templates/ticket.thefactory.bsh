@@ -35,6 +35,7 @@ File fileStatus=null;
 File file2=null;
 Properties p = logicsystem.getResourceAsProperties("fiscalprint.properties");
 String invoicefolder = p.getProperty("invoicefolder");
+String showChangeInScreen = p.getProperty("showChangeInScreen");
 
 String auxname="CONTADO";
 String auxaddress="Panama";
@@ -297,39 +298,41 @@ try{
 }catch(Exception e){
     e.printStackTrace();
 }
-if(ticket.getTicketType()==0){
-    boolean isCash = false;
-    String change = "";
-    PaymentInfo p = ticket.payments.getFirst();
+if(showChangeInScreen.compareTo("Y")==0){ 
+    if(ticket.getTicketType()==0){
+        boolean isCash = false;
+        String change = "";
+        PaymentInfo p = ticket.payments.getFirst();
 
-    if ("cash".equals(p.getName())) {
-        isCash = true;
-        change = p.printChange();
+        if ("cash".equals(p.getName())) {
+            isCash = true;
+            change = p.printChange();
+        }
+
+        // Get details of the original font before we change it otherwise all dialogboxes will use new settings
+        JOptionPane pane = new JOptionPane();
+        Font originalFont=pane.getFont();
+
+        UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20)));
+        message = "Cambio: " + change;
+        JLabel FontText = new JLabel(message);
+        FontText.setFont (new Font ( "Arial", Font.BOLD, 36) );
+
+        if(isCash) {
+             JOptionPane pane = new JOptionPane();
+             pane.setMessage(FontText);
+             pane.setPreferredSize( new Dimension(450,150));
+             JDialog dialog = pane.createDialog("Pago en efectivo");
+            new Thread(new Runnable() {
+                 void run() {
+                    dialog.show();
+                } 
+            }).start();
+        }
+
+        // Return to default settings
+        UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font(originalFont.getName(),originalFont.getStyle(),originalFont.getSize())));
     }
-
-    // Get details of the original font before we change it otherwise all dialogboxes will use new settings
-    JOptionPane pane = new JOptionPane();
-    Font originalFont=pane.getFont();
-
-    UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,20)));
-    message = "Cambio: " + change;
-    JLabel FontText = new JLabel(message);
-    FontText.setFont (new Font ( "Arial", Font.BOLD, 36) );
-
-    if(isCash) {
-         JOptionPane pane = new JOptionPane();
-         pane.setMessage(FontText);
-         pane.setPreferredSize( new Dimension(450,150));
-         JDialog dialog = pane.createDialog("Pago en efectivo");
-        new Thread(new Runnable() {
-             void run() {
-                dialog.show();
-            } 
-        }).start();
-    }
-
-    // Return to default settings
-    UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font(originalFont.getName(),originalFont.getStyle(),originalFont.getSize())));
 }
 
 
