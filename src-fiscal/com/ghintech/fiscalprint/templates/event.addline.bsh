@@ -32,7 +32,7 @@ logicsale.init(session);
 DataLogicSystem logicsystem = new DataLogicSystem();
 logicsystem.init(session);
 Properties p = logicsystem.getResourceAsProperties("fiscalprint.properties");
-String checkInventoryOnEdit = p.getProperty("checkInventoryOnEdit");
+String checkInventoryOnAdd = p.getProperty("checkInventoryOnEdit");
 p = logicsystem.getResourceAsProperties(hostname + "/properties");
 String loc = p.getProperty("location");
 
