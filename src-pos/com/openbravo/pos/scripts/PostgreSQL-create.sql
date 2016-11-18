@@ -144,7 +144,7 @@ INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('65', 'event.total', 0,
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('66', 'img.linediscount', 1, $FILE{/com/openbravo/pos/templates/img.linediscount.png});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('67', 'ticket.thefactory.preview', 0, $FILE{/com/ghintech/fiscalprint/templates/ticket.thefactory.preview.bsh});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('68', 'event.save', 0, $FILE{/com/openbravo/pos/templates/event.save.txt});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('69', 'event.removeline', 0, $FILE{/com/openbravo/pos/templates/event.removeline.bsh});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('69', 'event.removeline', 0, $FILE{/com/ghintech/fiscalprint/templates/event.removeline.bsh});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('70', 'event.totalcancel', 0, $FILE{/com/openbravo/pos/templates/event.totalcancel.bsh});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('71', 'script.totaldiscount2', 0, $FILE{/com/openbravo/pos/templates/script.totaldiscount.bsh});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('72', 'script.linediscountoverprice', 0, $FILE{/com/openbravo/pos/templates/script.linediscountoverprice.bsh});
