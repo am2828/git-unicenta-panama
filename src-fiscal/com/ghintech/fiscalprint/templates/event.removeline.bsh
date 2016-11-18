@@ -23,10 +23,11 @@ DataLogicIntegration logicintegration = new DataLogicIntegration();
 logicintegration.init(session);
 Properties p = logicsystem.getResourceAsProperties("fiscalprint.properties");
 String invoicefolder = p.getProperty("invoicefolder");
+String lockTicketPrecheck = p.getProperty("lockTicketPrecheck");
 
 Integer found = 1;
 File file2=null;
-if(checkInventoryOnDelete.compareTo("Y")==0){ 
+if(lockTicketPrecheck.compareTo("Y")==0){ 
 
     try{    
         file2 = new File(invoicefolder+ "/Eliminadas/" + ticket.getId() + ".txt"); 
