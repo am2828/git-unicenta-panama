@@ -7,5 +7,10 @@
 	<entry key="spoolerFolder">C:/IntTFHKA/</entry>
 	<entry key="fileName">factura.txt</entry>
 	<entry key="library">BemaFI64</entry>
-    
+        <comment>System Configuration for fiscal print</comment>
+        <entry key="checkInventoryOnEdit">N</entry>
+        <entry key="checkInventoryOnAdd">N</entry>
+        <entry key="checkInventoryOnDelete">N</entry>
+        <entry key="showChangeInScreen">Y</entry>
+        <entry key="lockTicketPrecheck">Y</entry>
 </properties>
