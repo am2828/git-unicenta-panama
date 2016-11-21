@@ -36,6 +36,7 @@ File file2=null;
 Properties p = logicsystem.getResourceAsProperties("fiscalprint.properties");
 String invoicefolder = p.getProperty("invoicefolder");
 String showChangeInScreen = p.getProperty("showChangeInScreen");
+String lockTicketPrecheck = p.getProperty("lockTicketPrecheck");
 
 String auxname="CONTADO";
 String auxaddress="Panama";
@@ -289,7 +290,7 @@ try{
         "Ocurrio un problema actualizando la informacion fiscal", "POS", JOptionPane.PLAIN_MESSAGE);   
         return found;         
     }
-    if(ticket.getTicketType()==0){
+    if(ticket.getTicketType()==0 && lockTicketPrecheck.compareTo("Y")==0){
         //delete file for precheck
         file2 = new File(invoicefolder + "/Eliminadas/" + ticket.getId() + ".txt"); 
         if(file2.exists())
