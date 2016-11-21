@@ -161,7 +161,7 @@ try{
     writer2.write("810");
     writer2.flush();
     writer2.close();
-    String filePath = invoicefolder + "IntTFHKA.exe SendFileCmd(C:/IntTFHKA/factura.txt)";
+    String filePath = invoicefolder + "IntTFHKA.exe SendFileCmd(" + invoicefolder + "factura.txt)";
     Process p = Runtime.getRuntime().exec(filePath);
     p.waitFor();
 
