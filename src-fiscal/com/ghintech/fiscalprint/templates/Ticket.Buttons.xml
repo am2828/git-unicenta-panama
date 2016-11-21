@@ -99,7 +99,7 @@
         <!-- <event  key="ticket.total" code="script.ReceiptConsolidate"/> -->
 
     <!-- SET Stock Level Checking (Default=DISABLED) --> 
-        <event key="ticket.addline" code="event.addline"/>
+        <!-- <event key="ticket.addline" code="event.addline"/>  -->
         <event key="ticket.setline" code="event.setline"/>
 
         <!-- <event key="ticket.change" code="event.change"/> -->
