@@ -11,4 +11,5 @@
     <entry key="checkInventoryOnAdd">N</entry>
     <entry key="showChangeInScreen">Y</entry>
     <entry key="lockTicketPrecheck">Y</entry>
+    <entry key="requestTipAmt">Y</entry>
 </properties>
