@@ -285,7 +285,7 @@ try{
     }
     //usamos filereader para extraer la informacion e insertarla en el ticket
     fileStatus = new File(invoicefolder + "Status.txt");
-    if(!logicintegration.updateTicketFiscalTheFactory(ticket,fileStatus)){
+    if(!logicfiscal.updateTicketFiscalTheFactory(ticket,fileStatus)){
         JOptionPane.showMessageDialog(null, 
         "Ocurrio un problema actualizando la informacion fiscal", "POS", JOptionPane.PLAIN_MESSAGE);   
         return found;         
