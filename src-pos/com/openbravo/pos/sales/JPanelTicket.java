@@ -1576,7 +1576,7 @@ if (pickupSize!=null && (Integer.parseInt(pickupSize) >= tmpPickupId.length())){
             return msg;
         } 
     }
-        
+       
     /**
      *
      * @param resource
@@ -1596,6 +1596,23 @@ if (pickupSize!=null && (Integer.parseInt(pickupSize) >= tmpPickupId.length())){
         }
     }
 
+    /**
+     *
+     * @param resource
+     * @param args
+     */
+    public Object evalScript2(String resource, ScriptArg... args) {
+
+        if (resource == null) {
+            MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotexecute"));
+            msg.show(this);            
+        } else {
+            ScriptObject scr = new ScriptObject(m_oTicket, m_oTicketExt);
+            scr.setSelectedIndex(m_ticketlines.getSelectedIndex());
+            return evalScript(scr, resource, args);   
+        }
+        return null;
+    }
     /**
      *
      * @param resource
