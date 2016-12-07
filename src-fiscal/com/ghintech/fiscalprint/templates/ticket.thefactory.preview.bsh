@@ -10,7 +10,7 @@ import com.openbravo.pos.forms.DataLogicSystem;
 import com.openbravo.pos.erp.sync.DataLogicIntegration;
 import com.openbravo.pos.ticket.ProductInfoExt;
 import com.openbravo.pos.payment.PaymentInfo;
-import com.openbravo.pos.sales.restaurant.RestaurantDBUtils;
+import com.ghintech.fiscalprint.DataLogicFiscal;
 import java.math.*;
 import java.util.Properties;
 import com.openbravo.data.loader.*;
@@ -26,6 +26,9 @@ DataLogicSystem logicsystem = new DataLogicSystem();
 logicsystem.init(session);
 DataLogicIntegration logicintegration = new DataLogicIntegration();
 logicintegration.init(session);
+DataLogicFiscal logicfiscal = new DataLogicFiscal();
+logicfiscal.init(session);
+
 Properties p = logicsystem.getResourceAsProperties("fiscalprint.properties");
 String invoicefolder = p.getProperty("invoicefolder");
 
@@ -105,7 +108,11 @@ try{
     if(auxname.length()<=cstrlength){
         cstrlength=auxname.length();			
     }
+    String tableDetails = logicfiscal.getTableDetails(ticket.getTicketId());
+    writer.write(prefix+"***** MESA: " + tableDetails + " *****\n");
     writer.write(prefix+"Nombre: " + auxname.substring(0,cstrlength) + "\n");
+
+    writer2.write(prefix+"***** MESA: " + tableDetails + " *****\n");
     writer2.write("Nombre: " + auxname.substring(0,cstrlength) + "\n");
     if((auxname.length())>cstrlength){
         writer.write(prefix+"        " + auxname.substring(cstrlength,((auxname.length()>cstrlength2)?cstrlength2:auxname.length())) + "\n");

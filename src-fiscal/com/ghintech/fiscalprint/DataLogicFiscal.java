@@ -45,6 +45,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,13 +67,26 @@ import java.util.Properties;
 public class DataLogicFiscal extends BeanFactoryDataSingle {
     
     protected Session s;
+    private PreparedStatement pstmt;
+    private String SQL;
+    private ResultSet rs;
+    private Statement stmt;
+    private Connection con;
 
     /** Creates a new instance of DataLogicIntegration */
     public DataLogicFiscal() {
+        
     }
     
     public void init(Session s) {
         this.s = s;
+        try{
+            
+            con=s.getConnection();                      
+        }
+        catch (SQLException e){
+            System.out.print("No session or connection");
+        }
     }
      
     
@@ -191,4 +209,18 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
         }
         return ticket;
     }
+    public String getTableDetails (String ticketID){
+       try{
+            SQL = "SELECT NAME FROM PLACES WHERE TICKETID='"+ ticketID + "'";   
+            stmt = (Statement) con.createStatement();  
+            rs = stmt.executeQuery(SQL);
+            if (rs.next()){
+                String name =rs.getString("NAME");
+                return(name);
+            }    
+        }catch(Exception e){
+        
+        }
+        return "";
+   }
 }
