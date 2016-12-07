@@ -38,7 +38,7 @@ if(lockTicketPrecheck.compareTo("Y")==0){
                     "Debe Especificar un motivo para poder eliminar", "POS", JOptionPane.PLAIN_MESSAGE);   
                 return 1;
             }
-            FileWriter writer2 = new FileWriter(file2);
+            FileWriter writer2 = new FileWriter(file2,true);
             writer2.write(delMsg);
             writer2.flush();
             writer2.close(); 
