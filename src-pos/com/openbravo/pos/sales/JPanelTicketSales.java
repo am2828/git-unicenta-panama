@@ -95,7 +95,7 @@ public class JPanelTicketSales extends JPanelTicket {
      */
     @Override
     protected JTicketsBag getJTicketsBag() {
-        return JTicketsBag.createTicketsBag(m_App.getProperties().getProperty("machine.ticketsbag"), m_App, this);
+        return JTicketsBag.createTicketsBag(m_App.getProperties().getProperty("machine.ticketsbag"), m_App, this,this);
     }
     
     /**

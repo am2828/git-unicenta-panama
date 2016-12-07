@@ -46,7 +46,9 @@ public abstract class JTicketsBag extends JPanel {
     /**
      *
      */
-    protected TicketsEditor m_panelticket;    
+    protected TicketsEditor m_panelticket;   
+    
+    
     
     /** Creates new form JTicketsBag
      * @param oApp
@@ -104,4 +106,17 @@ public abstract class JTicketsBag extends JPanel {
            return new JTicketsBagSimple(app, panelticket);
         }
     }   
+    public static JTicketsBag createTicketsBag(String sName, AppView app, TicketsEditor panelticket, JPanelTicket jpanelticket) {
+       
+        switch (sName) {
+            case "standard":
+                // return new JTicketsBagMulti(oApp, user, panelticket);
+                return new JTicketsBagShared(app, panelticket);
+            case "restaurant":
+                return new JTicketsBagRestaurantMap(app, panelticket,jpanelticket);
+            default:
+                // "simple"
+           return new JTicketsBagSimple(app, panelticket);
+        }
+    }
 }

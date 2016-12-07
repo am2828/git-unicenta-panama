@@ -81,11 +81,15 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
     private String waiterDetails;
     private String customerDetails;
     private String tableName;
-    
+    private JPanelTicket m_jpanelticket;
     /** Creates new form JTicketsBagRestaurant
      * @param app
      * @param panelticket */
-
+    public JTicketsBagRestaurantMap(AppView app, TicketsEditor panelticket,JPanelTicket jpanelticket) {
+        
+        this(app, panelticket);
+        m_jpanelticket = jpanelticket;
+    }
     public JTicketsBagRestaurantMap(AppView app, TicketsEditor panelticket) {
         
         super(app, panelticket);
@@ -388,23 +392,24 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
      */
     @Override
     public void deleteTicket() {
-        
-        if (m_PlaceCurrent != null) {
-            
-            String id = m_PlaceCurrent.getId();
-            try {
-                dlReceipts.deleteSharedTicket(id);
-            } catch (BasicException e) {
-                new MessageInf(e).show(this);
-            }       
-            
-            m_PlaceCurrent.setPeople(false);
-            
-            m_PlaceCurrent = null;
-        }        
-        
-        printState();     
-        m_panelticket.setActiveTicket(null, null); 
+        if(this.m_jpanelticket.evalScript2("ticket.delete") == null){
+            if (m_PlaceCurrent != null) {
+
+                String id = m_PlaceCurrent.getId();
+                try {
+                    dlReceipts.deleteSharedTicket(id);
+                } catch (BasicException e) {
+                    new MessageInf(e).show(this);
+                }       
+
+                m_PlaceCurrent.setPeople(false);
+
+                m_PlaceCurrent = null;
+            }        
+
+            printState();     
+            m_panelticket.setActiveTicket(null, null); 
+        }
     }
 
 // Added JG 03.07.2011 - TODO - Change Server Dialog here
