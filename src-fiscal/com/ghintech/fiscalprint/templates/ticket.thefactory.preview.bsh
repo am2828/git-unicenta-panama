@@ -108,7 +108,7 @@ try{
     if(auxname.length()<=cstrlength){
         cstrlength=auxname.length();			
     }
-    String tableDetails = logicfiscal.getTableDetails(ticket.getTicketId());
+    String tableDetails = logicfiscal.getTableDetails(ticket.getId());
     writer.write(prefix+"***** MESA: " + tableDetails + " *****\n");
     writer.write(prefix+"Nombre: " + auxname.substring(0,cstrlength) + "\n");
 
