@@ -10,6 +10,7 @@ import com.openbravo.pos.forms.DataLogicSystem;
 import com.openbravo.pos.erp.sync.DataLogicIntegration;
 import com.openbravo.pos.ticket.ProductInfoExt;
 import com.openbravo.pos.payment.PaymentInfo;
+import com.openbravo.pos.sales.restaurant.RestaurantDBUtils;
 import java.math.*;
 import java.util.Properties;
 import com.openbravo.data.loader.*;
@@ -158,7 +159,7 @@ try{
     writer2.write("Subtotal: "+ Formats.CURRENCY.formatValue(ticket.getSubTotal()+tip)+"\n");
     writer2.write("Impuesto: "+Formats.CURRENCY.formatValue(ticket.getTax())+"\n");
     writer2.write("Total: "+Formats.CURRENCY.formatValue(ticket.getTotal()+tip)+"\n");
-    writer2.write("810");
+    writer2.write("\n\n");
     writer2.flush();
     writer2.close();
     String filePath = invoicefolder + "IntTFHKA.exe SendFileCmd(" + invoicefolder + "factura.txt)";
