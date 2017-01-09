@@ -1347,7 +1347,7 @@ public Object transact() throws BasicException {
                                 location,
                                 aux.getProduct2(),
                                 null, 
-                                ticket.getLine(i).getMultiply() < 0.0 ? aux.getQty() : -aux.getQty()
+                                ticket.getLine(i).getMultiply()*(-aux.getQty())
                                 , 0.0,
                                 ticket.getUser().getName() 
                             });
