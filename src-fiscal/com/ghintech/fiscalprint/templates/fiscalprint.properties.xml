@@ -3,7 +3,7 @@
 <properties>
     <comment>Fiscal Print Configuration</comment>
     <entry key="vendor">thefactory</entry>
-    <entry key="invoicefolder">C:/IntTFHKA/</entry>
+    <entry key="invoiceFolder">C:/IntTFHKA/</entry>
     <entry key="spoolerFolder">C:/IntTFHKA/</entry>
     <entry key="fileName">factura.txt</entry>
     <entry key="library">BemaFI64</entry>
