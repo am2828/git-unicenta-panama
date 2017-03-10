@@ -223,4 +223,133 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
         }
         return "";
    }
+
+    public String salesByCategory() {
+        String prefix="800";
+        String sales=prefix+" Tipo de Venta  --  Cantidad  --  Total\n";
+        double amt=0.0;
+        try{
+            SQL = "SELECT CATEGORIES.NAME, " +
+                    "SUM(TICKETLINES.UNITS) AS QTY, " +
+                    "SUM(TICKETLINES.PRICE * TICKETLINES.UNITS) AS CATTOTAL " +
+                    "FROM (TICKETS INNER JOIN RECEIPTS ON TICKETS.ID = RECEIPTS.ID) INNER JOIN ((CATEGORIES INNER JOIN PRODUCTS ON CATEGORIES.ID = PRODUCTS.CATEGORY) INNER JOIN (TAXES INNER JOIN TICKETLINES ON TAXES.ID = TICKETLINES.TAXID) ON PRODUCTS.ID = TICKETLINES.PRODUCT) ON TICKETS.ID = TICKETLINES.TICKET " +
+                    "WHERE RECEIPTS.datenew between current_date + time '6:00' and current_date+1 AND PRODUCTS.ID!='000' " +
+                    "GROUP BY categories.ID, categories.NAME " +
+                    "ORDER BY CATEGORIES.NAME ";
+            stmt = (Statement) con.createStatement();  
+            rs = stmt.executeQuery(SQL);
+            
+            while (rs.next()){
+                sales+=prefix+" "+rs.getString("NAME")+"  --  "+String.valueOf(rs.getDouble("QTY"))+"  --  "+String.valueOf(rs.getDouble("CATTOTAL"))+"\n";
+                amt+=rs.getDouble("CATTOTAL");
+            }    
+            sales+=prefix+" Total  ----  "+String.valueOf(amt)+"\n";
+               
+            
+        }catch(SQLException e){
+            return e.getMessage();
+        }
+        return sales;
+    }
+
+    public String salesByTaxes() {
+        String prefix="800";
+        String sales=prefix+" Impuesto  --  Base  --  Monto\n";
+        double amt=0.0;
+        try{
+            SQL = "SELECT TAXCATEGORIES.NAME AS TAXNAME, SUM(TAXLINES.BASE) TOTALBASE,SUM(TAXLINES.AMOUNT) AS TOTALTAXES " +
+                    "FROM RECEIPTS, TAXLINES, TAXES, TAXCATEGORIES  " +
+                    "WHERE RECEIPTS.ID = TAXLINES.RECEIPT AND TAXLINES.TAXID = TAXES.ID AND TAXES.CATEGORY = TAXCATEGORIES.ID " +
+                    "AND RECEIPTS.datenew between current_date + time '6:00' and current_date+1 " +
+                    "GROUP BY TAXCATEGORIES.ID,  TAXCATEGORIES.NAME ";
+            stmt = (Statement) con.createStatement();  
+            rs = stmt.executeQuery(SQL);
+            
+            while (rs.next()){
+                sales+=prefix+" "+rs.getString("TAXNAME")+"  --  "+String.valueOf(rs.getDouble("TOTALBASE"))+"  --  "+String.valueOf(rs.getDouble("TOTALTAXES"))+"\n";
+                amt+=rs.getDouble("TOTALTAXES");
+            }    
+            sales+=prefix+" Total  ----  "+String.valueOf(amt)+"\n";
+                
+            
+        }catch(SQLException e){
+            return e.getMessage();
+        }
+        return sales;
+    
+    }
+
+    public String salesByProduct() {
+        String prefix="800";
+        String sales=prefix+" Producto  --  Unidades  --  Monto\n";
+        double amt=0.0;
+        try{
+            SQL = "SELECT " +
+                    "PRODUCTS.NAME, " +
+                    "SUM(TICKETLINES.UNITS) AS UNITS, " +
+                    "SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) AS TOTAL " +
+                    "FROM RECEIPTS, TICKETS, TICKETLINES, PRODUCTS " +
+                    "WHERE RECEIPTS.ID = TICKETS.ID AND TICKETS.ID = TICKETLINES.TICKET AND TICKETLINES.PRODUCT = PRODUCTS.ID " +
+                    "AND RECEIPTS.datenew between current_date + time '6:00' and current_date+1 AND PRODUCTS.ID!='000' " +
+                    "GROUP BY PRODUCTS.REFERENCE, PRODUCTS.NAME " +
+                    "ORDER BY PRODUCTS.NAME";
+            stmt = (Statement) con.createStatement();  
+            rs = stmt.executeQuery(SQL);
+            
+            while (rs.next()){
+                sales+=prefix+" "+rs.getString("NAME")+"  --  "+String.valueOf(rs.getDouble("UNITS"))+"  --  "+String.valueOf(rs.getDouble("TOTAL"))+"\n";
+                amt+=rs.getDouble("TOTAL");
+            }    
+            sales+=prefix+" Total  ----  "+String.valueOf(amt)+"\n";
+        }catch(SQLException e){
+            return e.getMessage();
+        }
+        return sales;
+    }
+    
+    public String salesByHour() {
+        String prefix="800";
+        String sales=prefix+" Hora  --  Transacciones  --  Valor\n";
+        double amt=0.0;
+        try{
+            SQL = "select date_part('hour',r.datenew) salehour,count(r.id) transact, sum(tl.units*tl.price) amt from receipts r inner join ticketlines tl on r.id=tl.ticket " +
+                    "where datenew between current_date + time '6:00' and current_date+1 " +
+                    "group by salehour " +
+                    "order by salehour";
+            stmt = (Statement) con.createStatement();  
+            rs = stmt.executeQuery(SQL);
+            
+            while (rs.next()){
+                sales+=prefix+" "+rs.getString("salehour")+"  --  "+String.valueOf(rs.getInt("transact"))+"  --  "+String.valueOf(rs.getDouble("amt"))+"\n";
+                amt+=rs.getDouble("amt");
+            }    
+            sales+=prefix+" Total  ----  "+String.valueOf(amt)+"\n";
+        }catch(SQLException e){
+            return e.getMessage();
+        }
+        return sales;
+    }
+    public String totalTips() {
+        String prefix="800";
+        String sales="";
+        double amt=0.0;
+        try{
+            SQL = "select tl.product, sum(tl.units*tl.price) amt from receipts r inner join ticketlines tl on r.id=tl.ticket " +
+                    "where datenew between current_date + time '6:00' and current_date+1 and product = '000' " +
+                    "group by tl.product ";
+            stmt = (Statement) con.createStatement();  
+            rs = stmt.executeQuery(SQL);
+            
+            while (rs.next()){
+                sales+=prefix+" PROPINAS   --  "+String.valueOf(rs.getDouble("amt"))+"\n";
+                amt+=rs.getDouble("amt");
+            }    
+            
+        }catch(SQLException e){
+            return e.getMessage();
+        }
+        return sales;
+    }
+
+    
 }
