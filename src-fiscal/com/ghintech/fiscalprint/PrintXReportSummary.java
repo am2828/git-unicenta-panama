@@ -50,6 +50,7 @@ public class PrintXReportSummary extends BeanFactoryCache {
         rep+=dlFiscal.salesByTaxes();
         rep+=dlFiscal.salesByHour();
         rep+=dlFiscal.totalTips();
+        rep+="810\n";
         
         return rep;
     }
