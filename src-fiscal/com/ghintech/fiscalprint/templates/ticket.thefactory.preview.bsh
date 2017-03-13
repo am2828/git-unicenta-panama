@@ -30,7 +30,7 @@ DataLogicFiscal logicfiscal = new DataLogicFiscal();
 logicfiscal.init(session);
 
 Properties p = logicsystem.getResourceAsProperties("fiscalprint.properties");
-String invoicefolder = p.getProperty("invoicefolder");
+String invoiceFolder = p.getProperty("invoiceFolder");
 
 Integer found = 1;
 File file=null;
@@ -43,20 +43,20 @@ String prefix="800";
 
 try{
     //eliminamos el status anterior si existe	
-    fileStatus = new File(invoicefolder + "Status_Error.txt");    
+    fileStatus = new File(invoiceFolder + "Status_Error.txt");    
     if(fileStatus.exists()){
         fileStatus.delete();
     }
     
     boolean checkprinter=false;
     //generamos el estatus de informacion para leer la informacin fiscal y ejecutamos el proceso
-    fileProcess=new File(invoicefolder + "IntTFHKA.exe");
+    fileProcess=new File(invoiceFolder + "IntTFHKA.exe");
     if(fileProcess.exists()){
-        String filePath2 = invoicefolder + "IntTFHKA.exe CheckFprinter()";
+        String filePath2 = invoiceFolder + "IntTFHKA.exe CheckFprinter()";
         Process p1 = Runtime.getRuntime().exec(filePath2);
         p1.waitFor();
         //usamos filereader para extraer la informacion e insertarla en el ticket
-        fileStatus = new File(invoicefolder + "Status_Error.txt");    
+        fileStatus = new File(invoiceFolder + "Status_Error.txt");    
         if(fileStatus.exists()){
             // creates a FileReader Object
             FileReader reader = new FileReader(fileStatus);
@@ -75,18 +75,18 @@ try{
         return found;         
     }
     //eliminamos el status anterior si existe	
-    fileStatus = new File(invoicefolder + "Status_Error.txt");    
+    fileStatus = new File(invoiceFolder + "Status_Error.txt");    
     if(fileStatus.exists()){
         fileStatus.delete();
     }
-    file = new File(invoicefolder + "factura.txt");    
+    file = new File(invoiceFolder + "factura.txt");    
     if(file.exists())
         file.delete();
     
     file.createNewFile();
     
     //create file for precheck
-    file2 = new File(invoicefolder + "/Eliminadas/" + ticket.getId() + ".txt"); 
+    file2 = new File(invoiceFolder + "/Eliminadas/" + ticket.getId() + ".txt"); 
     if(file2.exists())
         file2.delete();
     
@@ -169,7 +169,7 @@ try{
     writer2.write("\n\n");
     writer2.flush();
     writer2.close();
-    String filePath = invoicefolder + "IntTFHKA.exe SendFileCmd(" + invoicefolder + "factura.txt)";
+    String filePath = invoiceFolder + "IntTFHKA.exe SendFileCmd(" + invoiceFolder + "factura.txt)";
     Process p = Runtime.getRuntime().exec(filePath);
     p.waitFor();
 

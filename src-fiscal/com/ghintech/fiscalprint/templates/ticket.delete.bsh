@@ -22,7 +22,7 @@ logicsystem.init(session);
 DataLogicIntegration logicintegration = new DataLogicIntegration();
 logicintegration.init(session);
 Properties p = logicsystem.getResourceAsProperties("fiscalprint.properties");
-String invoicefolder = p.getProperty("invoicefolder");
+String invoiceFolder = p.getProperty("invoiceFolder");
 String lockTicketPrecheck = p.getProperty("lockTicketPrecheck");
 
 Integer found = 1;
@@ -30,7 +30,7 @@ File file2=null;
 if(lockTicketPrecheck.compareTo("Y")==0){ 
 
     try{    
-        file2 = new File(invoicefolder+ "/Eliminadas/" + ticket.getId() + ".txt"); 
+        file2 = new File(invoiceFolder+ "/Eliminadas/" + ticket.getId() + ".txt"); 
         if(file2.exists()){
             delMsg = JOptionPane.showInputDialog(null, "Motivo de eliminacion",null);
             if(delMsg==null){

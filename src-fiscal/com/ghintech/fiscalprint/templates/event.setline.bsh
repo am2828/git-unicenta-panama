@@ -45,14 +45,14 @@ logicsystem.init(session);
 DataLogicIntegration logicintegration = new DataLogicIntegration();
 logicintegration.init(session);
 Properties p = logicsystem.getResourceAsProperties("fiscalprint.properties");
-String invoicefolder = p.getProperty("invoicefolder");
+String invoiceFolder = p.getProperty("invoiceFolder");
 String checkInventoryOnEdit = p.getProperty("checkInventoryOnEdit");
 String lockTicketPrecheck = p.getProperty("lockTicketPrecheck");
 Integer found = 1;
 if(lockTicketPrecheck.compareTo("Y")==0){
     File file2=null;
     try{    
-        file2 = new File(invoicefolder+ "/Eliminadas/" + ticket.getId() + ".txt"); 
+        file2 = new File(invoiceFolder+ "/Eliminadas/" + ticket.getId() + ".txt"); 
         if(file2.exists()){
             JOptionPane.showMessageDialog(null,"No puede eliminar el ticket porque ya se a impreso una precuenta", "POS", JOptionPane.PLAIN_MESSAGE);   
             return 1;
