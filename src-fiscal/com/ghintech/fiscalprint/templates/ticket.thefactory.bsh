@@ -34,7 +34,7 @@ File file=null;
 File fileStatus=null;
 File file2=null;
 Properties p = logicsystem.getResourceAsProperties("fiscalprint.properties");
-String invoicefolder = p.getProperty("invoicefolder");
+String invoiceFolder = p.getProperty("invoiceFolder");
 String showChangeInScreen = p.getProperty("showChangeInScreen");
 String lockTicketPrecheck = p.getProperty("lockTicketPrecheck");
 
@@ -44,11 +44,11 @@ String auxtaxid="000-000-000";
 String prefix="j";
 try{
     //eliminamos el status anterior si existe	
-    fileStatus = new File(invoicefolder + "Status_Error.txt");    
+    fileStatus = new File(invoiceFolder + "Status_Error.txt");    
     if(fileStatus.exists()){
         fileStatus.delete();
     }
-    file = new File(invoicefolder + "factura.txt");    
+    file = new File(invoiceFolder + "factura.txt");    
     if(file.exists()){
         file.delete();
     }
@@ -73,7 +73,7 @@ try{
         cmd += fNumber.substring((fNumber.length()-7),fNumber.length());
         cmd += fNumber.substring((fNumber.length()-7),fNumber.length());
         cmd +=")";
-        String filePath2 = invoicefolder + "IntTFHKA.exe " + cmd;
+        String filePath2 = invoiceFolder + "IntTFHKA.exe " + cmd;
         System.out.println(filePath2);
         Process p1 = Runtime.getRuntime().exec(filePath2);
         p1.waitFor();
@@ -242,7 +242,7 @@ try{
     writer.write("101");
     writer.flush();
     writer.close();
-    String filePath = invoicefolder + "IntTFHKA.exe SendFileCmd(" + invoicefolder + "factura.txt)";
+    String filePath = invoiceFolder + "IntTFHKA.exe SendFileCmd(" + invoiceFolder + "factura.txt)";
     Process p = Runtime.getRuntime().exec(filePath);
     p.waitFor();
     //usamos filereader para extraer la informacion de si se imprimio exitosamente sino se envia un mensaje
@@ -250,7 +250,7 @@ try{
     boolean checkprinter=false;
     boolean StatusErrorExist=false;
     while(!StatusErrorExist){
-        fileStatus = new File(invoicefolder + "Status_Error.txt");    
+        fileStatus = new File(invoiceFolder + "Status_Error.txt");    
 	StatusErrorExist=fileStatus.exists();
     }
     FileReader reader = new FileReader(fileStatus);
@@ -268,7 +268,7 @@ try{
         reader.close(); 
     }
     if(!checkprinter){
-        String voidInvoice = invoicefolder + "IntTFHKA.exe SendCmd(7)";
+        String voidInvoice = invoiceFolder + "IntTFHKA.exe SendCmd(7)";
         Process p = Runtime.getRuntime().exec(voidInvoice);
         p.waitFor();
         JOptionPane.showMessageDialog(null,"No se pudo imprimir el ticket correctamente. El ticket sera eliminado", "POS", JOptionPane.PLAIN_MESSAGE);   
@@ -276,15 +276,15 @@ try{
         return found;         
     }
     //generamos el estatus de informacion para leer la informacin fiscal y ejecutamos el proceso
-    String filePath2 = invoicefolder + "IntTFHKA.exe UploadStatusCmd(S1)";
+    String filePath2 = invoiceFolder + "IntTFHKA.exe UploadStatusCmd(S1)";
     Process p1 = Runtime.getRuntime().exec(filePath2);
     p1.waitFor();
     while(!StatusErrorExist){
-        fileStatus = new File(invoicefolder + "Status.txt");    
+        fileStatus = new File(invoiceFolder + "Status.txt");    
 	StatusErrorExist=fileStatus.exists();
     }
     //usamos filereader para extraer la informacion e insertarla en el ticket
-    fileStatus = new File(invoicefolder + "Status.txt");
+    fileStatus = new File(invoiceFolder + "Status.txt");
     if(!logicfiscal.updateTicketFiscalTheFactory(ticket,fileStatus)){
         JOptionPane.showMessageDialog(null, 
         "Ocurrio un problema actualizando la informacion fiscal", "POS", JOptionPane.PLAIN_MESSAGE);   
@@ -292,7 +292,7 @@ try{
     }
     if(ticket.getTicketType()==0 && lockTicketPrecheck.compareTo("Y")==0){
         //delete file for precheck
-        file2 = new File(invoicefolder + "/Eliminadas/" + ticket.getId() + ".txt"); 
+        file2 = new File(invoiceFolder + "/Eliminadas/" + ticket.getId() + ".txt"); 
         if(file2.exists())
             file2.delete();
     }

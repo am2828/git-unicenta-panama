@@ -46,28 +46,28 @@ logicsale.init(session);
 DataLogicSystem ls = new DataLogicSystem();
 ls.init(session);
 Properties p = ls.getResourceAsProperties("fiscalprint.properties");
-String invoicefolder = p.getProperty("invoicefolder");
+String invoiceFolder = p.getProperty("invoiceFolder");
 String requestTipAmt = p.getProperty("requestTipAmt");
 
 try{
     //eliminamos el status anterior si existe	
-    fileStatus = new File(invoicefolder + "Status_Error.txt");    
+    fileStatus = new File(invoiceFolder + "Status_Error.txt");    
     if(fileStatus.exists()){
         fileStatus.delete();
     }
-    file = new File(invoicefolder + "factura.txt");    
+    file = new File(invoiceFolder + "factura.txt");    
     if(file.exists()){
         file.delete();
     }
     boolean checkprinter=false;
 	//generamos el estatus de informacion para leer la informacin fiscal y ejecutamos el proceso
-	fileProcess=new File(invoicefolder + "IntTFHKA.exe");
+	fileProcess=new File(invoiceFolder + "IntTFHKA.exe");
 	if(fileProcess.exists()){
-            String filePath2 = invoicefolder + "IntTFHKA.exe CheckFprinter()";
+            String filePath2 = invoiceFolder + "IntTFHKA.exe CheckFprinter()";
             Process p1 = Runtime.getRuntime().exec(filePath2);
             p1.waitFor();
             //usamos filereader para extraer la informacion e insertarla en el ticket
-            fileStatus = new File(invoicefolder + "Status_Error.txt");    
+            fileStatus = new File(invoiceFolder + "Status_Error.txt");    
 
             if(fileStatus.exists()){
 
