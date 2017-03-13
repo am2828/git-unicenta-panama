@@ -228,14 +228,13 @@ try{
             bd = new BigDecimal(paymentline.getTotal());
             
             aux=formatPayment.format(bd.doubleValue());
-            //if (paymentline.getName().compareTo("cash")==0){
-            //    if(paymentline.getChange()<=10000000.0){
-            //        bd = new BigDecimal(paymentline.getTotal()+paymentline.getChange());
-            //        aux=formatPayment.format(bd.doubleValue());
-            //    }
-            //    writer.write("201"+aux.replace(".","").replace(",","")+ "\n");
-            //}
-            if (paymentline.getName().compareTo("magcard")==0){
+            if (paymentline.getName().compareTo("cash")==0){
+                if(paymentline.getChange()<=10000000.0){
+                    bd = new BigDecimal(paymentline.getTotal()+paymentline.getChange());
+                    aux=formatPayment.format(bd.doubleValue());
+                }
+                writer.write("201"+aux.replace(".","").replace(",","")+ "\n");
+            }if (paymentline.getName().compareTo("magcard")==0){
                     writer.write("203"+aux.replace(".","").replace(",","")+ "\n");
             }
 	}
