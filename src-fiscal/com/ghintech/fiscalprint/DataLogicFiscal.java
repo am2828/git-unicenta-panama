@@ -315,7 +315,7 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
         double amt=0.0;
         try{
             SQL = "select date_part('hour',r.datenew) salehour,count(r.id) transact, sum(tl.units*tl.price) amt from receipts r inner join ticketlines tl on r.id=tl.ticket " +
-                    "where datenew between current_date + time '6:00' and current_date+1 " +
+                    "where datenew between current_date + time '6:00' and current_date+1 AND PRODUCTS.ID!='000' " +
                     "group by salehour " +
                     "order by salehour";
             stmt = (Statement) con.createStatement();  
