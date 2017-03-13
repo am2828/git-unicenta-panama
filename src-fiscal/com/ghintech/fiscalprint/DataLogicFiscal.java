@@ -45,6 +45,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -240,10 +242,10 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
             rs = stmt.executeQuery(SQL);
             
             while (rs.next()){
-                sales+=prefix+" "+rs.getString("NAME")+"  --  "+String.valueOf(rs.getDouble("QTY"))+"  --  "+String.valueOf(rs.getDouble("CATTOTAL"))+"\n";
+                sales+=prefix+" "+rs.getString("NAME")+"  --  "+String.valueOf(rs.getDouble("QTY"))+"  --  "+String.valueOf(BigDecimal.valueOf(rs.getDouble("CATTOTAL")).setScale(2, RoundingMode.CEILING))+"\n";
                 amt+=rs.getDouble("CATTOTAL");
             }    
-            sales+=prefix+" Total  ----  "+String.valueOf(amt)+"\n";
+            sales+=prefix+" Total  ----  "+String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING))+"\n";
                
             
         }catch(SQLException e){
@@ -266,10 +268,10 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
             rs = stmt.executeQuery(SQL);
             
             while (rs.next()){
-                sales+=prefix+" "+rs.getString("TAXNAME")+"  --  "+String.valueOf(rs.getDouble("TOTALBASE"))+"  --  "+String.valueOf(rs.getDouble("TOTALTAXES"))+"\n";
+                sales+=prefix+" "+rs.getString("TAXNAME")+"  --  "+String.valueOf(rs.getDouble("TOTALBASE"))+"  --  "+String.valueOf(BigDecimal.valueOf(rs.getDouble("TOTALTAXES")).setScale(2, RoundingMode.CEILING))+"\n";
                 amt+=rs.getDouble("TOTALTAXES");
             }    
-            sales+=prefix+" Total  ----  "+String.valueOf(amt)+"\n";
+            sales+=prefix+" Total  ----  "+String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING))+"\n";
                 
             
         }catch(SQLException e){
@@ -297,10 +299,10 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
             rs = stmt.executeQuery(SQL);
             
             while (rs.next()){
-                sales+=prefix+" "+rs.getString("NAME")+"  --  "+String.valueOf(rs.getDouble("UNITS"))+"  --  "+String.valueOf(rs.getDouble("TOTAL"))+"\n";
+                sales+=prefix+" "+rs.getString("NAME")+"  --  "+String.valueOf(rs.getDouble("UNITS"))+"  --  "+String.valueOf(BigDecimal.valueOf(rs.getDouble("TOTAL")).setScale(2, RoundingMode.CEILING))+"\n";
                 amt+=rs.getDouble("TOTAL");
             }    
-            sales+=prefix+" Total  ----  "+String.valueOf(amt)+"\n";
+            sales+=prefix+" Total  ----  "+String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING))+"\n";
         }catch(SQLException e){
             return e.getMessage();
         }
@@ -320,10 +322,10 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
             rs = stmt.executeQuery(SQL);
             
             while (rs.next()){
-                sales+=prefix+" "+rs.getString("salehour")+"  --  "+String.valueOf(rs.getInt("transact"))+"  --  "+String.valueOf(rs.getDouble("amt"))+"\n";
+                sales+=prefix+" "+rs.getString("salehour")+"  --  "+String.valueOf(rs.getInt("transact"))+"  --  "+String.valueOf(BigDecimal.valueOf(rs.getDouble("amt")).setScale(2, RoundingMode.CEILING))+"\n";
                 amt+=rs.getDouble("amt");
             }    
-            sales+=prefix+" Total  ----  "+String.valueOf(amt)+"\n";
+            sales+=prefix+" Total  ----  "+String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING))+"\n";
         }catch(SQLException e){
             return e.getMessage();
         }
@@ -341,7 +343,7 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
             rs = stmt.executeQuery(SQL);
             
             while (rs.next()){
-                sales+=prefix+" PROPINAS   --  "+String.valueOf(rs.getDouble("amt"))+"\n";
+                sales+=prefix+" PROPINAS   --  "+String.valueOf(BigDecimal.valueOf(rs.getDouble("amt")).setScale(2, RoundingMode.CEILING))+"\n";
                 amt+=rs.getDouble("amt");
             }    
             
