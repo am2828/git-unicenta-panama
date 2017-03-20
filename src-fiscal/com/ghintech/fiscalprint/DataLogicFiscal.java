@@ -226,26 +226,26 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
         return "";
    }
 
-    public String salesByCategory() {
+    public String salesByCategory(String startDate) {
         String prefix="800";
-        String sales=prefix+" Tipo de Venta  --  Cantidad  --  Total\n";
+        String sales=prefix+formatMsgToLeft("Tipo Venta")+formatMsgToRight("Cantidad")+formatMsgToRight("Total")+"\n";
         double amt=0.0;
         try{
             SQL = "SELECT CATEGORIES.NAME, " +
                     "SUM(TICKETLINES.UNITS) AS QTY, " +
                     "SUM(TICKETLINES.PRICE * TICKETLINES.UNITS) AS CATTOTAL " +
                     "FROM (TICKETS INNER JOIN RECEIPTS ON TICKETS.ID = RECEIPTS.ID) INNER JOIN ((CATEGORIES INNER JOIN PRODUCTS ON CATEGORIES.ID = PRODUCTS.CATEGORY) INNER JOIN (TAXES INNER JOIN TICKETLINES ON TAXES.ID = TICKETLINES.TAXID) ON PRODUCTS.ID = TICKETLINES.PRODUCT) ON TICKETS.ID = TICKETLINES.TICKET " +
-                    "WHERE RECEIPTS.datenew between current_date + time '6:00' and current_date+1 AND PRODUCTS.ID!='000' " +
+                    "WHERE RECEIPTS.datenew between date '"+startDate+"' + time '6:00' and date '"+startDate+"'+1 + time '6:00' AND PRODUCTS.ID!='000' " +
                     "GROUP BY categories.ID, categories.NAME " +
                     "ORDER BY CATEGORIES.NAME ";
             stmt = (Statement) con.createStatement();  
             rs = stmt.executeQuery(SQL);
             
             while (rs.next()){
-                sales+=prefix+" "+rs.getString("NAME")+"  --  "+String.valueOf(rs.getDouble("QTY"))+"  --  "+String.valueOf(BigDecimal.valueOf(rs.getDouble("CATTOTAL")).setScale(2, RoundingMode.CEILING))+"\n";
+                sales+=prefix+formatMsgToLeft(rs.getString("NAME"))+formatMsgToRight(String.valueOf(rs.getDouble("QTY")))+formatMsgToRight(String.valueOf(BigDecimal.valueOf(rs.getDouble("CATTOTAL")).setScale(2, RoundingMode.CEILING)))+"\n";
                 amt+=rs.getDouble("CATTOTAL");
             }    
-            sales+=prefix+" Total  ----  "+String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING))+"\n";
+            sales+=prefix+formatMsgToLeft("Total:")+formatMsgToLeft(" ")+formatMsgToRight(String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING)))+"\n";
                
             
         }catch(SQLException e){
@@ -254,24 +254,24 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
         return sales;
     }
 
-    public String salesByTaxes() {
+    public String salesByTaxes(String startDate) {
         String prefix="800";
-        String sales=prefix+" Impuesto  --  Base  --  Monto\n";
+        String sales=prefix+formatMsgToLeft("Impuesto")+formatMsgToRight("Base")+formatMsgToRight("Monto")+"\n";
         double amt=0.0;
         try{
             SQL = "SELECT TAXCATEGORIES.NAME AS TAXNAME, SUM(TAXLINES.BASE) TOTALBASE,SUM(TAXLINES.AMOUNT) AS TOTALTAXES " +
                     "FROM RECEIPTS, TAXLINES, TAXES, TAXCATEGORIES  " +
                     "WHERE RECEIPTS.ID = TAXLINES.RECEIPT AND TAXLINES.TAXID = TAXES.ID AND TAXES.CATEGORY = TAXCATEGORIES.ID " +
-                    "AND RECEIPTS.datenew between current_date + time '6:00' and current_date+1 " +
+                    "AND RECEIPTS.datenew between date '"+startDate+"' + time '6:00' and date '"+startDate+"'+1 + time '6:00' " +
                     "GROUP BY TAXCATEGORIES.ID,  TAXCATEGORIES.NAME ";
             stmt = (Statement) con.createStatement();  
             rs = stmt.executeQuery(SQL);
             
             while (rs.next()){
-                sales+=prefix+" "+rs.getString("TAXNAME")+"  --  "+String.valueOf(rs.getDouble("TOTALBASE"))+"  --  "+String.valueOf(BigDecimal.valueOf(rs.getDouble("TOTALTAXES")).setScale(2, RoundingMode.CEILING))+"\n";
+                sales+=prefix+formatMsgToLeft(rs.getString("TAXNAME"))+formatMsgToRight(String.valueOf(rs.getDouble("TOTALBASE")))+formatMsgToRight(String.valueOf(BigDecimal.valueOf(rs.getDouble("TOTALTAXES")).setScale(2, RoundingMode.CEILING)))+"\n";
                 amt+=rs.getDouble("TOTALTAXES");
             }    
-            sales+=prefix+" Total  ----  "+String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING))+"\n";
+            sales+=prefix+formatMsgToLeft("Total:")+formatMsgToLeft(" ")+formatMsgToRight(String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING)))+"\n";
                 
             
         }catch(SQLException e){
@@ -281,9 +281,9 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
     
     }
 
-    public String salesByProduct() {
+    public String salesByProduct(String startDate) {
         String prefix="800";
-        String sales=prefix+" Producto  --  Unidades  --  Monto\n";
+        String sales=prefix+formatMsgToLeft("Producto")+formatMsgToRight("Unidades")+formatMsgToRight("Monto")+"\n";
         double amt=0.0;
         try{
             SQL = "SELECT " +
@@ -292,66 +292,87 @@ public class DataLogicFiscal extends BeanFactoryDataSingle {
                     "SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) AS TOTAL " +
                     "FROM RECEIPTS, TICKETS, TICKETLINES, PRODUCTS " +
                     "WHERE RECEIPTS.ID = TICKETS.ID AND TICKETS.ID = TICKETLINES.TICKET AND TICKETLINES.PRODUCT = PRODUCTS.ID " +
-                    "AND RECEIPTS.datenew between current_date + time '6:00' and current_date+1 AND PRODUCTS.ID!='000' " +
+                    "AND RECEIPTS.datenew between date '"+startDate+"' + time '6:00' and date '"+startDate+"'+1 + time '6:00' AND PRODUCTS.ID!='000' " +
                     "GROUP BY PRODUCTS.REFERENCE, PRODUCTS.NAME " +
                     "ORDER BY PRODUCTS.NAME";
             stmt = (Statement) con.createStatement();  
             rs = stmt.executeQuery(SQL);
             
             while (rs.next()){
-                sales+=prefix+" "+rs.getString("NAME")+"  --  "+String.valueOf(rs.getDouble("UNITS"))+"  --  "+String.valueOf(BigDecimal.valueOf(rs.getDouble("TOTAL")).setScale(2, RoundingMode.CEILING))+"\n";
+                sales+=prefix+formatMsgToLeft(rs.getString("NAME"))+formatMsgToRight(String.valueOf(rs.getDouble("UNITS")))+formatMsgToRight(String.valueOf(BigDecimal.valueOf(rs.getDouble("TOTAL")).setScale(2, RoundingMode.CEILING)))+"\n";
                 amt+=rs.getDouble("TOTAL");
             }    
-            sales+=prefix+" Total  ----  "+String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING))+"\n";
+            sales+=prefix+formatMsgToLeft("Total:")+formatMsgToLeft(" ")+formatMsgToRight(String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING)))+"\n";
         }catch(SQLException e){
             return e.getMessage();
         }
         return sales;
     }
     
-    public String salesByHour() {
+    public String salesByHour(String startDate) {
         String prefix="800";
-        String sales=prefix+" Hora  --  Transacciones  --  Valor\n";
+        String sales=prefix+formatMsgToLeft("Hora")+formatMsgToRight("Transacciones")+formatMsgToRight("Valor")+"\n";
         double amt=0.0;
         try{
             SQL = "select date_part('hour',r.datenew) salehour,count(r.id) transact, sum(tl.units*tl.price) amt from receipts r inner join ticketlines tl on r.id=tl.ticket " +
-                    "where datenew between current_date + time '6:00' and current_date+1 AND tl.product!='000' " +
+                    "where datenew between date '"+startDate+"' + time '6:00' and date '"+startDate+"'+1 + time '6:00' AND tl.product!='000' " +
                     "group by salehour " +
                     "order by salehour";
             stmt = (Statement) con.createStatement();  
             rs = stmt.executeQuery(SQL);
             
             while (rs.next()){
-                sales+=prefix+" "+rs.getString("salehour")+"  --  "+String.valueOf(rs.getInt("transact"))+"  --  "+String.valueOf(BigDecimal.valueOf(rs.getDouble("amt")).setScale(2, RoundingMode.CEILING))+"\n";
+                sales+=prefix+formatMsgToLeft(rs.getString("salehour"))+formatMsgToRight(String.valueOf(rs.getInt("transact")))+formatMsgToRight(String.valueOf(BigDecimal.valueOf(rs.getDouble("amt")).setScale(2, RoundingMode.CEILING)))+"\n";
                 amt+=rs.getDouble("amt");
             }    
-            sales+=prefix+" Total  ----  "+String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING))+"\n";
+            sales+=prefix+formatMsgToLeft("Total:")+formatMsgToLeft(" ")+formatMsgToRight(String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING)))+"\n";
         }catch(SQLException e){
             return e.getMessage();
         }
         return sales;
     }
-    public String totalTips() {
+    public String totalTips(String startDate) {
         String prefix="800";
         String sales="";
         double amt=0.0;
         try{
             SQL = "select tl.product, sum(tl.units*tl.price) amt from receipts r inner join ticketlines tl on r.id=tl.ticket " +
-                    "where datenew between current_date + time '6:00' and current_date+1 and product = '000' " +
+                    "where datenew between date '"+startDate+"' + time '6:00' and date '"+startDate+"'+1 + time '6:00' and product = '000' " +
                     "group by tl.product ";
             stmt = (Statement) con.createStatement();  
             rs = stmt.executeQuery(SQL);
             
             while (rs.next()){
-                sales+=prefix+" PROPINAS   --  "+String.valueOf(BigDecimal.valueOf(rs.getDouble("amt")).setScale(2, RoundingMode.CEILING))+"\n";
+                
                 amt+=rs.getDouble("amt");
             }    
-            
+            sales+=prefix+formatMsgToLeft("Propinas:")+formatMsgToLeft(" ")+formatMsgToRight(String.valueOf(BigDecimal.valueOf(amt).setScale(2, RoundingMode.CEILING)))+"\n";
         }catch(SQLException e){
             return e.getMessage();
         }
         return sales;
     }
 
-    
+    public String formatMsgToRight(String msg){
+        
+        String desc = msg;
+        int len = desc.length();
+        if(len <=10){
+            for (int i =0;i<10-len;i++){
+                desc = " " + desc;
+            }
+        }
+        return desc.substring(0,10);
+    }
+    public String formatMsgToLeft(String msg){
+        
+        String desc = msg;
+        int len = desc.length();
+        if(len <=10){
+            for (int i = 0;i<10-len;i++){
+                desc = desc + " ";
+            }
+        }
+        return desc.substring(0,10);
+    }
 }

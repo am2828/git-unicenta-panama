@@ -19,13 +19,19 @@
 
 package com.ghintech.fiscalprint;
 
+import com.openbravo.data.gui.MessageInf;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.forms.BeanFactoryCache;
 import com.openbravo.pos.forms.BeanFactoryException;
 import com.openbravo.pos.forms.DataLogicSystem;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * @author Eduardo Gil
@@ -37,19 +43,30 @@ public class PrintXReportSummary extends BeanFactoryCache {
     public Object constructBean(AppView app) throws BeanFactoryException {
         DataLogicSystem dlSystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
         dlFiscal = (DataLogicFiscal) app.getBean("com.ghintech.fiscalprint.DataLogicFiscal");
-        PrintReport bean = new PrintReport("I0X\n"+createSummary(),dlSystem);
+        String startDate=JOptionPane.showInputDialog("Introduzca una fecha en el formato dd/MM/aaaa",new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTimeInMillis()));
+        
+        DateFormat helper = new SimpleDateFormat("dd/MM/yyyy");
+        Date datetmp = null;
+        try {
+            datetmp = helper.parse(startDate);
+        } catch (ParseException ex) {
+            Logger.getLogger(PrintXReportSummary.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Valor de fecha incorrecto", "POS", JOptionPane.PLAIN_MESSAGE);
+            
+        }
+        PrintReport bean = new PrintReport("I0X\n"+createSummary(new SimpleDateFormat("yyyy-MM-dd").format(datetmp)),dlSystem);
         
         return bean;
     }
 
-    private String createSummary() {
+    private String createSummary(String startDate) {
         
         String rep ;
-        rep=dlFiscal.salesByProduct();
-        rep+=dlFiscal.salesByCategory();
-        rep+=dlFiscal.salesByTaxes();
-        rep+=dlFiscal.salesByHour();
-        rep+=dlFiscal.totalTips();
+        rep="800\n"+dlFiscal.salesByProduct(startDate);
+        rep+=dlFiscal.salesByCategory(startDate);
+        rep+=dlFiscal.salesByTaxes(startDate);
+        rep+=dlFiscal.salesByHour(startDate);
+        rep+=dlFiscal.totalTips(startDate);
         rep+="810\n";
         
         return rep;
