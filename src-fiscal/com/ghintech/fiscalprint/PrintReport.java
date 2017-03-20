@@ -40,8 +40,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-public class PrintReport
-implements ProcessAction {
+public class PrintReport implements ProcessAction {
     private final String reportType;
     private final String invoiceFolder;
     private final String spoolerFolder;
