@@ -34,7 +34,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -112,10 +111,7 @@ public class PrintReport implements ProcessAction {
                 }
             }
         }
-        catch (IOException ex) {
-            Logger.getLogger(PrintReport.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        catch (InterruptedException ex) {
+        catch (IOException | InterruptedException ex) {
             Logger.getLogger(PrintReport.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new MessageInf(MessageInf.SGN_SUCCESS, AppLocal.getIntString("message.printok"));
